@@ -6,27 +6,18 @@
 
 <title>Pair Archive — 페어 카드 스튜디오</title>
 
-<!-- 미리보기 DOM을 그대로 PNG로 저장 -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 
 :root{
   --accent:#f39ab5;
-
-  /* 선택한 포인트 컬러 기반의 연한 배경 */
-  --accent-bg:#fff0f5;
-  --accent-bg-strong:#fce3eb;
-
+  --accent-soft:#fff1f5;
+  --accent-bg:#fffafb;
   --ink:#302a2d;
   --muted:#8f8187;
-  --paper:#fffdfb;
+  --line:#eadde1;
 }
-
-
-/* =========================
-   기본
-========================= */
 
 *{
   box-sizing:border-box;
@@ -43,7 +34,6 @@ body{
 body{
   background:#fff7f8;
   color:var(--ink);
-
   font-family:
   -apple-system,
   BlinkMacSystemFont,
@@ -58,17 +48,17 @@ textarea{
   font:inherit;
 }
 
-
-/* =========================
-   전체 레이아웃
-========================= */
-
 .wrap{
   width:100%;
   max-width:1320px;
   margin:auto;
   padding:38px 24px 70px;
 }
+
+
+/* =========================
+   상단
+========================= */
 
 .top{
   text-align:center;
@@ -83,17 +73,10 @@ textarea{
 }
 
 .top h1{
-  font-family:
-  Georgia,
-  "Times New Roman",
-  serif;
-
+  font-family:Georgia,"Times New Roman",serif;
   font-weight:500;
-
   font-size:34px;
-
   letter-spacing:-.5px;
-
   margin:0;
 }
 
@@ -103,37 +86,25 @@ textarea{
   font-size:13px;
 }
 
+
+/* =========================
+   레이아웃
+========================= */
+
 .layout{
   display:grid;
-
-  grid-template-columns:
-  370px
-  minmax(0,1fr);
-
+  grid-template-columns:370px minmax(0,1fr);
   gap:22px;
-
   align-items:start;
 }
 
-
-/* =========================
-   카드 박스
-========================= */
-
 .editor,
 .preview{
-  background:
-  rgba(255,253,251,.94);
-
-  border:
-  1px solid
-  #f0dfe4;
-
+  background:#fffdfb;
+  border:1px solid #f0dfe4;
   border-radius:24px;
-
   box-shadow:
-  0 18px 45px
-  rgba(157,83,105,.08);
+  0 18px 45px rgba(157,83,105,.08);
 }
 
 .editor{
@@ -147,17 +118,13 @@ textarea{
 
 
 /* =========================
-   편집 블록
+   입력 블록
 ========================= */
 
 .block{
   padding-bottom:22px;
-
   margin-bottom:22px;
-
-  border-bottom:
-  1px solid
-  #eee2e6;
+  border-bottom:1px solid #eee2e6;
 }
 
 .block:last-of-type{
@@ -167,20 +134,13 @@ textarea{
 
 .block h3{
   font-size:14px;
-
-  margin:
-  0 0 16px;
+  margin:0 0 16px;
 }
 
 .block h3 span{
   color:var(--accent);
-
-  font-family:
-  Georgia,
-  serif;
-
+  font-family:Georgia,serif;
   font-size:16px;
-
   margin-right:5px;
 }
 
@@ -194,48 +154,32 @@ textarea{
 
 label{
   display:block;
-
   font-size:11px;
-
   color:#8f8187;
-
   margin-bottom:6px;
 }
 
 input[type=text],
 textarea{
   width:100%;
-
-  border:
-  1px solid
-  #eadde1;
-
+  border:1px solid #eadde1;
   background:#fff;
-
   border-radius:12px;
-
-  padding:
-  11px 12px;
-
+  padding:11px 12px;
   color:var(--ink);
-
   outline:none;
 }
 
 input[type=text]:focus,
 textarea:focus{
   border-color:#ef9eb7;
-
   box-shadow:
-  0 0 0 4px
-  #fdebf1;
+  0 0 0 4px #fdebf1;
 }
 
 textarea{
   min-height:100px;
-
   resize:vertical;
-
   line-height:1.7;
 }
 
@@ -246,19 +190,14 @@ textarea{
 
 .upload{
   display:flex;
-
   align-items:center;
-
   justify-content:center;
 
   min-height:45px;
 
-  border:
-  1px dashed
-  #e5b7c5;
+  border:1px dashed #e5b7c5;
 
-  background:
-  #fff8fa;
+  background:#fff8fa;
 
   border-radius:12px;
 
@@ -279,124 +218,12 @@ textarea{
 
 
 /* =========================
-   사진 조절창
-========================= */
-
-.crop{
-  position:relative;
-
-  width:100%;
-
-  aspect-ratio:1;
-
-  margin-top:14px;
-
-  border-radius:50%;
-
-  overflow:hidden;
-
-  background:
-  var(--accent-bg-strong);
-
-  touch-action:none;
-
-  box-shadow:
-  inset 0 0 0 2px
-  rgba(255,255,255,.9),
-
-  0 12px 28px
-  rgba(113,70,84,.12);
-}
-
-.crop img{
-  position:absolute;
-
-  left:50%;
-  top:50%;
-
-  max-width:none;
-
-  transform-origin:center center;
-
-  cursor:grab;
-
-  user-select:none;
-}
-
-.crop img:active{
-  cursor:grabbing;
-}
-
-.hint{
-  position:absolute;
-
-  inset:0;
-
-  display:grid;
-
-  place-items:center;
-
-  text-align:center;
-
-  color:#b29ba2;
-
-  font-size:12px;
-
-  line-height:1.7;
-
-  pointer-events:none;
-}
-
-.cropTools{
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  gap:8px;
-
-  margin-top:12px;
-}
-
-.cropTools button{
-  width:36px;
-  height:32px;
-
-  border:
-  1px solid
-  #eadde1;
-
-  background:white;
-
-  border-radius:9px;
-
-  cursor:pointer;
-
-  color:#735966;
-}
-
-.zoom{
-  font-size:11px;
-
-  color:#8f8187;
-
-  min-width:48px;
-
-  text-align:center;
-}
-
-
-/* =========================
-   컬러 팔레트
+   색상 팔레트
 ========================= */
 
 .palette{
   display:grid;
-
-  grid-template-columns:
-  repeat(8,1fr);
-
+  grid-template-columns:repeat(8,1fr);
   gap:10px;
 }
 
@@ -406,13 +233,10 @@ textarea{
 
   border-radius:50%;
 
-  border:
-  3px solid
-  white;
+  border:3px solid white;
 
   box-shadow:
-  0 0 0 1px
-  #eadde1;
+  0 0 0 1px #eadde1;
 
   cursor:pointer;
 
@@ -421,8 +245,7 @@ textarea{
 
 .sw.active{
   box-shadow:
-  0 0 0 2px
-  #4e3a42;
+  0 0 0 2px #4e3a42;
 }
 
 
@@ -448,23 +271,14 @@ textarea{
   font-weight:700;
 
   cursor:pointer;
-
-  transition:
-  opacity .2s,
-  transform .2s;
 }
 
 .save:hover{
   background:#4a3d42;
 }
 
-.save:active{
-  transform:scale(.99);
-}
-
 .save:disabled{
   opacity:.6;
-
   cursor:wait;
 }
 
@@ -475,9 +289,7 @@ textarea{
 
 .previewHead{
   display:flex;
-
   align-items:end;
-
   justify-content:space-between;
 
   margin:
@@ -496,7 +308,7 @@ textarea{
 
 
 /* =========================
-   미리보기 배경
+   미리보기 바깥 배경
 ========================= */
 
 .stage{
@@ -506,9 +318,9 @@ textarea{
 
   background:
   linear-gradient(
-    135deg,
+    145deg,
     var(--accent-bg),
-    #fffafa
+    var(--accent-soft)
   );
 
   padding:30px;
@@ -516,20 +328,19 @@ textarea{
   display:flex;
 
   align-items:center;
-
   justify-content:center;
 
   overflow:hidden;
 
   transition:
-  background .25s ease;
+  background .3s ease;
 }
 
 
-/* =========================
+/* ==================================================
    실제 결과물
-   4:5
-========================= */
+   4:5 고정
+================================================== */
 
 .mac{
   position:relative;
@@ -538,8 +349,7 @@ textarea{
 
   max-width:720px;
 
-  aspect-ratio:
-  4 / 5;
+  aspect-ratio:4 / 5;
 
   flex:none;
 
@@ -547,8 +357,7 @@ textarea{
   var(--accent-bg);
 
   border:
-  1px solid
-  rgba(255,255,255,.9);
+  1px solid var(--accent);
 
   border-radius:20px;
 
@@ -559,12 +368,13 @@ textarea{
   rgba(104,61,76,.19);
 
   transition:
-  background .25s ease;
+  background .3s ease,
+  border-color .3s ease;
 }
 
 
 /* =========================
-   맥북 상단 바
+   맥북 상단바
 ========================= */
 
 .macbar{
@@ -577,11 +387,10 @@ textarea{
   min-height:40px;
 
   background:
-  rgba(255,255,255,.72);
+  var(--accent-soft);
 
   border-bottom:
-  1px solid
-  rgba(150,110,125,.12);
+  1px solid var(--accent);
 
   display:flex;
 
@@ -590,20 +399,19 @@ textarea{
   padding:
   0 18px;
 
-  backdrop-filter:
-  blur(10px);
+  transition:
+  background .3s ease,
+  border-color .3s ease;
 }
 
 .dots{
   display:flex;
-
   gap:7px;
 }
 
 .dot{
   width:12px;
   height:12px;
-
   border-radius:50%;
 }
 
@@ -619,35 +427,47 @@ textarea{
   background:#31c85a;
 }
 
+
+/* 페어명 */
+
 .title{
   position:absolute;
 
   left:50%;
 
-  transform:
-  translateX(-50%);
+  top:50%;
 
-  max-width:55%;
+  transform:
+  translate(-50%,-50%);
+
+  width:60%;
+
+  text-align:center;
+
+  color:
+  #786a70;
+
+  font-size:12px;
+
+  font-weight:500;
+
+  letter-spacing:.2px;
 
   white-space:nowrap;
 
   overflow:hidden;
 
   text-overflow:ellipsis;
-
-  color:#8d8186;
-
-  font-size:11px;
 }
 
 
 /* =========================
    카드 본문
 
-   사진과 글 사이를
-   넉넉하게 유지
+   위 여백 =
+   아래 여백
 
-   위/아래 여백 균형
+   사진과 글 사이도 충분히 확보
 ========================= */
 
 .card{
@@ -660,23 +480,23 @@ textarea{
   bottom:0;
 
   width:100%;
+  height:93%;
 
-  display:flex;
+  display:grid;
 
-  flex-direction:column;
+  grid-template-rows:
+  1fr
+  auto
+  1fr;
 
   align-items:center;
 
-  text-align:center;
-
-  /*
-    위쪽 여백
-    아래쪽 여백
-    좌우 여백
-  */
+  justify-items:center;
 
   padding:
-  7% 8% 7%;
+  7% 8%;
+
+  text-align:center;
 
   overflow:hidden;
 }
@@ -685,44 +505,37 @@ textarea{
 /* =========================
    사진
 
-   가로 80%
-
-   은은한 그림자
+   1:1
+   둥근 사각형
 ========================= */
 
 .photo{
   position:relative;
 
-  width:80%;
+  width:84%;
 
-  aspect-ratio:1;
+  aspect-ratio:1 / 1;
 
-  flex:none;
-
-  border-radius:50%;
+  border-radius:28px;
 
   overflow:hidden;
 
   background:
-  var(--accent-bg-strong);
-
-  /*
-    사진 아래 여백 확대
-  */
-
-  margin-bottom:
-  7%;
+  var(--accent-soft);
 
   box-shadow:
-  0 12px 30px
-  rgba(104,61,76,.12),
+  0 18px 38px
+  rgba(113,70,84,.18),
 
-  0 4px 10px
-  rgba(104,61,76,.06);
+  0 4px 12px
+  rgba(113,70,84,.08);
+
+  grid-row:1;
+
+  align-self:center;
 
   transition:
-  background .25s ease,
-  box-shadow .25s ease;
+  background .3s ease;
 }
 
 .photo::after{
@@ -732,11 +545,11 @@ textarea{
 
   inset:0;
 
-  border-radius:50%;
+  border-radius:28px;
 
   border:
-  2px solid
-  rgba(255,255,255,.82);
+  1px solid
+  rgba(255,255,255,.9);
 
   pointer-events:none;
 }
@@ -744,17 +557,22 @@ textarea{
 .photo img{
   position:absolute;
 
-  left:50%;
-  top:50%;
+  inset:0;
 
-  max-width:none;
+  width:100%;
 
-  transform-origin:center center;
+  height:100%;
+
+  object-fit:cover;
+
+  display:block;
 }
 
 
 /* =========================
-   텍스트 영역
+   글 콘텐츠
+
+   사진과 확실하게 분리
 ========================= */
 
 .content{
@@ -762,35 +580,26 @@ textarea{
 
   min-width:0;
 
+  grid-row:2;
+
   display:flex;
 
   flex-direction:column;
 
   align-items:center;
 
+  justify-content:center;
+
   text-align:center;
 
+  padding:
+  6% 0 5%;
+
   overflow:hidden;
-
-  flex:1;
-
-  /*
-    콘텐츠가 아래에
-    너무 붙지 않도록
-    여유 확보
-  */
-
-  padding-bottom:
-  2%;
 }
 
 
-/*
-  페어명
-
-  기존 큰 페어 이름 대신
-  작은 제목으로 사용
-*/
+/* 페어명 */
 
 .eyebrow{
   width:100%;
@@ -798,36 +607,35 @@ textarea{
   color:
   var(--accent);
 
-  font-size:10px;
+  font-size:11px;
 
   font-weight:800;
 
-  letter-spacing:3px;
+  letter-spacing:2.5px;
 
-  margin-bottom:4%;
+  line-height:1.4;
+
+  margin:0;
 
   white-space:nowrap;
 
   overflow:hidden;
 
   text-overflow:ellipsis;
+
+  transition:
+  color .3s ease;
 }
 
 
-/*
-  큰 페어 이름 삭제
-
-  기존 .name 대신
-  사용하지 않음
-*/
-
+/* 설명 */
 
 .desc{
   width:100%;
 
   font-size:
   clamp(
-    10px,
+    11px,
     1.5vw,
     14px
   );
@@ -840,22 +648,12 @@ textarea{
 
   word-break:keep-all;
 
-  margin:0;
-
-  max-width:560px;
+  margin:
+  8px 0 0;
 }
 
 
-/*
-  포인트 컬러 하단 바 삭제
-
-  기존 .rule을 아예 표시하지 않음
-*/
-
-.rule{
-  display:none;
-}
-
+/* 마지막 한 줄 문구 */
 
 .note{
   width:100%;
@@ -863,34 +661,48 @@ textarea{
   font-size:
   clamp(
     9px,
-    1.3vw,
+    1.25vw,
     12px
   );
 
-  line-height:1.85;
+  line-height:1.6;
 
   color:#91868b;
 
-  white-space:pre-line;
+  white-space:nowrap;
 
-  word-break:keep-all;
+  overflow:hidden;
 
-  margin:
-  6% 0 0;
+  text-overflow:ellipsis;
 
-  max-width:560px;
+  margin:0;
+
+  grid-row:3;
+
+  align-self:center;
+
+  padding-top:0;
 }
 
 
 /* =========================
-   모바일
+   캡처 시 그림자 제거
+   외곽 테두리는 유지
+========================= */
+
+.capture-mode .mac{
+  box-shadow:none;
+}
+
+
+/* =========================
+   태블릿
 ========================= */
 
 @media(max-width:950px){
 
   .layout{
-    grid-template-columns:
-    1fr;
+    grid-template-columns:1fr;
   }
 
 }
@@ -910,7 +722,6 @@ textarea{
   .editor,
   .preview{
     padding:16px;
-
     border-radius:20px;
   }
 
@@ -934,7 +745,16 @@ textarea{
 
   .card{
     padding:
-    7% 7% 7%;
+    7% 7%;
+  }
+
+  .photo{
+    width:86%;
+    border-radius:22px;
+  }
+
+  .photo::after{
+    border-radius:22px;
   }
 
 }
@@ -981,19 +801,6 @@ textarea{
 
 }
 
-
-/* =========================
-   캡처 시
-   미리보기와 완전히 동일한
-   화면을 유지
-========================= */
-
-.capture-mode .mac{
-  box-shadow:
-  0 30px 65px
-  rgba(104,61,76,.19);
-}
-
 </style>
 </head>
 
@@ -1025,12 +832,14 @@ Pair Archive
 <div class="layout">
 
 
-<!-- ======================
+<!-- =========================
      편집 영역
-====================== -->
+========================= -->
 
 <section class="editor">
 
+
+<!-- 페어 정보 -->
 
 <div class="block">
 
@@ -1039,8 +848,6 @@ Pair Archive
 페어 정보
 </h3>
 
-
-<!-- 맥북 창 이름 -->
 
 <div class="field">
 
@@ -1056,15 +863,6 @@ value="Pair Archive"
 
 </div>
 
-
-<!-- 기존 페어 이름 삭제 -->
-
-<!--
-  큰 페어 이름 입력창 삭제
--->
-
-
-<!-- 소개 -->
 
 <div class="field">
 
@@ -1083,9 +881,7 @@ id="desc"
 
 
 
-<!-- ======================
-     사진
-====================== -->
+<!-- 사진 -->
 
 <div class="block">
 
@@ -1107,68 +903,11 @@ accept="image/*"
 
 </label>
 
-
-<div
-id="crop"
-class="crop"
->
-
-<img
-id="cropImg"
-hidden
->
-
-<span
-id="hint"
-class="hint"
->
-사진을 선택한 뒤<br>
-원 안에서 드래그해서<br>
-위치를 조절해보세요
-</span>
-
-</div>
-
-
-<div class="cropTools">
-
-<button
-id="minus"
-type="button"
->
-−
-</button>
-
-<span
-id="zoom"
-class="zoom"
->
-100%
-</span>
-
-<button
-id="plus"
-type="button"
->
-＋
-</button>
-
-<button
-id="reset"
-type="button"
->
-↺
-</button>
-
-</div>
-
 </div>
 
 
 
-<!-- ======================
-     컬러
-====================== -->
+<!-- 색상 -->
 
 <div class="block">
 
@@ -1187,11 +926,13 @@ data-c="#f39ab5"
 style="background:#f39ab5"
 ></button>
 
+
 <button
 class="sw"
 data-c="#f6a6c1"
 style="background:#f6a6c1"
 ></button>
+
 
 <button
 class="sw"
@@ -1199,11 +940,13 @@ data-c="#f6b7a9"
 style="background:#f6b7a9"
 ></button>
 
+
 <button
 class="sw"
 data-c="#f7cf8e"
 style="background:#f7cf8e"
 ></button>
+
 
 <button
 class="sw"
@@ -1211,11 +954,13 @@ data-c="#b9d99f"
 style="background:#b9d99f"
 ></button>
 
+
 <button
 class="sw"
 data-c="#9fd9d0"
 style="background:#9fd9d0"
 ></button>
+
 
 <button
 class="sw"
@@ -1223,11 +968,13 @@ data-c="#9fc8ee"
 style="background:#9fc8ee"
 ></button>
 
+
 <button
 class="sw"
 data-c="#c5b2e8"
 style="background:#c5b2e8"
 ></button>
+
 
 <button
 class="sw"
@@ -1235,11 +982,13 @@ data-c="#e8a9d4"
 style="background:#e8a9d4"
 ></button>
 
+
 <button
 class="sw"
 data-c="#f3b8d7"
 style="background:#f3b8d7"
 ></button>
+
 
 <button
 class="sw"
@@ -1247,11 +996,13 @@ data-c="#f1d29d"
 style="background:#f1d29d"
 ></button>
 
+
 <button
 class="sw"
 data-c="#b8dfc4"
 style="background:#b8dfc4"
 ></button>
+
 
 <button
 class="sw"
@@ -1259,17 +1010,20 @@ data-c="#a9dce8"
 style="background:#a9dce8"
 ></button>
 
+
 <button
 class="sw"
 data-c="#b3c9ee"
 style="background:#b3c9ee"
 ></button>
 
+
 <button
 class="sw"
 data-c="#d4b9ee"
 style="background:#d4b9ee"
 ></button>
+
 
 <button
 class="sw"
@@ -1284,9 +1038,7 @@ style="background:#f2a8a8"
 
 
 
-<!-- ======================
-     이야기
-====================== -->
+<!-- 이야기 -->
 
 <div class="block">
 
@@ -1295,11 +1047,6 @@ style="background:#f2a8a8"
 이야기
 </h3>
 
-
-<!--
-  기존 섹션 제목을
-  페어명으로 변경
--->
 
 <div class="field">
 
@@ -1323,12 +1070,27 @@ value="OUR STORY"
 </label>
 
 <textarea
-id="note"
+id="desc2"
 >서로의 세계가 되어준 우리
 같은 시간, 다른 공간에서도
 우리는 언제나 서로를 향해 빛날 거야.</textarea>
 
 </div>
+
+
+<div class="field">
+
+<label>
+마지막 문구 · 한 줄</label>
+
+<input
+id="note"
+type="text"
+value="with love, always."
+>
+
+</div>
+
 
 </div>
 
@@ -1347,9 +1109,9 @@ type="button"
 
 
 
-<!-- ======================
+<!-- =========================
      미리보기
-====================== -->
+========================= -->
 
 <section class="preview">
 
@@ -1367,13 +1129,9 @@ Preview
 </div>
 
 
+
 <div class="stage">
 
-
-<!--
-  이 #mac 전체를
-  그대로 PNG로 저장
--->
 
 <div
 id="mac"
@@ -1430,7 +1188,7 @@ hidden
 
 
 
-<!-- 글 -->
+<!-- 중앙 콘텐츠 -->
 
 <div class="content">
 
@@ -1445,36 +1203,29 @@ OUR STORY
 </div>
 
 
-<!-- 큰 페어 이름 삭제 -->
-
-
 <!-- 소개 -->
 
 <p
 id="outDesc"
 class="desc"
->심해보다 깊은 마음으로
-영원히 함께할 우리의 이야기</p>
+>
+심해보다 깊은 마음으로
+영원히 함께할 우리의 이야기
+</p>
 
 
-<!-- 기존 하단 컬러 바 삭제 -->
-
-<div
-class="rule"
-></div>
+</div>
 
 
-<!-- 이야기 -->
+
+<!-- 마지막 한 줄 -->
 
 <p
 id="outNote"
 class="note"
->서로의 세계가 되어준 우리
-같은 시간, 다른 공간에서도
-우리는 언제나 서로를 향해 빛날 거야.</p>
-
-
-</div>
+>
+with love, always.
+</p>
 
 
 </div>
@@ -1509,12 +1260,6 @@ const state = {
 
   src:null,
 
-  x:0,
-
-  y:0,
-
-  scale:1,
-
   color:'#f39ab5'
 
 };
@@ -1536,6 +1281,9 @@ $('windowTitle');
 const desc =
 $('desc');
 
+const desc2 =
+$('desc2');
+
 const eyebrow =
 $('eyebrow');
 
@@ -1545,23 +1293,11 @@ $('note');
 const file =
 $('file');
 
-const crop =
-$('crop');
-
-const cropImg =
-$('cropImg');
-
-const hint =
-$('hint');
-
-const photo =
-$('photo');
+const outTitle =
+$('outTitle');
 
 const outImg =
 $('outImg');
-
-const outTitle =
-$('outTitle');
 
 const outDesc =
 $('outDesc');
@@ -1572,14 +1308,14 @@ $('outEye');
 const outNote =
 $('outNote');
 
-const zoom =
-$('zoom');
-
 const save =
 $('save');
 
 const mac =
 $('mac');
+
+const stage =
+document.querySelector('.stage');
 
 
 
@@ -1617,15 +1353,9 @@ function hexToRgb(hex){
 }
 
 
-/*
-  선택한 색을
-  흰색과 섞어서
-  연한 파스텔 배경 생성
-*/
-
-function makePastel(
+function mixWithWhite(
   hex,
-  amount=.88
+  amount
 ){
 
   const rgb =
@@ -1656,15 +1386,10 @@ function makePastel(
   );
 
 
-  return `
-    rgb(
-      ${r},
-      ${g},
-      ${b}
-    )
-  `;
+  return `rgb(${r},${g},${b})`;
 
 }
+
 
 
 /* =========================
@@ -1673,9 +1398,11 @@ function makePastel(
 
 function syncText(){
 
+
   outTitle.textContent =
 
     windowTitle.value ||
+
     'Pair Archive';
 
 
@@ -1687,45 +1414,55 @@ function syncText(){
   outEye.textContent =
 
     eyebrow.value ||
-    'PAIR';
+
+    'OUR STORY';
 
 
   outNote.textContent =
 
-    note.value;
+    note.value ||
+
+    'with love, always.';
+
 
 }
 
 
+
 /* =========================
-   컬러 적용
+   색상 적용
 ========================= */
 
 function applyColor(){
 
-  const color =
-    state.color;
+
+  const soft =
+  mixWithWhite(
+    state.color,
+    .88
+  );
 
 
-  const light =
-    makePastel(
-      color,
-      .91
-    );
-
-
-  const stronger =
-    makePastel(
-      color,
-      .84
-    );
+  const bg =
+  mixWithWhite(
+    state.color,
+    .95
+  );
 
 
   document.documentElement
   .style
   .setProperty(
     '--accent',
-    color
+    state.color
+  );
+
+
+  document.documentElement
+  .style
+  .setProperty(
+    '--accent-soft',
+    soft
   );
 
 
@@ -1733,160 +1470,18 @@ function applyColor(){
   .style
   .setProperty(
     '--accent-bg',
-    light
-  );
-
-
-  document.documentElement
-  .style
-  .setProperty(
-    '--accent-bg-strong',
-    stronger
+    bg
   );
 
 }
 
-
-/* =========================
-   사진 렌더링
-========================= */
-
-function renderPhoto(){
-
-  if(
-    !state.src ||
-    !cropImg.naturalWidth
-  ){
-
-    return;
-
-  }
-
-
-  const cropSize =
-    crop.clientWidth;
-
-
-  const photoSize =
-    photo.clientWidth;
-
-
-  /*
-    조절창
-    이미지가 원을 꽉 채우도록 계산
-  */
-
-  const cropBase =
-
-    Math.max(
-
-      cropSize /
-      cropImg.naturalWidth,
-
-      cropSize /
-      cropImg.naturalHeight
-
-    );
-
-
-  const cropWidth =
-
-    cropImg.naturalWidth *
-    cropBase *
-    state.scale;
-
-
-  const cropHeight =
-
-    cropImg.naturalHeight *
-    cropBase *
-    state.scale;
-
-
-  cropImg.style.width =
-    cropWidth + 'px';
-
-
-  cropImg.style.height =
-    cropHeight + 'px';
-
-
-  cropImg.style.transform =
-
-    `translate(
-      calc(-50% + ${state.x}px),
-      calc(-50% + ${state.y}px)
-    )`;
-
-
-  /*
-    조절창 → 미리보기
-    비율을 정확히 맞춤
-  */
-
-  const ratio =
-
-    photoSize /
-    cropSize;
-
-
-  const previewBase =
-
-    Math.max(
-
-      photoSize /
-      cropImg.naturalWidth,
-
-      photoSize /
-      cropImg.naturalHeight
-
-    );
-
-
-  const previewWidth =
-
-    cropImg.naturalWidth *
-    previewBase *
-    state.scale;
-
-
-  const previewHeight =
-
-    cropImg.naturalHeight *
-    previewBase *
-    state.scale;
-
-
-  outImg.style.width =
-
-    previewWidth + 'px';
-
-
-  outImg.style.height =
-
-    previewHeight + 'px';
-
-
-  outImg.style.transform =
-
-    `translate(
-      calc(-50% + ${state.x * ratio}px),
-      calc(-50% + ${state.y * ratio}px)
-    )`;
-
-
-  zoom.textContent =
-
-    Math.round(
-      state.scale *
-      100
-    ) + '%';
-
-}
 
 
 /* =========================
    사진 업로드
+
+   자동 1:1
+   object-fit:cover
 ========================= */
 
 file.addEventListener(
@@ -1895,12 +1490,15 @@ file.addEventListener(
 
   event => {
 
+
     const f =
-      event.target.files?.[0];
+    event.target.files?.[0];
 
 
     if(!f){
+
       return;
+
     }
 
 
@@ -1920,296 +1518,117 @@ file.addEventListener(
 
 
     const reader =
-      new FileReader();
+    new FileReader();
 
 
     reader.onload =
 
     event => {
 
+
       state.src =
-        event.target.result;
-
-      state.x =
-        0;
-
-      state.y =
-        0;
-
-      state.scale =
-        1;
+      event.target.result;
 
 
-      cropImg.onload = () => {
+      outImg.onload =
 
-        cropImg.hidden =
-          false;
-
-        outImg.src =
-          state.src;
+      () => {
 
         outImg.hidden =
-          false;
-
-        hint.hidden =
-          true;
-
-
-        requestAnimationFrame(
-
-          renderPhoto
-
-        );
+        false;
 
       };
 
 
-      cropImg.src =
-        state.src;
+      outImg.src =
+      state.src;
+
 
     };
 
 
-    reader.readAsDataURL(f);
+    reader.readAsDataURL(
+      f
+    );
+
 
   }
 
 );
 
 
+
 /* =========================
-   확대
+   텍스트 입력
 ========================= */
 
-$('plus').onclick = () => {
+[
+  windowTitle,
+  desc,
+  desc2,
+  eyebrow,
+  note
 
-  if(!state.src){
-    return;
-  }
+].forEach(
+
+  element => {
 
 
-  state.scale =
+    element.addEventListener(
 
-    Math.min(
+      'input',
 
-      3,
+      () => {
 
-      state.scale + .1
+
+        /*
+          소개 textarea
+        */
+
+        if(
+          element === desc
+        ){
+
+          outDesc.textContent =
+          desc.value;
+
+        }
+
+
+        /*
+          페어 이야기
+        */
+
+        if(
+          element === desc2
+        ){
+
+          outDesc.textContent =
+          desc2.value;
+
+        }
+
+
+        /*
+          나머지
+        */
+
+        syncText();
+
+
+      }
 
     );
 
 
-  renderPhoto();
-
-};
-
-
-/* =========================
-   축소
-========================= */
-
-$('minus').onclick = () => {
-
-  if(!state.src){
-    return;
-  }
-
-
-  state.scale =
-
-    Math.max(
-
-      .5,
-
-      state.scale - .1
-
-    );
-
-
-  renderPhoto();
-
-};
-
-
-/* =========================
-   초기화
-========================= */
-
-$('reset').onclick = () => {
-
-  state.x =
-    0;
-
-  state.y =
-    0;
-
-  state.scale =
-    1;
-
-  renderPhoto();
-
-};
-
-
-/* =========================
-   마우스 휠 확대
-========================= */
-
-crop.addEventListener(
-
-  'wheel',
-
-  event => {
-
-    if(!state.src){
-      return;
-    }
-
-
-    event.preventDefault();
-
-
-    state.scale =
-
-      Math.max(
-
-        .5,
-
-        Math.min(
-
-          3,
-
-          state.scale +
-
-          (
-            event.deltaY < 0
-            ? .08
-            : -.08
-          )
-
-        )
-
-      );
-
-
-    renderPhoto();
-
-  },
-
-  {
-    passive:false
   }
 
 );
 
 
-/* =========================
-   드래그
-========================= */
-
-let dragging =
-false;
-
-let lastX =
-0;
-
-let lastY =
-0;
-
-
-cropImg.addEventListener(
-
-  'pointerdown',
-
-  event => {
-
-    if(!state.src){
-      return;
-    }
-
-
-    dragging =
-      true;
-
-
-    lastX =
-      event.clientX;
-
-
-    lastY =
-      event.clientY;
-
-
-    cropImg.setPointerCapture(
-
-      event.pointerId
-
-    );
-
-  }
-
-);
-
-
-cropImg.addEventListener(
-
-  'pointermove',
-
-  event => {
-
-    if(!dragging){
-      return;
-    }
-
-
-    state.x +=
-
-      event.clientX -
-      lastX;
-
-
-    state.y +=
-
-      event.clientY -
-      lastY;
-
-
-    lastX =
-      event.clientX;
-
-
-    lastY =
-      event.clientY;
-
-
-    renderPhoto();
-
-  }
-
-);
-
-
-function stopDrag(){
-
-  dragging =
-    false;
-
-}
-
-
-cropImg.addEventListener(
-  'pointerup',
-  stopDrag
-);
-
-cropImg.addEventListener(
-  'pointercancel',
-  stopDrag
-);
-
 
 /* =========================
-   컬러 선택
+   색상 선택
 ========================= */
 
 document
@@ -2218,20 +1637,23 @@ document
 
   button => {
 
-    button.onclick = () => {
+
+    button.onclick =
+
+    () => {
+
 
       state.color =
-
-        button.dataset.c;
+      button.dataset.c;
 
 
       document
       .querySelectorAll('.sw')
       .forEach(
 
-        x =>
+        item =>
 
-        x.classList.remove(
+        item.classList.remove(
           'active'
         )
 
@@ -2245,67 +1667,22 @@ document
 
       applyColor();
 
+
     };
 
-  }
-
-);
-
-
-/* =========================
-   텍스트 입력
-========================= */
-
-[
-  windowTitle,
-  desc,
-  eyebrow,
-  note
-
-].forEach(
-
-  element => {
-
-    element.addEventListener(
-
-      'input',
-
-      syncText
-
-    );
 
   }
 
 );
 
-
-/* =========================
-   화면 크기 변경
-========================= */
-
-window.addEventListener(
-
-  'resize',
-
-  () => {
-
-    if(state.src){
-
-      requestAnimationFrame(
-
-        renderPhoto
-
-      );
-
-    }
-
-  }
-
-);
 
 
 /* =========================
    이미지 저장
+
+   #mac 전체를 그대로 캡처
+
+   미리보기와 PNG 동일
 ========================= */
 
 save.addEventListener(
@@ -2332,7 +1709,7 @@ save.addEventListener(
     ){
 
       alert(
-        '이미지 저장 기능을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.'
+        '이미지 저장 기능을 불러오지 못했습니다.'
       );
 
       return;
@@ -2341,100 +1718,112 @@ save.addEventListener(
 
 
     save.disabled =
-      true;
+    true;
+
 
     save.textContent =
-      '이미지 생성 중...';
+    '이미지 생성 중...';
 
 
     try{
 
 
       /*
-        저장 직전에
-        최신 상태 반영
+        이미지 로딩 대기
       */
 
-      syncText();
+      if(
+        !outImg.complete
+      ){
 
-      applyColor();
+        await new Promise(
 
-      renderPhoto();
+          resolve => {
+
+            outImg.onload =
+            resolve;
+
+          }
+
+        );
+
+      }
 
 
       /*
-        브라우저 렌더링 완료 대기
+        마지막 화면 렌더링 대기
       */
 
       await new Promise(
 
         resolve =>
 
+        requestAnimationFrame(
+
+          () =>
+
           requestAnimationFrame(
-
-            () =>
-
-            requestAnimationFrame(
-
-              resolve
-
-            )
-
+            resolve
           )
+
+        )
 
       );
 
 
       /*
-        미리보기 DOM 자체 캡처
-
-        CSS 결과와 저장 결과 동일
+        미리보기 맥북창 자체 캡처
       */
 
       const canvas =
 
-        await html2canvas(
+      await html2canvas(
 
-          mac,
+        mac,
 
-          {
+        {
 
-            scale:3,
+          scale:3,
 
-            useCORS:true,
+          useCORS:true,
 
-            allowTaint:false,
+          allowTaint:false,
 
-            backgroundColor:
-            null,
+          backgroundColor:
+          getComputedStyle(
+            mac
+          ).backgroundColor,
 
-            logging:false,
+          logging:false,
 
-            imageTimeout:
-            15000
+          imageTimeout:15000
 
-          }
+        }
 
-        );
+      );
 
+
+      /*
+        PNG
+      */
 
       const blob =
 
-        await new Promise(
+      await new Promise(
 
-          resolve =>
+        resolve =>
 
-            canvas.toBlob(
+        canvas.toBlob(
 
-              resolve,
+          resolve,
 
-              'image/png',
+          'image/png',
 
-              1
+          1
 
-            )
+        )
 
-        );
+      );
 
 
       if(!blob){
@@ -2448,24 +1837,24 @@ save.addEventListener(
 
       const url =
 
-        URL.createObjectURL(
-          blob
-        );
+      URL.createObjectURL(
+        blob
+      );
 
 
       const link =
 
-        document.createElement(
-          'a'
-        );
+      document.createElement(
+        'a'
+      );
 
 
       link.href =
-        url;
+      url;
 
 
       link.download =
-        'pair-archive.png';
+      'pair-archive.png';
 
 
       document.body.appendChild(
@@ -2496,6 +1885,7 @@ save.addEventListener(
 
     }catch(error){
 
+
       console.error(
         error
       );
@@ -2508,26 +1898,31 @@ save.addEventListener(
 
     }finally{
 
+
       save.disabled =
-        false;
+      false;
+
 
       save.textContent =
-        '이미지로 저장';
+      '이미지로 저장';
+
 
     }
+
 
   }
 
 );
 
 
+
 /* =========================
    초기 실행
 ========================= */
 
-syncText();
-
 applyColor();
+
+syncText();
 
 
 })();
