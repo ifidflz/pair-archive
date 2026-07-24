@@ -2,9 +2,12 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Pair Archive — 페어 카드 스튜디오</title>
+
+<!-- 미리보기 화면을 그대로 PNG로 캡처하기 위한 라이브러리 -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 
@@ -18,8 +21,11 @@
   box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
   margin:0;
+  padding:0;
+  width:100%;
   min-height:100%;
 }
 
@@ -56,12 +62,14 @@ textarea{
   font-family:Georgia,serif;
   font-size:25px;
   color:var(--accent);
+  margin-bottom:6px;
 }
 
 .top h1{
-  font-family:Georgia,serif;
+  font-family:Georgia,"Times New Roman",serif;
   font-weight:500;
   font-size:34px;
+  letter-spacing:-.5px;
   margin:0;
 }
 
@@ -114,6 +122,7 @@ textarea{
 .block h3 span{
   color:var(--accent);
   font-family:Georgia,serif;
+  font-size:16px;
   margin-right:5px;
 }
 
@@ -155,6 +164,9 @@ textarea{
   line-height:1.7;
 }
 
+
+/* 사진 업로드 */
+
 .upload{
   display:flex;
   align-items:center;
@@ -166,6 +178,10 @@ textarea{
   color:#9a6576;
   cursor:pointer;
   font-size:13px;
+}
+
+.upload:hover{
+  background:#fff1f5;
 }
 
 .upload input{
@@ -184,6 +200,7 @@ textarea{
   overflow:hidden;
   background:#f8edf0;
   touch-action:none;
+
   box-shadow:
   inset 0 0 0 2px rgba(255,255,255,.9),
   0 12px 28px rgba(113,70,84,.12);
@@ -227,20 +244,21 @@ textarea{
   width:36px;
   height:32px;
   border:1px solid #eadde1;
-  background:#fff;
+  background:white;
   border-radius:9px;
   cursor:pointer;
+  color:#735966;
 }
 
 .zoom{
-  min-width:48px;
-  text-align:center;
   font-size:11px;
   color:#8f8187;
+  min-width:48px;
+  text-align:center;
 }
 
 
-/* 컬러 */
+/* 색상 */
 
 .palette{
   display:grid;
@@ -263,7 +281,7 @@ textarea{
 }
 
 
-/* 저장 */
+/* 저장 버튼 */
 
 .save{
   width:100%;
@@ -281,13 +299,18 @@ textarea{
   background:#4a3d42;
 }
 
+.save:disabled{
+  opacity:.6;
+  cursor:wait;
+}
 
-/* 미리보기 */
+
+/* 미리보기 헤더 */
 
 .previewHead{
   display:flex;
-  justify-content:space-between;
   align-items:end;
+  justify-content:space-between;
   margin:0 2px 14px;
 }
 
@@ -301,54 +324,84 @@ textarea{
   font-size:10px;
 }
 
+
+/* 미리보기 배경 */
+
 .stage{
   width:100%;
-  padding:30px;
   border-radius:18px;
+
   background:
   radial-gradient(
     circle at 50% 20%,
-    #fffdfd,
-    #f9eef2 60%,
-    #f5e6eb
+    #fffdfd 0,
+    #f9eef2 58%,
+    #f5e6eb 100%
   );
+
+  padding:30px;
+
   display:flex;
+  align-items:center;
   justify-content:center;
+
   overflow:hidden;
 }
 
 
 /*
-  핵심
+  ====================================
+  실제 저장될 결과물
+  ====================================
+
+  무조건 4:5
 
   미리보기 자체가
-  실제 PNG와 동일한 4:5 비율
-
-  저장용 PNG도
-  이 비율을 그대로 사용
+  저장되는 이미지와 같은 DOM
 */
 
 .mac{
   position:relative;
-  width:min(100%,720px);
+
+  width:100%;
+  max-width:720px;
+
   aspect-ratio:4 / 5;
+
+  flex:none;
+
   background:#fff;
+
   border:1px solid #e3dfe1;
+
   border-radius:20px;
+
   overflow:hidden;
+
   box-shadow:
   0 30px 65px rgba(104,61,76,.19);
 }
 
+
+/* 맥북 상단 */
+
 .macbar{
-  height:5%;
-  min-height:36px;
-  background:#faf9fa;
-  border-bottom:1px solid #e7e4e5;
-  display:flex;
-  align-items:center;
-  padding:0 3%;
   position:relative;
+
+  width:100%;
+  height:7%;
+
+  min-height:40px;
+
+  background:#faf9fa;
+
+  border-bottom:1px solid #e7e4e5;
+
+  display:flex;
+
+  align-items:center;
+
+  padding:0 18px;
 }
 
 .dots{
@@ -376,37 +429,45 @@ textarea{
 
 .title{
   position:absolute;
+
   left:50%;
+
   transform:translateX(-50%);
-  max-width:60%;
-  overflow:hidden;
-  text-overflow:ellipsis;
+
+  max-width:55%;
+
   white-space:nowrap;
-  font-size:11px;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
   color:#999094;
+
+  font-size:11px;
 }
 
 
-/*
-  실제 카드 영역
-
-  모든 요소를
-  percentage 기반으로 배치해서
-
-  미리보기와 PNG가
-  같은 구조를 갖게 함
-*/
+/* 카드 */
 
 .card{
   position:absolute;
+
   left:0;
   right:0;
-  top:5%;
+
+  top:7%;
   bottom:0;
 
+  width:100%;
+
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
+  text-align:center;
 
   padding:
   4% 8% 5%;
@@ -415,19 +476,21 @@ textarea{
 }
 
 
-/*
-  사진
-
-  가로폭의 80%
-*/
+/* 사진 */
 
 .photo{
   position:relative;
+
   width:80%;
+
   aspect-ratio:1;
+
   flex:none;
+
   border-radius:50%;
+
   overflow:hidden;
+
   background:#f7e9ee;
 
   box-shadow:
@@ -438,71 +501,114 @@ textarea{
 
 .photo::after{
   content:"";
+
   position:absolute;
+
   inset:0;
+
   border-radius:50%;
-  border:2px solid rgba(255,255,255,.85);
+
+  border:
+  2px solid
+  rgba(255,255,255,.85);
+
   pointer-events:none;
 }
 
 .photo img{
   position:absolute;
+
   left:50%;
   top:50%;
+
   max-width:none;
+
   transform-origin:center center;
 }
 
 
-/* 글 */
+/* 텍스트 영역 */
 
 .content{
   width:100%;
-  flex:1;
+
+  min-width:0;
 
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
 
   text-align:center;
 
-  min-height:0;
   overflow:hidden;
+
+  flex:1;
 }
 
 .eyebrow{
+  width:100%;
+
   color:var(--accent);
+
   font-size:10px;
+
   font-weight:800;
+
   letter-spacing:3px;
+
   margin-bottom:2%;
-  max-width:100%;
+
   white-space:nowrap;
+
   overflow:hidden;
+
   text-overflow:ellipsis;
 }
 
 .name{
-  font-family:Georgia,serif;
+  width:100%;
+
+  font-family:
+  Georgia,
+  "Times New Roman",
+  serif;
+
   font-weight:500;
-  font-size:clamp(25px,5vw,42px);
+
+  font-size:clamp(
+    25px,
+    5vw,
+    42px
+  );
+
   line-height:1.2;
+
   letter-spacing:-1px;
 
   margin:
   0 0 2%;
 
-  max-width:100%;
   word-break:break-word;
 }
 
 .desc{
   width:100%;
-  font-size:clamp(10px,1.5vw,14px);
+
+  font-size:
+  clamp(
+    10px,
+    1.5vw,
+    14px
+  );
+
   line-height:1.75;
+
   color:#746a70;
 
   white-space:pre-line;
+
   word-break:keep-all;
 
   margin:0;
@@ -510,26 +616,41 @@ textarea{
 
 .rule{
   width:55px;
+
   height:2px;
+
   background:var(--accent);
+
   margin:4% 0;
+
   flex:none;
 }
 
 .note{
   width:100%;
-  font-size:clamp(9px,1.3vw,12px);
+
+  font-size:
+  clamp(
+    9px,
+    1.3vw,
+    12px
+  );
+
   line-height:1.8;
+
   color:#91868b;
 
   white-space:pre-line;
+
   word-break:keep-all;
 
   margin:0;
 }
 
 
-/* 모바일 */
+/* =================================
+   모바일
+================================= */
 
 @media(max-width:950px){
 
@@ -539,10 +660,19 @@ textarea{
 
 }
 
+
+/*
+  세로 모바일
+
+  미리보기 전체가
+  화면 안에 들어오게 함
+*/
+
 @media(max-width:600px){
 
   .wrap{
-    padding:22px 12px 50px;
+    padding:
+    20px 10px 40px;
   }
 
   .editor,
@@ -552,11 +682,13 @@ textarea{
   }
 
   .stage{
-    padding:12px;
+    padding:10px;
+    width:100%;
   }
 
   .mac{
     width:100%;
+    max-width:none;
   }
 
   .palette{
@@ -570,14 +702,23 @@ textarea{
 
 }
 
+
+/*
+  모바일 가로 화면
+
+  화면에 잘리지 않도록
+  높이 기준으로 축소
+*/
+
 @media(
-  max-width:900px
+  max-width:950px
 ) and (
   orientation:landscape
 ){
 
   .wrap{
-    padding:12px 16px 30px;
+    padding:
+    12px 16px 30px;
   }
 
   .top{
@@ -589,16 +730,35 @@ textarea{
   }
 
   .stage{
-    padding:12px;
+    padding:10px;
   }
 
   .mac{
-    width:min(
-      100%,
-      calc(100vw - 80px)
-    );
+    width:auto;
+
+    height:
+    calc(100vh - 180px);
+
+    max-width:none;
+
+    aspect-ratio:
+    4 / 5;
   }
 
+}
+
+
+/*
+  캡처할 때
+  그림자 제거용 클래스
+
+  PNG 자체에는
+  미리보기 그림자까지 포함시키지 않기 위해
+  사용 가능
+*/
+
+.capture-mode .mac{
+  box-shadow:none;
 }
 
 </style>
@@ -613,9 +773,13 @@ textarea{
 
 <header class="top">
 
-<div class="mark">♡</div>
+<div class="mark">
+♡
+</div>
 
-<h1>Pair Archive</h1>
+<h1>
+Pair Archive
+</h1>
 
 <p>
 두 사람의 이야기를 하나의 작은 창에 담아보세요.
@@ -627,6 +791,10 @@ textarea{
 
 <div class="layout">
 
+
+<!-- ======================
+     편집 영역
+====================== -->
 
 <section class="editor">
 
@@ -675,7 +843,9 @@ value="祁煜 × 我"
 소개
 </label>
 
-<textarea id="desc">심해보다 깊은 마음으로
+<textarea
+id="desc"
+>심해보다 깊은 마음으로
 영원히 함께할 우리의 이야기</textarea>
 
 </div>
@@ -773,37 +943,101 @@ type="button"
 
 <div class="palette">
 
-<button class="sw active" data-c="#f39ab5" style="background:#f39ab5"></button>
+<button
+class="sw active"
+data-c="#f39ab5"
+style="background:#f39ab5"
+></button>
 
-<button class="sw" data-c="#f6a6c1" style="background:#f6a6c1"></button>
+<button
+class="sw"
+data-c="#f6a6c1"
+style="background:#f6a6c1"
+></button>
 
-<button class="sw" data-c="#f6b7a9" style="background:#f6b7a9"></button>
+<button
+class="sw"
+data-c="#f6b7a9"
+style="background:#f6b7a9"
+></button>
 
-<button class="sw" data-c="#f7cf8e" style="background:#f7cf8e"></button>
+<button
+class="sw"
+data-c="#f7cf8e"
+style="background:#f7cf8e"
+></button>
 
-<button class="sw" data-c="#b9d99f" style="background:#b9d99f"></button>
+<button
+class="sw"
+data-c="#b9d99f"
+style="background:#b9d99f"
+></button>
 
-<button class="sw" data-c="#9fd9d0" style="background:#9fd9d0"></button>
+<button
+class="sw"
+data-c="#9fd9d0"
+style="background:#9fd9d0"
+></button>
 
-<button class="sw" data-c="#9fc8ee" style="background:#9fc8ee"></button>
+<button
+class="sw"
+data-c="#9fc8ee"
+style="background:#9fc8ee"
+></button>
 
-<button class="sw" data-c="#c5b2e8" style="background:#c5b2e8"></button>
+<button
+class="sw"
+data-c="#c5b2e8"
+style="background:#c5b2e8"
+></button>
 
-<button class="sw" data-c="#e8a9d4" style="background:#e8a9d4"></button>
+<button
+class="sw"
+data-c="#e8a9d4"
+style="background:#e8a9d4"
+></button>
 
-<button class="sw" data-c="#f3b8d7" style="background:#f3b8d7"></button>
+<button
+class="sw"
+data-c="#f3b8d7"
+style="background:#f3b8d7"
+></button>
 
-<button class="sw" data-c="#f1d29d" style="background:#f1d29d"></button>
+<button
+class="sw"
+data-c="#f1d29d"
+style="background:#f1d29d"
+></button>
 
-<button class="sw" data-c="#b8dfc4" style="background:#b8dfc4"></button>
+<button
+class="sw"
+data-c="#b8dfc4"
+style="background:#b8dfc4"
+></button>
 
-<button class="sw" data-c="#a9dce8" style="background:#a9dce8"></button>
+<button
+class="sw"
+data-c="#a9dce8"
+style="background:#a9dce8"
+></button>
 
-<button class="sw" data-c="#b3c9ee" style="background:#b3c9ee"></button>
+<button
+class="sw"
+data-c="#b3c9ee"
+style="background:#b3c9ee"
+></button>
 
-<button class="sw" data-c="#d4b9ee" style="background:#d4b9ee"></button>
+<button
+class="sw"
+data-c="#d4b9ee"
+style="background:#d4b9ee"
+></button>
 
-<button class="sw" data-c="#f2a8a8" style="background:#f2a8a8"></button>
+<button
+class="sw"
+data-c="#f2a8a8"
+style="background:#f2a8a8"
+></button>
 
 </div>
 
@@ -840,7 +1074,9 @@ value="OUR STORY"
 페어에 대한 이야기
 </label>
 
-<textarea id="note">서로의 세계가 되어준 우리
+<textarea
+id="note"
+>서로의 세계가 되어준 우리
 같은 시간, 다른 공간에서도
 우리는 언제나 서로를 향해 빛날 거야.</textarea>
 
@@ -863,6 +1099,10 @@ type="button"
 
 
 
+<!-- ======================
+     미리보기
+====================== -->
+
 <section class="preview">
 
 
@@ -882,6 +1122,11 @@ Preview
 <div class="stage">
 
 
+<!--
+  이 #mac 전체가
+  그대로 PNG로 저장됨
+-->
+
 <div
 id="mac"
 class="mac"
@@ -890,10 +1135,13 @@ class="mac"
 
 <div class="macbar">
 
+
 <div class="dots">
 
 <i class="dot r"></i>
+
 <i class="dot y"></i>
+
 <i class="dot g"></i>
 
 </div>
@@ -950,23 +1198,21 @@ class="name"
 <p
 id="outDesc"
 class="desc"
->
-심해보다 깊은 마음으로
-영원히 함께할 우리의 이야기
-</p>
+>심해보다 깊은 마음으로
+영원히 함께할 우리의 이야기</p>
 
 
-<div class="rule"></div>
+<div
+class="rule"
+></div>
 
 
 <p
 id="outNote"
 class="note"
->
-서로의 세계가 되어준 우리
+>서로의 세계가 되어준 우리
 같은 시간, 다른 공간에서도
-우리는 언제나 서로를 향해 빛날 거야.
-</p>
+우리는 언제나 서로를 향해 빛날 거야.</p>
 
 
 </div>
@@ -1079,6 +1325,9 @@ $('zoom');
 const save =
 $('save');
 
+const mac =
+$('mac');
+
 
 
 /* =========================
@@ -1087,29 +1336,23 @@ $('save');
 
 function syncText(){
 
-
   outTitle.textContent =
     windowTitle.value ||
     'Pair Archive';
-
 
   outName.textContent =
     name.value ||
     'Pair Name';
 
-
   outDesc.textContent =
     desc.value;
-
 
   outEye.textContent =
     eyebrow.value ||
     'OUR STORY';
 
-
   outNote.textContent =
     note.value;
-
 
   document.documentElement
   .style
@@ -1118,118 +1361,74 @@ function syncText(){
     state.color
   );
 
-
 }
 
 
 
 /* =========================
-   이미지 크기 계산
-========================= */
+   이미지 렌더링
 
-function getImageSize(
-
-  boxSize,
-
-  naturalWidth,
-
-  naturalHeight,
-
-  scale
-
-){
-
-
-  const base =
-
-    Math.max(
-
-      boxSize /
-      naturalWidth,
-
-      boxSize /
-      naturalHeight
-
-    );
-
-
-  return {
-
-    width:
-
-      naturalWidth *
-      base *
-      scale,
-
-    height:
-
-      naturalHeight *
-      base *
-      scale
-
-  };
-
-}
-
-
-
-/* =========================
-   사진 렌더링
-
-   미리보기는 조절창과
-   같은 이미지 좌표를 사용
+   조절창 → 미리보기
 ========================= */
 
 function renderPhoto(){
 
-
   if(!state.src){
-
     return;
-
   }
 
-
-  if(
-    !cropImg.naturalWidth
-  ){
-
+  if(!cropImg.naturalWidth){
     return;
-
   }
 
-
-  /*
-    조절창
-  */
 
   const cropSize =
     crop.clientWidth;
 
 
-  const cropImage =
+  const photoSize =
+    photo.clientWidth;
 
-    getImageSize(
 
-      cropSize,
+  /*
+    조절창에서
+    사진이 원을 꽉 채우도록
+    cover 계산
+  */
 
+  const cropBase =
+
+    Math.max(
+
+      cropSize /
       cropImg.naturalWidth,
 
-      cropImg.naturalHeight,
-
-      state.scale
+      cropSize /
+      cropImg.naturalHeight
 
     );
 
 
+  const cropWidth =
+
+    cropImg.naturalWidth *
+    cropBase *
+    state.scale;
+
+
+  const cropHeight =
+
+    cropImg.naturalHeight *
+    cropBase *
+    state.scale;
+
+
   cropImg.style.width =
-    cropImage.width +
-    'px';
+    cropWidth + 'px';
 
 
   cropImg.style.height =
-    cropImage.height +
-    'px';
+    cropHeight + 'px';
 
 
   cropImg.style.transform =
@@ -1243,41 +1442,49 @@ function renderPhoto(){
 
   /*
     미리보기
+
+    조절창과 동일한
+    이미지 위치를 비율로 변환
   */
 
-  const previewSize =
-    photo.clientWidth;
+  const ratio =
+    photoSize /
+    cropSize;
 
 
-  const previewImage =
+  const previewBase =
 
-    getImageSize(
+    Math.max(
 
-      previewSize,
-
+      photoSize /
       cropImg.naturalWidth,
 
-      cropImg.naturalHeight,
-
-      state.scale
+      photoSize /
+      cropImg.naturalHeight
 
     );
 
 
-  const ratio =
+  const previewWidth =
 
-    previewSize /
-    cropSize;
+    cropImg.naturalWidth *
+    previewBase *
+    state.scale;
+
+
+  const previewHeight =
+
+    cropImg.naturalHeight *
+    previewBase *
+    state.scale;
 
 
   outImg.style.width =
-    previewImage.width +
-    'px';
+    previewWidth + 'px';
 
 
   outImg.style.height =
-    previewImage.height +
-    'px';
+    previewHeight + 'px';
 
 
   outImg.style.transform =
@@ -1288,23 +1495,19 @@ function renderPhoto(){
     )`;
 
 
-
   zoom.textContent =
 
     Math.round(
       state.scale *
       100
-    ) +
-
-    '%';
-
+    ) + '%';
 
 }
 
 
 
 /* =========================
-   파일
+   사진 업로드
 ========================= */
 
 file.addEventListener(
@@ -1313,20 +1516,15 @@ file.addEventListener(
 
   event => {
 
-
     const f =
       event.target.files?.[0];
-
 
     if(!f){
       return;
     }
 
-
     if(
-      !f.type.startsWith(
-        'image/'
-      )
+      !f.type.startsWith('image/')
     ){
 
       alert(
@@ -1346,18 +1544,14 @@ file.addEventListener(
 
     event => {
 
-
       state.src =
         event.target.result;
-
 
       state.x =
         0;
 
-
       state.y =
         0;
-
 
       state.scale =
         1;
@@ -1365,29 +1559,22 @@ file.addEventListener(
 
       cropImg.onload = () => {
 
+        cropImg.hidden =
+          false;
 
         outImg.src =
           state.src;
 
-
-        cropImg.hidden =
-          false;
-
-
         outImg.hidden =
           false;
-
 
         hint.hidden =
           true;
 
 
         requestAnimationFrame(
-
           renderPhoto
-
         );
-
 
       };
 
@@ -1395,12 +1582,10 @@ file.addEventListener(
       cropImg.src =
         state.src;
 
-
     };
 
 
     reader.readAsDataURL(f);
-
 
   }
 
@@ -1409,93 +1594,74 @@ file.addEventListener(
 
 
 /* =========================
-   확대/축소
+   확대
 ========================= */
 
-$('plus').onclick =
-
-() => {
-
+$('plus').onclick = () => {
 
   if(!state.src){
     return;
   }
-
 
   state.scale =
 
     Math.min(
-
       3,
-
-      state.scale +
-      .1
-
+      state.scale + .1
     );
 
-
   renderPhoto();
-
-
-};
-
-
-
-$('minus').onclick =
-
-() => {
-
-
-  if(!state.src){
-    return;
-  }
-
-
-  state.scale =
-
-    Math.max(
-
-      .5,
-
-      state.scale -
-      .1
-
-    );
-
-
-  renderPhoto();
-
-
-};
-
-
-
-$('reset').onclick =
-
-() => {
-
-
-  state.x =
-    0;
-
-
-  state.y =
-    0;
-
-
-  state.scale =
-    1;
-
-
-  renderPhoto();
-
 
 };
 
 
 
 /* =========================
-   마우스 휠 확대
+   축소
+========================= */
+
+$('minus').onclick = () => {
+
+  if(!state.src){
+    return;
+  }
+
+  state.scale =
+
+    Math.max(
+      .5,
+      state.scale - .1
+    );
+
+  renderPhoto();
+
+};
+
+
+
+/* =========================
+   초기화
+========================= */
+
+$('reset').onclick = () => {
+
+  state.x =
+    0;
+
+  state.y =
+    0;
+
+  state.scale =
+    1;
+
+  renderPhoto();
+
+};
+
+
+
+/* =========================
+   마우스 휠
 ========================= */
 
 crop.addEventListener(
@@ -1504,11 +1670,9 @@ crop.addEventListener(
 
   event => {
 
-
     if(!state.src){
       return;
     }
-
 
     event.preventDefault();
 
@@ -1537,7 +1701,6 @@ crop.addEventListener(
 
 
     renderPhoto();
-
 
   },
 
@@ -1569,30 +1732,22 @@ cropImg.addEventListener(
 
   event => {
 
-
     if(!state.src){
       return;
     }
 
-
     dragging =
       true;
-
 
     lastX =
       event.clientX;
 
-
     lastY =
       event.clientY;
 
-
     cropImg.setPointerCapture(
-
       event.pointerId
-
     );
-
 
   }
 
@@ -1604,7 +1759,6 @@ cropImg.addEventListener(
   'pointermove',
 
   event => {
-
 
     if(!dragging){
       return;
@@ -1626,13 +1780,11 @@ cropImg.addEventListener(
     lastX =
       event.clientX;
 
-
     lastY =
       event.clientY;
 
 
     renderPhoto();
-
 
   }
 
@@ -1660,7 +1812,7 @@ cropImg.addEventListener(
 
 
 /* =========================
-   컬러
+   색상
 ========================= */
 
 document
@@ -1669,11 +1821,7 @@ document
 
   button => {
 
-
-    button.onclick =
-
-    () => {
-
+    button.onclick = () => {
 
       state.color =
         button.dataset.c;
@@ -1698,9 +1846,7 @@ document
 
       syncText();
 
-
     };
-
 
   }
 
@@ -1709,7 +1855,7 @@ document
 
 
 /* =========================
-   텍스트
+   텍스트 입력
 ========================= */
 
 [
@@ -1744,17 +1890,13 @@ window.addEventListener(
 
   () => {
 
-
     if(state.src){
 
       requestAnimationFrame(
-
         renderPhoto
-
       );
 
     }
-
 
   }
 
@@ -1763,726 +1905,258 @@ window.addEventListener(
 
 
 /* =========================
-   PNG 저장
+   이미지 저장
 
-   중요:
-   미리보기와 동일한
-   4:5 비율과 동일한
-   상대좌표 시스템 사용
+   핵심:
+
+   Canvas로 다시 그리지 않음.
+
+   #mac DOM 자체를
+   html2canvas로 캡처함.
+
+   따라서
+
+   미리보기 =
+   저장 결과
+
+   가 됨.
 ========================= */
 
-save.onclick =
+save.addEventListener(
 
-async () => {
+  'click',
 
-
-  if(!state.src){
-
-    alert(
-      '먼저 사진을 선택해 주세요.'
-    );
-
-    return;
-
-  }
+  async () => {
 
 
-  const W =
-    1800;
+    if(!state.src){
 
-
-  const H =
-    2250;
-
-
-  const canvas =
-    document.createElement(
-      'canvas'
-    );
-
-
-  canvas.width =
-    W;
-
-
-  canvas.height =
-    H;
-
-
-  const ctx =
-    canvas.getContext(
-      '2d'
-    );
-
-
-  if(!ctx){
-
-    alert(
-      '이미지를 저장할 수 없습니다.'
-    );
-
-    return;
-
-  }
-
-
-  /*
-    미리보기의 실제 구조를
-    1800×2250에 그대로 대응
-
-    macbar = 5%
-  */
-
-  const barH =
-    H *
-    .05;
-
-
-  /*
-    배경
-  */
-
-  ctx.fillStyle =
-    '#ffffff';
-
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-
-  /*
-    맥북 바
-  */
-
-  ctx.fillStyle =
-    '#faf9fa';
-
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    barH
-  );
-
-
-  /*
-    버튼
-  */
-
-  [
-    '#ff625a',
-    '#ffc04b',
-    '#31c85a'
-  ]
-  .forEach(
-
-    (color,index) => {
-
-
-      ctx.fillStyle =
-        color;
-
-
-      ctx.beginPath();
-
-
-      ctx.arc(
-
-        W *
-        .03 +
-
-        index *
-        42,
-
-        barH /
-        2,
-
-        13,
-
-        0,
-
-        Math.PI *
-        2
-
+      alert(
+        '먼저 사진을 선택해 주세요.'
       );
 
-
-      ctx.fill();
-
+      return;
 
     }
 
-  );
+
+    if(
+      typeof html2canvas ===
+      'undefined'
+    ){
+
+      alert(
+        '이미지 저장 기능을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.'
+      );
+
+      return;
+
+    }
 
 
-  /*
-    창 이름
-  */
+    save.disabled =
+      true;
 
-  ctx.fillStyle =
-    '#999094';
-
-
-  ctx.font =
-    '17px sans-serif';
+    save.textContent =
+      '이미지 생성 중...';
 
 
-  ctx.textAlign =
-    'center';
+    try{
 
 
-  ctx.fillText(
+      /*
+        이미지가 실제로
+        로드될 때까지 기다림
+      */
 
-    windowTitle.value ||
-    'Pair Archive',
+      if(
+        outImg.complete === false
+      ){
 
-    W /
-    2,
+        await new Promise(
 
-    barH *
-    .6
+          resolve => {
 
-  );
+            outImg.onload =
+              resolve;
 
+          }
 
+        );
 
-  /*
-    카드 내부
-
-    미리보기와 동일한
-    4% / 8% 패딩
-  */
-
-  const cardTop =
-    barH;
+      }
 
 
-  const cardHeight =
-    H -
-    barH;
+      /*
+        브라우저가
+        마지막 CSS 렌더링을
+        완료하도록 대기
+      */
 
+      await new Promise(
 
-  const horizontalPadding =
-    W *
-    .08;
+        resolve =>
 
+          requestAnimationFrame(
 
-  const innerWidth =
+            () =>
 
-    W -
-    horizontalPadding *
-    2;
+            requestAnimationFrame(
+              resolve
+            )
 
-
-  /*
-    사진 80%
-  */
-
-  const photoSize =
-    innerWidth *
-    .80;
-
-
-  const photoX =
-
-    (
-      W -
-      photoSize
-    ) /
-    2;
-
-
-  const cardPaddingTop =
-
-    cardHeight *
-    .04;
-
-
-  const photoY =
-
-    cardTop +
-    cardPaddingTop;
-
-
-  /*
-    이미지 로드
-  */
-
-  const image =
-    new Image();
-
-
-  image.onload =
-
-  () => {
-
-
-    /*
-      조절창의 좌표를
-      저장 이미지 좌표로 변환
-
-      사진 조절창 크기와
-      저장 사진 크기의 비율 사용
-    */
-
-    const cropSize =
-      crop.clientWidth;
-
-
-    const ratio =
-
-      photoSize /
-      cropSize;
-
-
-    /*
-      실제 사진 크기
-
-      미리보기와 같은
-      cover 계산
-    */
-
-    const base =
-
-      Math.max(
-
-        photoSize /
-        image.naturalWidth,
-
-        photoSize /
-        image.naturalHeight
+          )
 
       );
 
 
-    const drawWidth =
+      /*
+        현재 미리보기 DOM을
+        그대로 캡처
 
-      image.naturalWidth *
-      base *
-      state.scale;
+        scale:3
+        → 저장 PNG 해상도를
+        미리보기보다 높게 생성
 
+        width/height 비율은
+        정확히 동일
+      */
 
-    const drawHeight =
+      const canvas =
 
-      image.naturalHeight *
-      base *
-      state.scale;
+        await html2canvas(
 
+          mac,
 
-    const moveX =
+          {
 
-      state.x *
-      ratio;
+            scale:3,
 
+            useCORS:true,
 
-    const moveY =
+            allowTaint:false,
 
-      state.y *
-      ratio;
+            backgroundColor:'#ffffff',
 
+            logging:false,
 
+            imageTimeout:15000
 
-    /*
-      원형 마스크
-    */
-
-    ctx.save();
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-
-      W /
-      2,
-
-      photoY +
-      photoSize /
-      2,
-
-      photoSize /
-      2,
-
-      0,
-
-      Math.PI *
-      2
-
-    );
-
-
-    ctx.clip();
-
-
-    /*
-      사진
-
-      미리보기와 동일한
-      중앙 정렬 + 이동
-    */
-
-    ctx.drawImage(
-
-      image,
-
-      photoX +
-
-      (
-        photoSize -
-        drawWidth
-      ) /
-      2 +
-
-      moveX,
-
-      photoY +
-
-      (
-        photoSize -
-        drawHeight
-      ) /
-      2 +
-
-      moveY,
-
-      drawWidth,
-
-      drawHeight
-
-    );
-
-
-    ctx.restore();
-
-
-
-    /*
-      사진 아래 텍스트 위치
-
-      미리보기와 같은
-      percentage 구조
-    */
-
-    const photoMargin =
-
-      cardHeight *
-      .04;
-
-
-    let y =
-
-      photoY +
-      photoSize +
-      photoMargin;
-
-
-
-    /*
-      컨텐츠 영역 중심
-    */
-
-    const centerX =
-      W /
-      2;
-
-
-
-    /*
-      섹션 제목
-    */
-
-    ctx.fillStyle =
-      state.color;
-
-
-    ctx.font =
-      'bold 22px sans-serif';
-
-
-    ctx.textAlign =
-      'center';
-
-
-    ctx.fillText(
-
-      (
-        eyebrow.value ||
-        'OUR STORY'
-      ).toUpperCase(),
-
-      centerX,
-
-      y +
-      25
-
-    );
-
-
-    y +=
-      85;
-
-
-
-    /*
-      이름
-    */
-
-    ctx.fillStyle =
-      '#302a2d';
-
-
-    ctx.font =
-      '500 62px Georgia';
-
-
-    ctx.fillText(
-
-      name.value ||
-      'Pair Name',
-
-      centerX,
-
-      y
-
-    );
-
-
-    y +=
-      80;
-
-
-
-    /*
-      소개
-    */
-
-    ctx.font =
-      '23px sans-serif';
-
-
-    ctx.fillStyle =
-      '#746a70';
-
-
-    const descLines =
-
-      String(
-        desc.value ||
-        ''
-      )
-      .split('\n');
-
-
-    descLines.forEach(
-
-      (line,index) => {
-
-
-        ctx.fillText(
-
-          line,
-
-          centerX,
-
-          y +
-
-          index *
-          38
+          }
 
         );
 
+
+      /*
+        PNG 생성
+      */
+
+      const blob =
+
+        await new Promise(
+
+          resolve =>
+
+            canvas.toBlob(
+
+              resolve,
+
+              'image/png',
+
+              1
+
+            )
+
+        );
+
+
+      if(!blob){
+
+        throw new Error(
+          'PNG 생성 실패'
+        );
 
       }
 
-    );
 
+      /*
+        다운로드
+      */
 
-    y +=
+      const url =
 
-      descLines.length *
-      38;
-
-
-    /*
-      포인트 라인
-    */
-
-    y +=
-      24;
-
-
-    ctx.fillStyle =
-      state.color;
-
-
-    ctx.fillRect(
-
-      centerX -
-      27,
-
-      y,
-
-      54,
-
-      2
-
-    );
-
-
-    y +=
-      70;
-
-
-
-    /*
-      이야기
-
-      미리보기와 동일한
-      줄 단위 구조
-    */
-
-    ctx.font =
-      '20px sans-serif';
-
-
-    ctx.fillStyle =
-      '#91868b';
-
-
-    const noteLines =
-
-      String(
-        note.value ||
-        ''
-      )
-      .split('\n');
-
-
-    noteLines.forEach(
-
-      (line,index) => {
-
-
-        ctx.fillText(
-
-          line,
-
-          centerX,
-
-          y +
-
-          index *
-          34
-
+        URL.createObjectURL(
+          blob
         );
 
 
-      }
+      const link =
 
-    );
-
-
-
-    /*
-      PNG 생성
-    */
-
-    canvas.toBlob(
-
-      blob => {
-
-
-        if(!blob){
-
-          alert(
-            '이미지를 저장하지 못했습니다.'
-          );
-
-          return;
-
-        }
-
-
-        const url =
-
-          URL.createObjectURL(
-            blob
-          );
-
-
-        const a =
-
-          document.createElement(
-            'a'
-          );
-
-
-        a.href =
-          url;
-
-
-        a.download =
-          'pair-archive.png';
-
-
-        document.body.appendChild(
-          a
+        document.createElement(
+          'a'
         );
 
 
-        a.click();
+      link.href =
+        url;
 
 
-        a.remove();
+      link.download =
+        'pair-archive.png';
 
 
-        setTimeout(
-
-          () => {
-
-            URL.revokeObjectURL(
-              url
-            );
-
-          },
-
-          1000
-
-        );
+      document.body.appendChild(
+        link
+      );
 
 
-      },
-
-      'image/png'
-
-    );
+      link.click();
 
 
-  };
+      link.remove();
 
 
-  image.onerror =
+      setTimeout(
 
-  () => {
+        () => {
 
-    alert(
-      '사진을 저장하는 중 오류가 발생했습니다.'
-    );
+          URL.revokeObjectURL(
+            url
+          );
 
-  };
+        },
+
+        1500
+
+      );
 
 
-  image.src =
-    state.src;
+    }catch(error){
+
+      console.error(
+        error
+      );
 
 
-};
+      alert(
+        '이미지를 저장하는 중 문제가 발생했습니다.\n잠시 후 다시 시도해 주세요.'
+      );
+
+
+    }finally{
+
+      save.disabled =
+        false;
+
+      save.textContent =
+        '이미지로 저장';
+
+    }
+
+
+  }
+
+);
 
 
 
