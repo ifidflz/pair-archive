@@ -1683,14 +1683,12 @@ class="note"
   /* =========================================================
      저장용 캡처
 
-     핵심 변경점 (화질 / 미리보기 불일치 수정):
+     핵심 포인트 (화질 / 미리보기 불일치 수정):
 
-     1. html2canvas의 기본 렌더러는 CSS를 "수동으로 재해석"해서
-        캔버스에 그리는 방식이라, 원형(border-radius) 테두리,
-        그림자, 그라디언트 등이 실제 화면과 미묘하게 달라지고
-        가장자리가 계단현상(계단 blur)으로 뭉개짐.
-        → foreignObjectRendering:true 로 브라우저 자체 렌더링 엔진을
-          그대로 이용하도록 변경 (실제 화면과 훨씬 가깝고 훨씬 선명함)
+     1. html2canvas 기본 렌더러(foreignObjectRendering 미사용)를 사용.
+        foreignObjectRendering:true는 화질/정확도는 더 좋아지지만
+        iOS Safari, 카카오톡/인스타그램 인앱 브라우저 등에서
+        캔버스가 흰 화면으로 저장되는 호환성 문제가 있어 사용하지 않음.
 
      2. scale을 기기 배율(devicePixelRatio)까지 반영해서
         고해상도 디스플레이에서도 더 선명하게 저장
@@ -1931,11 +1929,8 @@ class="note"
 
       clone 전체를 캡처
 
-      - foreignObjectRendering:true
-        → 브라우저의 실제 렌더링 엔진(SVG foreignObject)을 사용해서
-          그리기 때문에, 수동 재해석 방식보다 미리보기와
-          훨씬 더 똑같고 훨씬 더 선명하게 나옴
-          (원형 사진 가장자리, 그림자, 그라디언트가 특히 개선됨)
+      - foreignObjectRendering은 흰 화면 저장 버그 때문에 사용하지 않음
+        (기본 렌더러 사용)
 
       - scale: 기기 배율(devicePixelRatio)까지 반영한 고해상도 배율
         (최소 3배, 고해상도 디스플레이에서는 더 높게)
@@ -1984,11 +1979,12 @@ class="note"
           logging:false,
 
           /*
-            브라우저 자체 렌더링 엔진 사용
-            → 미리보기와 훨씬 더 가까운 결과 + 더 선명한 화질
+            foreignObjectRendering은 화질/정확도가 더 좋아지지만
+            iOS Safari, 카카오톡/인스타그램 인앱 브라우저 등에서
+            보안 정책 때문에 캔버스가 빈 화면(흰색)으로 나오는
+            버그가 매우 흔해서 사용하지 않음.
+            기본 렌더러 + 높은 scale 조합으로 화질을 확보함.
           */
-
-          foreignObjectRendering:true,
 
           /*
             CSS 픽셀 크기 유지
@@ -2064,13 +2060,7 @@ class="note"
 
 
         /*
-          현재 미리보기
-          그대로 캡처
-
-          foreignObjectRendering이 지원되지 않는
-          구형 브라우저(구형 iOS Safari 등)에서는
-          html2canvas가 자동으로 기본 렌더러로 대체하므로
-          별도 예외처리 없이도 항상 결과가 생성됨
+          현재 미리보기 그대로 캡처
         */
 
         const canvas =
