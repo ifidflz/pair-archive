@@ -3,79 +3,2190 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Pair Archive — 페어 카드 스튜디오</title>
+
 <style>
-:root{--accent:#f39ab5;--accent-soft:#fff0f5;--ink:#302a2d;--muted:#8f8187;--paper:#fffdfb;--line:#eee2e6}
-*{box-sizing:border-box}body{margin:0;background:#fff7f8;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Apple SD Gothic Neo",sans-serif}
-button,input,textarea{font:inherit}.wrap{max-width:1320px;margin:auto;padding:38px 24px 70px}
-.top{text-align:center;margin-bottom:30px}.top .mark{font-family:Georgia,serif;font-size:25px;color:var(--accent);margin-bottom:6px}.top h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:34px;letter-spacing:-.5px;margin:0}.top p{color:#9c8e94;margin:9px 0 0;font-size:13px}
-.layout{display:grid;grid-template-columns:370px minmax(0,1fr);gap:22px;align-items:start}
-.editor,.preview{background:rgba(255,253,251,.92);border:1px solid #f0dfe4;border-radius:24px;box-shadow:0 18px 45px rgba(157,83,105,.08)}
-.editor{padding:24px}.preview{padding:24px;min-width:0}
-.block{padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line)}.block:last-of-type{border-bottom:0;margin-bottom:0}
-.block h3{font-size:14px;margin:0 0 16px;letter-spacing:.2px}.block h3 span{color:var(--accent);font-family:Georgia,serif;font-size:16px;margin-right:5px}
-.field{margin-bottom:13px}.field:last-child{margin-bottom:0}label{display:block;font-size:11px;color:#8f8187;margin-bottom:6px}
-input[type=text],textarea{width:100%;border:1px solid #eadde1;background:#fff;border-radius:12px;padding:11px 12px;color:var(--ink);outline:none}input[type=text]:focus,textarea:focus{border-color:#ef9eb7;box-shadow:0 0 0 4px #fdebf1}textarea{min-height:76px;resize:vertical;line-height:1.6}
-.upload{display:flex;align-items:center;justify-content:center;min-height:45px;border:1px dashed #e5b7c5;background:#fff8fa;border-radius:12px;color:#9a6576;cursor:pointer;font-size:13px}.upload:hover{background:#fff1f5}.upload input{display:none}
-.crop{position:relative;height:220px;margin-top:10px;border-radius:14px;overflow:hidden;background:#f8edf0;touch-action:none}.crop img{position:absolute;left:50%;top:50%;max-width:none;transform:translate(-50%,-50%);user-select:none;cursor:grab}.hint{position:absolute;inset:0;display:grid;place-items:center;color:#b29ba2;font-size:12px;text-align:center;padding:30px;pointer-events:none}.frame{position:absolute;inset:18px;border:1px solid rgba(255,255,255,.95);box-shadow:0 0 0 999px rgba(90,50,65,.13);border-radius:12px;pointer-events:none}
-.cropTools{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:10px}.cropTools button{width:36px;height:32px;border:1px solid #eadde1;background:white;border-radius:9px;cursor:pointer;color:#735966}.zoom{font-size:11px;color:#8f8187;min-width:48px;text-align:center}
-.palette{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}.sw{width:28px;height:28px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 1px #eadde1;cursor:pointer;padding:0}.sw.active{box-shadow:0 0 0 2px #4e3a42}
-.save{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:#302a2d;color:white;font-weight:700;cursor:pointer}.save:hover{background:#4a3d42}
-.previewHead{display:flex;align-items:end;justify-content:space-between;margin:0 2px 14px}.previewHead h3{font-size:14px;margin:0}.previewHead small{color:#ae9ca3;font-size:10px}
-.stage{border-radius:18px;background:radial-gradient(circle at 50% 20%,#fffdfd 0,#f9eef2 58%,#f5e6eb 100%);padding:48px;min-height:730px;display:grid;place-items:center;overflow:auto}
-.mac{width:min(820px,100%);aspect-ratio:1.5;background:#fff;border:1px solid #e3dfe1;border-radius:20px;overflow:hidden;box-shadow:0 30px 65px rgba(104,61,76,.19);flex:none;position:relative}
-.mac:after{content:"";position:absolute;inset:44px 0 0;background:linear-gradient(120deg,transparent 45%,rgba(255,255,255,.7) 50%,transparent 55%);opacity:.4;pointer-events:none}
-.macbar{height:44px;background:rgba(250,249,250,.94);border-bottom:1px solid #e7e4e5;display:flex;align-items:center;padding:0 15px;position:relative;z-index:2}.dots{display:flex;gap:7px}.dot{width:12px;height:12px;border-radius:50%}.r{background:#ff625a}.y{background:#ffc04b}.g{background:#31c85a}.title{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;color:#999094;letter-spacing:.2px}
-.card{height:calc(100% - 44px);position:relative;display:grid;grid-template-columns:260px minmax(0,1fr);gap:52px;align-items:center;padding:55px 60px}
-.photo{width:260px;height:330px;border-radius:130px 130px 28px 28px;overflow:hidden;background:#f7e9ee;position:relative;box-shadow:0 14px 30px rgba(113,70,84,.14)}.photo:after{content:"";position:absolute;inset:0;border:1px solid rgba(255,255,255,.8);border-radius:inherit;pointer-events:none}.photo img{width:100%;height:100%;object-fit:cover}
-.content{min-width:0}.eyebrow{font-size:10px;letter-spacing:3px;color:var(--accent);font-weight:800;margin-bottom:16px}.name{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:42px;line-height:1.15;letter-spacing:-1px;margin:0 0 17px;word-break:break-word}.desc{font-size:14px;line-height:1.85;color:#746a70;white-space:pre-line;margin:0;max-width:410px}.rule{width:55px;height:2px;background:var(--accent);margin:27px 0}.note{font-size:12px;line-height:1.9;color:#91868b;white-space:pre-line;margin:0;max-width:420px}.signature{font-family:Georgia,serif;font-size:12px;color:#b29ba3;margin-top:28px}.corner{position:absolute;right:35px;bottom:28px;font-family:Georgia,serif;font-size:12px;color:#c9bbc0}
-@media(max-width:950px){.layout{grid-template-columns:1fr}.stage{min-height:0;padding:20px}.mac{width:800px}.preview{overflow:hidden}}
-@media(max-width:560px){.wrap{padding:22px 12px 50px}.editor,.preview{padding:16px}.palette{grid-template-columns:repeat(8,1fr);gap:7px}.sw{width:25px;height:25px}.stage{padding:10px}.mac{width:720px}}
+:root{
+  --accent:#f39ab5;
+  --accent-soft:#fff0f5;
+  --ink:#302a2d;
+  --muted:#8f8187;
+  --paper:#fffdfb;
+  --line:#eee2e6;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#fff7f8;
+  color:var(--ink);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans KR",
+    "Apple SD Gothic Neo",
+    sans-serif;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+.wrap{
+  max-width:1320px;
+  margin:auto;
+  padding:38px 24px 70px;
+}
+
+.top{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.top .mark{
+  font-family:Georgia,serif;
+  font-size:25px;
+  color:var(--accent);
+  margin-bottom:6px;
+}
+
+.top h1{
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+  font-size:34px;
+  letter-spacing:-.5px;
+  margin:0;
+}
+
+.top p{
+  color:#9c8e94;
+  margin:9px 0 0;
+  font-size:13px;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:370px minmax(0,1fr);
+  gap:22px;
+  align-items:start;
+}
+
+.editor,
+.preview{
+  background:rgba(255,253,251,.92);
+  border:1px solid #f0dfe4;
+  border-radius:24px;
+  box-shadow:0 18px 45px rgba(157,83,105,.08);
+}
+
+.editor{
+  padding:24px;
+}
+
+.preview{
+  padding:24px;
+  min-width:0;
+}
+
+.block{
+  padding-bottom:22px;
+  margin-bottom:22px;
+  border-bottom:1px solid var(--line);
+}
+
+.block:last-of-type{
+  border-bottom:0;
+  margin-bottom:0;
+}
+
+.block h3{
+  font-size:14px;
+  margin:0 0 16px;
+  letter-spacing:.2px;
+}
+
+.block h3 span{
+  color:var(--accent);
+  font-family:Georgia,serif;
+  font-size:16px;
+  margin-right:5px;
+}
+
+.field{
+  margin-bottom:13px;
+}
+
+.field:last-child{
+  margin-bottom:0;
+}
+
+label{
+  display:block;
+  font-size:11px;
+  color:#8f8187;
+  margin-bottom:6px;
+}
+
+input[type=text],
+textarea,
+select{
+  width:100%;
+  border:1px solid #eadde1;
+  background:#fff;
+  border-radius:12px;
+  padding:11px 12px;
+  color:var(--ink);
+  outline:none;
+}
+
+input[type=text]:focus,
+textarea:focus,
+select:focus{
+  border-color:#ef9eb7;
+  box-shadow:0 0 0 4px #fdebf1;
+}
+
+textarea{
+  min-height:76px;
+  resize:vertical;
+  line-height:1.6;
+}
+
+.upload{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:45px;
+  border:1px dashed #e5b7c5;
+  background:#fff8fa;
+  border-radius:12px;
+  color:#9a6576;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.upload:hover{
+  background:#fff1f5;
+}
+
+.upload input{
+  display:none;
+}
+
+.crop{
+  position:relative;
+  height:220px;
+  margin-top:10px;
+  border-radius:14px;
+  overflow:hidden;
+  background:#f8edf0;
+  touch-action:none;
+}
+
+.crop img{
+  position:absolute;
+  left:50%;
+  top:50%;
+  max-width:none;
+  transform:translate(-50%,-50%);
+  user-select:none;
+  cursor:grab;
+}
+
+.crop img:active{
+  cursor:grabbing;
+}
+
+.hint{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#b29ba2;
+  font-size:12px;
+  text-align:center;
+  padding:30px;
+  pointer-events:none;
+}
+
+.frame{
+  position:absolute;
+  inset:18px;
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:
+    0 0 0 999px rgba(90,50,65,.13);
+  border-radius:12px;
+  pointer-events:none;
+}
+
+.cropTools{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-top:10px;
+}
+
+.cropTools button{
+  width:36px;
+  height:32px;
+  border:1px solid #eadde1;
+  background:white;
+  border-radius:9px;
+  cursor:pointer;
+  color:#735966;
+}
+
+.cropTools button:hover{
+  background:#fff4f7;
+}
+
+.zoom{
+  font-size:11px;
+  color:#8f8187;
+  min-width:48px;
+  text-align:center;
+}
+
+.palette{
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:10px;
+}
+
+.sw{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:3px solid white;
+  box-shadow:0 0 0 1px #eadde1;
+  cursor:pointer;
+  padding:0;
+}
+
+.sw.active{
+  box-shadow:0 0 0 2px #4e3a42;
+}
+
+.ratioGroup{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.ratioBtn{
+  padding:11px;
+  border-radius:11px;
+  border:1px solid #eadde1;
+  background:white;
+  color:#806d75;
+  cursor:pointer;
+}
+
+.ratioBtn.active{
+  background:var(--accent-soft);
+  border-color:var(--accent);
+  color:#8f5268;
+  font-weight:700;
+}
+
+.save{
+  width:100%;
+  margin-top:18px;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  background:#302a2d;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.save:hover{
+  background:#4a3d42;
+}
+
+.previewHead{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin:0 2px 14px;
+}
+
+.previewHead h3{
+  font-size:14px;
+  margin:0;
+}
+
+.previewHead small{
+  color:#ae9ca3;
+  font-size:10px;
+}
+
+.stage{
+  border-radius:18px;
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      #fffdfd 0,
+      #f9eef2 58%,
+      #f5e6eb 100%
+    );
+  padding:48px;
+  min-height:730px;
+  display:grid;
+  place-items:center;
+  overflow:auto;
+}
+
+.mac{
+  width:min(820px,100%);
+  aspect-ratio:1.5;
+  background:#fff;
+  border:1px solid #e3dfe1;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:
+    0 30px 65px rgba(104,61,76,.19);
+  flex:none;
+  position:relative;
+}
+
+.mac.square{
+  aspect-ratio:1/1;
+}
+
+.mac.portrait{
+  aspect-ratio:4/5;
+}
+
+.mac:after{
+  content:"";
+  position:absolute;
+  inset:44px 0 0;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 45%,
+      rgba(255,255,255,.7) 50%,
+      transparent 55%
+    );
+  opacity:.4;
+  pointer-events:none;
+}
+
+.macbar{
+  height:44px;
+  background:rgba(250,249,250,.94);
+  border-bottom:1px solid #e7e4e5;
+  display:flex;
+  align-items:center;
+  padding:0 15px;
+  position:relative;
+  z-index:2;
+}
+
+.dots{
+  display:flex;
+  gap:7px;
+}
+
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+}
+
+.r{
+  background:#ff625a;
+}
+
+.y{
+  background:#ffc04b;
+}
+
+.g{
+  background:#31c85a;
+}
+
+.title{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:11px;
+  color:#999094;
+  letter-spacing:.2px;
+  max-width:60%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.card{
+  height:calc(100% - 44px);
+  position:relative;
+  display:grid;
+  grid-template-columns:260px minmax(0,1fr);
+  gap:52px;
+  align-items:center;
+  padding:55px 60px;
+}
+
+.mac.square .card{
+  grid-template-columns:1fr;
+  grid-template-rows:auto auto;
+  gap:28px;
+  padding:50px;
+  overflow:auto;
+}
+
+.mac.square .photo{
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  margin:auto;
+}
+
+.mac.square .content{
+  text-align:center;
+}
+
+.mac.square .rule{
+  margin:22px auto;
+}
+
+.mac.portrait .card{
+  grid-template-columns:1fr;
+  grid-template-rows:auto auto;
+  gap:28px;
+  padding:45px 55px;
+  overflow:auto;
+}
+
+.mac.portrait .photo{
+  width:240px;
+  height:290px;
+  margin:auto;
+}
+
+.mac.portrait .content{
+  text-align:center;
+}
+
+.mac.portrait .rule{
+  margin:22px auto;
+}
+
+.photo{
+  width:260px;
+  height:330px;
+  border-radius:
+    130px
+    130px
+    28px
+    28px;
+  overflow:hidden;
+  background:#f7e9ee;
+  position:relative;
+  box-shadow:
+    0 14px 30px rgba(113,70,84,.14);
+}
+
+.photo:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:inherit;
+  pointer-events:none;
+}
+
+.photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.content{
+  min-width:0;
+}
+
+.eyebrow{
+  font-size:10px;
+  letter-spacing:3px;
+  color:var(--accent);
+  font-weight:800;
+  margin-bottom:16px;
+}
+
+.name{
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+  font-size:42px;
+  line-height:1.15;
+  letter-spacing:-1px;
+  margin:0 0 17px;
+  word-break:break-word;
+}
+
+.desc{
+  font-size:14px;
+  line-height:1.85;
+  color:#746a70;
+  white-space:pre-line;
+  margin:0;
+  max-width:410px;
+}
+
+.rule{
+  width:55px;
+  height:2px;
+  background:var(--accent);
+  margin:27px 0;
+}
+
+.note{
+  font-size:12px;
+  line-height:1.9;
+  color:#91868b;
+  white-space:pre-line;
+  margin:0;
+  max-width:420px;
+}
+
+@media(max-width:950px){
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .stage{
+    min-height:0;
+    padding:20px;
+  }
+
+  .mac{
+    width:800px;
+  }
+
+  .preview{
+    overflow:hidden;
+  }
+}
+
+@media(max-width:560px){
+
+  .wrap{
+    padding:22px 12px 50px;
+  }
+
+  .editor,
+  .preview{
+    padding:16px;
+  }
+
+  .palette{
+    grid-template-columns:repeat(8,1fr);
+    gap:7px;
+  }
+
+  .sw{
+    width:25px;
+    height:25px;
+  }
+
+  .stage{
+    padding:10px;
+  }
+
+  .mac{
+    width:720px;
+  }
+
+}
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
-<header class="top"><div class="mark">♡</div><h1>Pair Archive</h1><p>두 사람의 이야기를 하나의 작은 창에 담아보세요.</p></header>
+
+<header class="top">
+  <div class="mark">♡</div>
+  <h1>Pair Archive</h1>
+  <p>두 사람의 이야기를 하나의 작은 창에 담아보세요.</p>
+</header>
+
 <div class="layout">
+
 <section class="editor">
-<div class="block"><h3><span>01</span> 페어 정보</h3>
-<div class="field"><label>페어 이름</label><input id="name" type="text" value="祁煜 × 我"></div>
-<div class="field"><label>소개</label><textarea id="desc">심해보다 깊은 마음으로
-영원히 함께할 우리의 이야기</textarea></div></div>
-<div class="block"><h3><span>02</span> 사진</h3>
-<label class="upload">＋ 사진 선택<input id="file" type="file" accept="image/*"></label>
-<div class="crop"><img id="cropImg" hidden><span class="hint" id="hint">사진을 선택한 뒤<br>드래그해서 위치를 조절해보세요</span><span class="frame"></span></div>
-<div class="cropTools"><button id="minus" type="button">−</button><span class="zoom" id="zoom">100%</span><button id="plus" type="button">＋</button><button id="reset" type="button">↺</button></div></div>
-<div class="block"><h3><span>03</span> 포인트 컬러</h3><div class="palette">
-<button class="sw active" data-c="#f39ab5" style="background:#f39ab5"></button><button class="sw" data-c="#f6a6c1" style="background:#f6a6c1"></button><button class="sw" data-c="#f6b7a9" style="background:#f6b7a9"></button><button class="sw" data-c="#f7cf8e" style="background:#f7cf8e"></button><button class="sw" data-c="#b9d99f" style="background:#b9d99f"></button><button class="sw" data-c="#9fd9d0" style="background:#9fd9d0"></button><button class="sw" data-c="#9fc8ee" style="background:#9fc8ee"></button><button class="sw" data-c="#c5b2e8" style="background:#c5b2e8"></button><button class="sw" data-c="#e8a9d4" style="background:#e8a9d4"></button><button class="sw" data-c="#f3b8d7" style="background:#f3b8d7"></button><button class="sw" data-c="#f1d29d" style="background:#f1d29d"></button><button class="sw" data-c="#b8dfc4" style="background:#b8dfc4"></button><button class="sw" data-c="#a9dce8" style="background:#a9dce8"></button><button class="sw" data-c="#b3c9ee" style="background:#b3c9ee"></button><button class="sw" data-c="#d4b9ee" style="background:#d4b9ee"></button><button class="sw" data-c="#f2a8a8" style="background:#f2a8a8"></button>
-</div></div>
-<div class="block"><h3><span>04</span> 이야기</h3>
-<div class="field"><label>섹션 제목</label><input id="eyebrow" type="text" value="OUR STORY"></div>
-<div class="field"><label>페어에 대한 이야기</label><textarea id="note">서로의 세계가 되어준 우리
+
+<!-- 01 페어 정보 -->
+<div class="block">
+
+<h3>
+  <span>01</span>
+  페어 정보
+</h3>
+
+<div class="field">
+
+<label>맥북 창 이름</label>
+
+<input
+  id="windowTitle"
+  type="text"
+  value="Pair Archive"
+>
+
+</div>
+
+<div class="field">
+
+<label>페어 이름</label>
+
+<input
+  id="name"
+  type="text"
+  value="祁煜 × 我"
+>
+
+</div>
+
+<div class="field">
+
+<label>소개</label>
+
+<textarea id="desc">심해보다 깊은 마음으로
+영원히 함께할 우리의 이야기</textarea>
+
+</div>
+
+</div>
+
+
+<!-- 02 사진 -->
+<div class="block">
+
+<h3>
+  <span>02</span>
+  사진
+</h3>
+
+<label class="upload">
+
+＋ 사진 선택
+
+<input
+  id="file"
+  type="file"
+  accept="image/*"
+>
+
+</label>
+
+<div class="crop">
+
+<img
+  id="cropImg"
+  hidden
+>
+
+<span
+  class="hint"
+  id="hint"
+>
+사진을 선택한 뒤<br>
+드래그해서 위치를 조절해보세요
+</span>
+
+<span class="frame"></span>
+
+</div>
+
+<div class="cropTools">
+
+<button id="minus" type="button">−</button>
+
+<span
+  class="zoom"
+  id="zoom"
+>
+100%
+</span>
+
+<button id="plus" type="button">＋</button>
+
+<button id="reset" type="button">↺</button>
+
+</div>
+
+</div>
+
+
+<!-- 03 포인트 컬러 -->
+<div class="block">
+
+<h3>
+  <span>03</span>
+  포인트 컬러
+</h3>
+
+<div class="palette">
+
+<button class="sw active" data-c="#f39ab5" style="background:#f39ab5"></button>
+
+<button class="sw" data-c="#f6a6c1" style="background:#f6a6c1"></button>
+
+<button class="sw" data-c="#f6b7a9" style="background:#f6b7a9"></button>
+
+<button class="sw" data-c="#f7cf8e" style="background:#f7cf8e"></button>
+
+<button class="sw" data-c="#b9d99f" style="background:#b9d99f"></button>
+
+<button class="sw" data-c="#9fd9d0" style="background:#9fd9d0"></button>
+
+<button class="sw" data-c="#9fc8ee" style="background:#9fc8ee"></button>
+
+<button class="sw" data-c="#c5b2e8" style="background:#c5b2e8"></button>
+
+<button class="sw" data-c="#e8a9d4" style="background:#e8a9d4"></button>
+
+<button class="sw" data-c="#f3b8d7" style="background:#f3b8d7"></button>
+
+<button class="sw" data-c="#f1d29d" style="background:#f1d29d"></button>
+
+<button class="sw" data-c="#b8dfc4" style="background:#b8dfc4"></button>
+
+<button class="sw" data-c="#a9dce8" style="background:#a9dce8"></button>
+
+<button class="sw" data-c="#b3c9ee" style="background:#b3c9ee"></button>
+
+<button class="sw" data-c="#d4b9ee" style="background:#d4b9ee"></button>
+
+<button class="sw" data-c="#f2a8a8" style="background:#f2a8a8"></button>
+
+</div>
+
+</div>
+
+
+<!-- 04 이야기 -->
+<div class="block">
+
+<h3>
+  <span>04</span>
+  이야기
+</h3>
+
+<div class="field">
+
+<label>섹션 제목</label>
+
+<input
+  id="eyebrow"
+  type="text"
+  value="OUR STORY"
+>
+
+</div>
+
+<div class="field">
+
+<label>페어에 대한 이야기</label>
+
+<textarea id="note">서로의 세계가 되어준 우리
 같은 시간, 다른 공간에서도
-우리는 언제나 서로를 향해 빛날 거야.</textarea></div></div>
-<button class="save" id="save" type="button">PNG로 저장하기</button>
+우리는 언제나 서로를 향해 빛날 거야.</textarea>
+
+</div>
+
+</div>
+
+
+<!-- 05 결과물 비율 -->
+<div class="block">
+
+<h3>
+  <span>05</span>
+  결과물 비율
+</h3>
+
+<div class="ratioGroup">
+
+<button
+  class="ratioBtn"
+  data-ratio="1:1"
+  type="button"
+>
+1 : 1<br>
+<small>정사각형</small>
+</button>
+
+<button
+  class="ratioBtn active"
+  data-ratio="4:5"
+  type="button"
+>
+4 : 5<br>
+<small>인스타그램</small>
+</button>
+
+</div>
+
+</div>
+
+
+<button
+  class="save"
+  id="save"
+  type="button"
+>
+PNG로 저장하기
+</button>
+
 </section>
-<section class="preview"><div class="previewHead"><h3>Preview</h3><small>Pair Archive · Mac Window Edition</small></div>
-<div class="stage"><div class="mac" id="card"><div class="macbar"><div class="dots"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i></div><span class="title">Pair Archive</span></div>
-<div class="card"><div class="photo"><img id="outImg" hidden></div><div class="content"><div class="eyebrow" id="outEye">OUR STORY</div><h2 class="name" id="outName">祁煜 × 我</h2><p class="desc" id="outDesc">심해보다 깊은 마음으로
-영원히 함께할 우리의 이야기</p><div class="rule"></div><p class="note" id="outNote">서로의 세계가 되어준 우리
+
+
+<!-- 미리보기 -->
+<section class="preview">
+
+<div class="previewHead">
+
+<h3>Preview</h3>
+
+<small>
+Pair Archive · Mac Window Edition
+</small>
+
+</div>
+
+<div class="stage">
+
+<div
+  class="mac portrait"
+  id="card"
+>
+
+<div class="macbar">
+
+<div class="dots">
+
+<i class="dot r"></i>
+<i class="dot y"></i>
+<i class="dot g"></i>
+
+</div>
+
+<span
+  class="title"
+  id="outTitle"
+>
+Pair Archive
+</span>
+
+</div>
+
+
+<div class="card">
+
+<div class="photo">
+
+<img
+  id="outImg"
+  hidden
+>
+
+</div>
+
+
+<div class="content">
+
+<div
+  class="eyebrow"
+  id="outEye"
+>
+OUR STORY
+</div>
+
+<h2
+  class="name"
+  id="outName"
+>
+祁煜 × 我
+</h2>
+
+<p
+  class="desc"
+  id="outDesc"
+>심해보다 깊은 마음으로
+영원히 함께할 우리의 이야기</p>
+
+<div class="rule"></div>
+
+<p
+  class="note"
+  id="outNote"
+>서로의 세계가 되어준 우리
 같은 시간, 다른 공간에서도
-우리는 언제나 서로를 향해 빛날 거야.</p><div class="signature">with love, always.</div></div><div class="corner">01 / 01</div></div></div></div></section>
-</div></div>
+우리는 언제나 서로를 향해 빛날 거야.</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</div>
+
+
 <script>
-(()=>{const $=id=>document.getElementById(id);const s={src:null,scale:1,x:0,y:0,color:'#f39ab5'};
-function sync(){outName.textContent=name.value||'Pair Name';outDesc.textContent=desc.value;outEye.textContent=eyebrow.value||'OUR STORY';outNote.textContent=note.value;document.documentElement.style.setProperty('--accent',s.color)}
-['name','desc','eyebrow','note'].forEach(id=>$(id).addEventListener('input',sync));
-function render(){if(!s.src)return;cropImg.style.transform=`translate(calc(-50% + ${s.x}px),calc(-50% + ${s.y}px)) scale(${s.scale})`;zoom.textContent=Math.round(s.scale*100)+'%'}
-file.onchange=e=>{const f=e.target.files?.[0];if(!f)return;if(!f.type.startsWith('image/'))return alert('이미지 파일을 선택해 주세요.');const r=new FileReader();r.onload=ev=>{s.src=ev.target.result;s.scale=1;s.x=0;s.y=0;cropImg.src=s.src;cropImg.hidden=false;hint.hidden=true;outImg.src=s.src;outImg.hidden=false;render()};r.readAsDataURL(f)};
-plus.onclick=()=>{s.scale=Math.min(3,s.scale+.1);render()};minus.onclick=()=>{s.scale=Math.max(.5,s.scale-.1);render()};reset.onclick=()=>{s.scale=1;s.x=0;s.y=0;render()};
-document.querySelectorAll('.sw').forEach(b=>b.onclick=()=>{s.color=b.dataset.c;document.querySelectorAll('.sw').forEach(x=>x.classList.remove('active'));b.classList.add('active');sync()});
-let drag=false,lx=0,ly=0;cropImg.onpointerdown=e=>{if(!s.src)return;drag=true;lx=e.clientX;ly=e.clientY;cropImg.setPointerCapture(e.pointerId)};cropImg.onpointermove=e=>{if(!drag)return;s.x+=e.clientX-lx;s.y+=e.clientY-ly;lx=e.clientX;ly=e.clientY;render()};cropImg.onpointerup=()=>drag=false;cropImg.onpointercancel=()=>drag=false;
-crop.onwheel=e=>{if(!s.src)return;e.preventDefault();s.scale=Math.max(.5,Math.min(3,s.scale+(e.deltaY<0?.08:-.08)));render()},{passive:false};
-function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
-function lines(c,text,x,y,lh,font,fill){c.font=font;c.fillStyle=fill;c.textAlign='left';String(text||'').split('\\n').forEach((t,i)=>c.fillText(t,x,y+i*lh));return y+String(text||'').split('\\n').length*lh}
-save.onclick=()=>{if(!s.src)return alert('먼저 사진을 선택해 주세요.');const c=document.createElement('canvas'),ctx=c.getContext('2d'),W=1800,H=1200;c.width=W;c.height=H;ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.fillStyle='#faf9fa';ctx.fillRect(0,0,W,92);['#ff625a','#ffc04b','#31c85a'].forEach((col,i)=>{ctx.fillStyle=col;ctx.beginPath();ctx.arc(38+i*42,46,13,0,7);ctx.fill()});ctx.fillStyle='#999094';ctx.font='17px sans-serif';ctx.textAlign='center';ctx.fillText('Pair Archive',900,53);const im=new Image();im.onload=()=>{const px=110,py=280,sz=500;ctx.save();rr(ctx,px,py,sz,640,250);ctx.clip();const fit=Math.max(sz/im.width,640/im.height),iw=im.width*fit*s.scale,ih=im.height*fit*s.scale;ctx.drawImage(im,px+(sz-iw)/2+s.x*2,py+(640-ih)/2+s.y*2,iw,ih);ctx.restore();ctx.fillStyle=s.color;ctx.textAlign='left';ctx.font='bold 22px sans-serif';ctx.fillText((eyebrow.value||'OUR STORY').toUpperCase(),760,310);ctx.fillStyle='#302a2d';ctx.font='500 62px Georgia,serif';ctx.fillText(name.value||'Pair Name',760,410);let y=485;y=lines(ctx,desc.value,760,y,38,'23px sans-serif','#746a70');ctx.fillStyle=s.color;ctx.fillRect(760,y+30,55,2);lines(ctx,note.value,760,y+95,34,'20px sans-serif','#91868b');ctx.fillStyle='#b29ba3';ctx.font='16px Georgia,serif';ctx.fillText('with love, always.',760,1080);c.toBlob(b=>{const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='pair-archive.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)},'image/png')};im.src=s.src};
-sync()})();
+
+(() => {
+
+const $ = id => document.getElementById(id);
+
+
+/* 상태 */
+
+const state = {
+
+  src:null,
+
+  scale:1,
+
+  x:0,
+
+  y:0,
+
+  color:'#f39ab5',
+
+  ratio:'4:5'
+
+};
+
+
+/* DOM */
+
+const windowTitle =
+  $('windowTitle');
+
+const name =
+  $('name');
+
+const desc =
+  $('desc');
+
+const eyebrow =
+  $('eyebrow');
+
+const note =
+  $('note');
+
+const file =
+  $('file');
+
+const crop =
+  document.querySelector('.crop');
+
+const cropImg =
+  $('cropImg');
+
+const hint =
+  $('hint');
+
+const outImg =
+  $('outImg');
+
+const outTitle =
+  $('outTitle');
+
+const outName =
+  $('outName');
+
+const outDesc =
+  $('outDesc');
+
+const outEye =
+  $('outEye');
+
+const outNote =
+  $('outNote');
+
+const zoom =
+  $('zoom');
+
+const card =
+  $('card');
+
+const save =
+  $('save');
+
+
+/* 미리보기 동기화 */
+
+function sync(){
+
+  outTitle.textContent =
+    windowTitle.value ||
+    'Pair Archive';
+
+  outName.textContent =
+    name.value ||
+    'Pair Name';
+
+  outDesc.textContent =
+    desc.value;
+
+  outEye.textContent =
+    eyebrow.value ||
+    'OUR STORY';
+
+  outNote.textContent =
+    note.value;
+
+  document.documentElement.style.setProperty(
+    '--accent',
+    state.color
+  );
+
+}
+
+
+/* 텍스트 입력 */
+
+[
+  windowTitle,
+  name,
+  desc,
+  eyebrow,
+  note
+
+].forEach(input => {
+
+  input.addEventListener(
+    'input',
+    sync
+  );
+
+});
+
+
+/* 사진 위치 및 확대 */
+
+function render(){
+
+  if(!state.src){
+    return;
+  }
+
+  cropImg.style.transform =
+    `translate(
+      calc(-50% + ${state.x}px),
+      calc(-50% + ${state.y}px)
+    )
+    scale(${state.scale})`;
+
+  zoom.textContent =
+    Math.round(
+      state.scale * 100
+    ) + '%';
+
+}
+
+
+/* 사진 업로드 */
+
+file.addEventListener(
+  'change',
+  event => {
+
+    const selected =
+      event.target.files?.[0];
+
+    if(!selected){
+      return;
+    }
+
+    if(
+      !selected.type.startsWith(
+        'image/'
+      )
+    ){
+
+      alert(
+        '이미지 파일을 선택해 주세요.'
+      );
+
+      return;
+
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      event => {
+
+        state.src =
+          event.target.result;
+
+        state.scale =
+          1;
+
+        state.x =
+          0;
+
+        state.y =
+          0;
+
+
+        cropImg.src =
+          state.src;
+
+        cropImg.hidden =
+          false;
+
+        hint.hidden =
+          true;
+
+
+        outImg.src =
+          state.src;
+
+        outImg.hidden =
+          false;
+
+
+        render();
+
+      };
+
+
+    reader.onerror =
+      () => {
+
+        alert(
+          '사진을 불러오지 못했습니다.'
+        );
+
+      };
+
+
+    reader.readAsDataURL(
+      selected
+    );
+
+  }
+);
+
+
+/* 확대 */
+
+$('plus').addEventListener(
+  'click',
+  () => {
+
+    state.scale =
+      Math.min(
+        3,
+        state.scale + 0.1
+      );
+
+    render();
+
+  }
+);
+
+
+/* 축소 */
+
+$('minus').addEventListener(
+  'click',
+  () => {
+
+    state.scale =
+      Math.max(
+        0.5,
+        state.scale - 0.1
+      );
+
+    render();
+
+  }
+);
+
+
+/* 초기화 */
+
+$('reset').addEventListener(
+  'click',
+  () => {
+
+    state.scale =
+      1;
+
+    state.x =
+      0;
+
+    state.y =
+      0;
+
+    render();
+
+  }
+);
+
+
+/* 마우스 휠 확대 */
+
+crop.addEventListener(
+  'wheel',
+  event => {
+
+    if(!state.src){
+      return;
+    }
+
+    event.preventDefault();
+
+    state.scale =
+      Math.max(
+        0.5,
+        Math.min(
+          3,
+          state.scale +
+          (
+            event.deltaY < 0
+            ? 0.08
+            : -0.08
+          )
+        )
+      );
+
+    render();
+
+  },
+  {
+    passive:false
+  }
+);
+
+
+/* 사진 드래그 */
+
+let dragging =
+  false;
+
+let lastX =
+  0;
+
+let lastY =
+  0;
+
+
+cropImg.addEventListener(
+  'pointerdown',
+  event => {
+
+    if(!state.src){
+      return;
+    }
+
+    dragging =
+      true;
+
+    lastX =
+      event.clientX;
+
+    lastY =
+      event.clientY;
+
+    cropImg.setPointerCapture(
+      event.pointerId
+    );
+
+  }
+);
+
+
+cropImg.addEventListener(
+  'pointermove',
+  event => {
+
+    if(!dragging){
+      return;
+    }
+
+    state.x +=
+      event.clientX -
+      lastX;
+
+    state.y +=
+      event.clientY -
+      lastY;
+
+
+    lastX =
+      event.clientX;
+
+    lastY =
+      event.clientY;
+
+
+    render();
+
+  }
+);
+
+
+cropImg.addEventListener(
+  'pointerup',
+  () => {
+
+    dragging =
+      false;
+
+  }
+);
+
+
+cropImg.addEventListener(
+  'pointercancel',
+  () => {
+
+    dragging =
+      false;
+
+  }
+);
+
+
+/* 색상 */
+
+document
+  .querySelectorAll('.sw')
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => {
+
+        state.color =
+          button.dataset.c;
+
+        document
+          .querySelectorAll('.sw')
+          .forEach(
+            item =>
+              item.classList.remove(
+                'active'
+              )
+          );
+
+        button.classList.add(
+          'active'
+        );
+
+        sync();
+
+      }
+    );
+
+  });
+
+
+/* 비율 */
+
+document
+  .querySelectorAll('.ratioBtn')
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => {
+
+        state.ratio =
+          button.dataset.ratio;
+
+
+        document
+          .querySelectorAll('.ratioBtn')
+          .forEach(
+            item =>
+              item.classList.remove(
+                'active'
+              )
+          );
+
+
+        button.classList.add(
+          'active'
+        );
+
+
+        card.classList.remove(
+          'square',
+          'portrait'
+        );
+
+
+        if(
+          state.ratio ===
+          '1:1'
+        ){
+
+          card.classList.add(
+            'square'
+          );
+
+        }else{
+
+          card.classList.add(
+            'portrait'
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+
+/* 둥근 사각형 */
+
+function roundedRect(
+  ctx,
+  x,
+  y,
+  width,
+  height,
+  radius
+){
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    x + radius,
+    y
+  );
+
+  ctx.arcTo(
+    x + width,
+    y,
+    x + width,
+    y + height,
+    radius
+  );
+
+  ctx.arcTo(
+    x + width,
+    y + height,
+    x,
+    y + height,
+    radius
+  );
+
+  ctx.arcTo(
+    x,
+    y + height,
+    x,
+    y,
+    radius
+  );
+
+  ctx.arcTo(
+    x,
+    y,
+    x + width,
+    y,
+    radius
+  );
+
+  ctx.closePath();
+
+}
+
+
+/* 여러 줄 텍스트 */
+
+function drawLines(
+  ctx,
+  text,
+  x,
+  y,
+  lineHeight,
+  font,
+  color,
+  align='left'
+){
+
+  ctx.font =
+    font;
+
+  ctx.fillStyle =
+    color;
+
+  ctx.textAlign =
+    align;
+
+  const lines =
+    String(
+      text || ''
+    ).split('\n');
+
+
+  lines.forEach(
+    (line,index) => {
+
+      ctx.fillText(
+        line,
+        x,
+        y +
+        index *
+        lineHeight
+      );
+
+    }
+  );
+
+
+  return (
+    y +
+    lines.length *
+    lineHeight
+  );
+
+}
+
+
+/* PNG 저장 */
+
+save.addEventListener(
+  'click',
+  () => {
+
+    if(!state.src){
+
+      alert(
+        '먼저 사진을 선택해 주세요.'
+      );
+
+      return;
+
+    }
+
+
+    const canvas =
+      document.createElement(
+        'canvas'
+      );
+
+    const ctx =
+      canvas.getContext(
+        '2d'
+      );
+
+
+    if(!ctx){
+
+      alert(
+        '이미지를 저장할 수 없습니다.'
+      );
+
+      return;
+
+    }
+
+
+    /*
+      PNG 크기
+
+      1:1
+      1800 x 1800
+
+      4:5
+      1800 x 2250
+    */
+
+    const W =
+      1800;
+
+    const H =
+      state.ratio ===
+      '1:1'
+      ? 1800
+      : 2250;
+
+
+    canvas.width =
+      W;
+
+    canvas.height =
+      H;
+
+
+    /* 배경 */
+
+    ctx.fillStyle =
+      '#ffffff';
+
+    ctx.fillRect(
+      0,
+      0,
+      W,
+      H
+    );
+
+
+    /* 맥북 상단바 */
+
+    const barHeight =
+      92;
+
+    ctx.fillStyle =
+      '#faf9fa';
+
+    ctx.fillRect(
+      0,
+      0,
+      W,
+      barHeight
+    );
+
+
+    /* 맥북 버튼 */
+
+    [
+      '#ff625a',
+      '#ffc04b',
+      '#31c85a'
+
+    ].forEach(
+      (color,index) => {
+
+        ctx.fillStyle =
+          color;
+
+        ctx.beginPath();
+
+        ctx.arc(
+          38 +
+          index *
+          42,
+          46,
+          13,
+          0,
+          Math.PI *
+          2
+        );
+
+        ctx.fill();
+
+      }
+    );
+
+
+    /* 맥북 창 이름 */
+
+    ctx.fillStyle =
+      '#999094';
+
+    ctx.font =
+      '17px sans-serif';
+
+    ctx.textAlign =
+      'center';
+
+    ctx.fillText(
+      windowTitle.value ||
+      'Pair Archive',
+      W / 2,
+      53
+    );
+
+
+    const image =
+      new Image();
+
+
+    image.onload =
+      () => {
+
+        /*
+          1:1 디자인
+        */
+
+        if(
+          state.ratio ===
+          '1:1'
+        ){
+
+          const photoSize =
+            570;
+
+          const photoX =
+            (W -
+             photoSize) /
+            2;
+
+          const photoY =
+            180;
+
+
+          /* 사진 */
+
+          ctx.save();
+
+          ctx.beginPath();
+
+          ctx.arc(
+            W / 2,
+            photoY +
+            photoSize / 2,
+            photoSize / 2,
+            0,
+            Math.PI *
+            2
+          );
+
+          ctx.clip();
+
+
+          const fit =
+            Math.max(
+              photoSize /
+              image.width,
+
+              photoSize /
+              image.height
+            );
+
+
+          const iw =
+            image.width *
+            fit *
+            state.scale;
+
+          const ih =
+            image.height *
+            fit *
+            state.scale;
+
+
+          ctx.drawImage(
+            image,
+
+            photoX +
+            (
+              photoSize -
+              iw
+            ) /
+            2 +
+            state.x *
+            2,
+
+            photoY +
+            (
+              photoSize -
+              ih
+            ) /
+            2 +
+            state.y *
+            2,
+
+            iw,
+            ih
+          );
+
+
+          ctx.restore();
+
+
+          /* 텍스트 */
+
+          let y =
+            820;
+
+
+          ctx.fillStyle =
+            state.color;
+
+          ctx.font =
+            'bold 22px sans-serif';
+
+          ctx.textAlign =
+            'center';
+
+          ctx.fillText(
+            (
+              eyebrow.value ||
+              'OUR STORY'
+            ).toUpperCase(),
+
+            W / 2,
+            y
+          );
+
+
+          y +=
+            85;
+
+
+          ctx.fillStyle =
+            '#302a2d';
+
+          ctx.font =
+            '500 62px Georgia, serif';
+
+
+          ctx.fillText(
+            name.value ||
+            'Pair Name',
+
+            W / 2,
+            y
+          );
+
+
+          y +=
+            70;
+
+
+          y =
+            drawLines(
+              ctx,
+              desc.value,
+              W / 2,
+              y,
+              38,
+              '23px sans-serif',
+              '#746a70',
+              'center'
+            );
+
+
+          ctx.fillStyle =
+            state.color;
+
+          ctx.fillRect(
+            W / 2 -
+            27,
+
+            y +
+            28,
+
+            54,
+            2
+          );
+
+
+          drawLines(
+            ctx,
+            note.value,
+            W / 2,
+            y +
+            90,
+            34,
+            '20px sans-serif',
+            '#91868b',
+            'center'
+          );
+
+
+        /*
+          4:5 디자인
+        */
+
+        }else{
+
+          const photoW =
+            600;
+
+          const photoH =
+            700;
+
+          const photoX =
+            (W -
+             photoW) /
+            2;
+
+          const photoY =
+            150;
+
+
+          /* 사진 */
+
+          ctx.save();
+
+
+          roundedRect(
+            ctx,
+            photoX,
+            photoY,
+            photoW,
+            photoH,
+            300
+          );
+
+
+          ctx.clip();
+
+
+          const fit =
+            Math.max(
+              photoW /
+              image.width,
+
+              photoH /
+              image.height
+            );
+
+
+          const iw =
+            image.width *
+            fit *
+            state.scale;
+
+          const ih =
+            image.height *
+            fit *
+            state.scale;
+
+
+          ctx.drawImage(
+            image,
+
+            photoX +
+            (
+              photoW -
+              iw
+            ) /
+            2 +
+            state.x *
+            2,
+
+            photoY +
+            (
+              photoH -
+              ih
+            ) /
+            2 +
+            state.y *
+            2,
+
+            iw,
+            ih
+          );
+
+
+          ctx.restore();
+
+
+          /* 텍스트 */
+
+          let y =
+            950;
+
+
+          ctx.fillStyle =
+            state.color;
+
+          ctx.font =
+            'bold 22px sans-serif';
+
+          ctx.textAlign =
+            'center';
+
+
+          ctx.fillText(
+            (
+              eyebrow.value ||
+              'OUR STORY'
+            ).toUpperCase(),
+
+            W / 2,
+            y
+          );
+
+
+          y +=
+            80;
+
+
+          ctx.fillStyle =
+            '#302a2d';
+
+          ctx.font =
+            '500 62px Georgia, serif';
+
+
+          ctx.fillText(
+            name.value ||
+            'Pair Name',
+
+            W / 2,
+            y
+          );
+
+
+          y +=
+            70;
+
+
+          y =
+            drawLines(
+              ctx,
+              desc.value,
+              W / 2,
+              y,
+              38,
+              '23px sans-serif',
+              '#746a70',
+              'center'
+            );
+
+
+          ctx.fillStyle =
+            state.color;
+
+          ctx.fillRect(
+            W / 2 -
+            27,
+
+            y +
+            28,
+
+            54,
+            2
+          );
+
+
+          drawLines(
+            ctx,
+            note.value,
+            W / 2,
+            y +
+            90,
+            34,
+            '20px sans-serif',
+            '#91868b',
+            'center'
+          );
+
+        }
+
+
+        /* PNG 생성 */
+
+        canvas.toBlob(
+
+          blob => {
+
+            if(!blob){
+
+              alert(
+                'PNG 이미지를 만드는 데 실패했습니다. 다시 시도해 주세요.'
+              );
+
+              return;
+
+            }
+
+
+            const url =
+              URL.createObjectURL(
+                blob
+              );
+
+
+            const link =
+              document.createElement(
+                'a'
+              );
+
+
+            link.href =
+              url;
+
+
+            link.download =
+              state.ratio ===
+              '1:1'
+              ? 'pair-archive-square.png'
+              : 'pair-archive-4x5.png';
+
+
+            document.body.appendChild(
+              link
+            );
+
+
+            link.click();
+
+
+            link.remove();
+
+
+            setTimeout(
+              () => {
+
+                URL.revokeObjectURL(
+                  url
+                );
+
+              },
+              1000
+            );
+
+          },
+
+          'image/png'
+
+        );
+
+      };
+
+
+    image.onerror =
+      () => {
+
+        alert(
+          '사진을 불러오지 못했습니다. 다시 사진을 선택해 주세요.'
+        );
+
+      };
+
+
+    image.src =
+      state.src;
+
+  }
+);
+
+
+/* 초기 상태 */
+
+sync();
+
+})();
+
 </script>
-</body></html>
+
+</body>
+</html>
