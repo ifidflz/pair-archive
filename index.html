@@ -1354,447 +1354,259 @@ class="note"
 
 (() => {
 
+  /* =========================================================
+     상태
+  ========================================================= */
 
-/* =========================================================
-   상태
-========================================================= */
-
-const state = {
-
-  src:null,
-
-  color:'#f39ab5'
-
-};
-
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const $ =
-id =>
-document.getElementById(id);
-
-
-const windowTitle =
-$('windowTitle');
-
-const pairName =
-$('pairName');
-
-const pairName2 =
-$('pairName2');
-
-const desc =
-$('desc');
-
-const desc2 =
-$('desc2');
-
-const note =
-$('note');
-
-const file =
-$('file');
-
-const outTitle =
-$('outTitle');
-
-const outPairName =
-$('outPairName');
-
-const outDesc =
-$('outDesc');
-
-const outNote =
-$('outNote');
-
-const outImg =
-$('outImg');
-
-const save =
-$('save');
-
-const mac =
-$('mac');
-
-
-
-/* =========================================================
-   HEX → RGB
-========================================================= */
-
-function hexToRgb(hex){
-
-  hex =
-    hex.replace(
-      '#',
-      ''
-    );
-
-  return {
-
-    r:
-      parseInt(
-        hex.substring(0,2),
-        16
-      ),
-
-    g:
-      parseInt(
-        hex.substring(2,4),
-        16
-      ),
-
-    b:
-      parseInt(
-        hex.substring(4,6),
-        16
-      )
-
+  const state = {
+    src: null,
+    color: '#f39ab5'
   };
 
-}
+
+  /* =========================================================
+     DOM
+  ========================================================= */
+
+  const $ = id => document.getElementById(id);
+
+  const windowTitle = $('windowTitle');
+  const pairName = $('pairName');
+  const pairName2 = $('pairName2');
+
+  const desc = $('desc');
+  const desc2 = $('desc2');
+
+  const note = $('note');
+
+  const file = $('file');
+
+  const outTitle = $('outTitle');
+  const outPairName = $('outPairName');
+  const outDesc = $('outDesc');
+  const outNote = $('outNote');
+
+  const outImg = $('outImg');
+
+  const save = $('save');
+
+  const mac = $('mac');
 
 
+  /* =========================================================
+     HEX → RGB
+  ========================================================= */
 
-/* =========================================================
-   포인트 컬러 → 연한 배경색 생성
-========================================================= */
+  function hexToRgb(hex){
 
-function updateTheme(){
+    hex = hex.replace('#','');
 
-  const rgb =
-    hexToRgb(
-      state.color
-    );
-
-
-  /*
-    매우 연한 파스텔 배경
-  */
-
-  const bg =
-
-    `rgb(
-      ${Math.round(
-        rgb.r +
-        (255-rgb.r)*0.90
-      )},
-
-      ${Math.round(
-        rgb.g +
-        (255-rgb.g)*0.90
-      )},
-
-      ${Math.round(
-        rgb.b +
-        (255-rgb.b)*0.90
-      )}
-    )`;
-
-
-  /*
-    연한 테두리
-  */
-
-  const border =
-
-    `rgb(
-      ${Math.round(
-        rgb.r +
-        (255-rgb.r)*0.68
-      )},
-
-      ${Math.round(
-        rgb.g +
-        (255-rgb.g)*0.68
-      )},
-
-      ${Math.round(
-        rgb.b +
-        (255-rgb.b)*0.68
-      )}
-    )`;
-
-
-  /*
-    내부 구분선
-  */
-
-  const line =
-
-    `rgb(
-      ${Math.round(
-        rgb.r +
-        (255-rgb.r)*0.78
-      )},
-
-      ${Math.round(
-        rgb.g +
-        (255-rgb.g)*0.78
-      )},
-
-      ${Math.round(
-        rgb.b +
-        (255-rgb.b)*0.78
-      )}
-    )`;
-
-
-  document.documentElement
-  .style
-  .setProperty(
-    '--accent',
-    state.color
-  );
-
-
-  document.documentElement
-  .style
-  .setProperty(
-    '--accent-bg',
-    bg
-  );
-
-
-  document.documentElement
-  .style
-  .setProperty(
-    '--accent-border',
-    border
-  );
-
-
-  document.documentElement
-  .style
-  .setProperty(
-    '--accent-line',
-    line
-  );
-
-}
-
-
-
-/* =========================================================
-   텍스트 동기화
-========================================================= */
-
-function syncText(){
-
-
-  outTitle.textContent =
-
-    windowTitle.value ||
-
-    'Pair Archive';
-
-
-
-  /*
-    페어명 입력창 2개가
-    같은 값을 유지하도록 함
-  */
-
-  outPairName.textContent =
-
-    pairName.value ||
-
-    'Pair Name';
-
-
-
-  outDesc.textContent =
-
-    desc.value;
-
-
-
-  outNote.textContent =
-
-    note.value;
-
-
-
-  /*
-    이야기 영역의 페어명 입력을
-    수정하면 메인 페어명도 같이 변경
-  */
-
-  if(
-    document.activeElement ===
-    pairName2
-  ){
-
-    pairName.value =
-      pairName2.value;
-
-  }
-  else{
-
-    pairName2.value =
-      pairName.value;
+    return {
+      r: parseInt(hex.substring(0,2),16),
+      g: parseInt(hex.substring(2,4),16),
+      b: parseInt(hex.substring(4,6),16)
+    };
 
   }
 
 
+  /* =========================================================
+     포인트 컬러 테마
+  ========================================================= */
 
-  /*
-    소개 입력도 동일
-  */
+  function updateTheme(){
 
-  if(
-    document.activeElement ===
-    desc2
-  ){
+    const rgb = hexToRgb(state.color);
 
-    desc.value =
-      desc2.value;
+
+    const bg = `
+      rgb(
+        ${Math.round(rgb.r + (255-rgb.r)*0.90)},
+        ${Math.round(rgb.g + (255-rgb.g)*0.90)},
+        ${Math.round(rgb.b + (255-rgb.b)*0.90)}
+      )
+    `;
+
+
+    const border = `
+      rgb(
+        ${Math.round(rgb.r + (255-rgb.r)*0.68)},
+        ${Math.round(rgb.g + (255-rgb.g)*0.68)},
+        ${Math.round(rgb.b + (255-rgb.b)*0.68)}
+      )
+    `;
+
+
+    const line = `
+      rgb(
+        ${Math.round(rgb.r + (255-rgb.r)*0.78)},
+        ${Math.round(rgb.g + (255-rgb.g)*0.78)},
+        ${Math.round(rgb.b + (255-rgb.b)*0.78)}
+      )
+    `;
+
+
+    document.documentElement.style
+      .setProperty('--accent',state.color);
+
+    document.documentElement.style
+      .setProperty('--accent-bg',bg);
+
+    document.documentElement.style
+      .setProperty('--accent-border',border);
+
+    document.documentElement.style
+      .setProperty('--accent-line',line);
 
   }
-  else{
 
-    desc2.value =
+
+  /* =========================================================
+     텍스트 동기화
+  ========================================================= */
+
+  function syncText(){
+
+    outTitle.textContent =
+      windowTitle.value || 'Pair Archive';
+
+
+    /*
+      페어명 입력창 두 개를
+      동일하게 유지
+    */
+
+    if(document.activeElement === pairName2){
+
+      pairName.value =
+        pairName2.value;
+
+    }else{
+
+      pairName2.value =
+        pairName.value;
+
+    }
+
+
+    outPairName.textContent =
+      pairName.value || 'Pair Name';
+
+
+    /*
+      소개도 동일하게 유지
+    */
+
+    if(document.activeElement === desc2){
+
+      desc.value =
+        desc2.value;
+
+    }else{
+
+      desc2.value =
+        desc.value;
+
+    }
+
+
+    outDesc.textContent =
       desc.value;
 
+
+    outNote.textContent =
+      note.value;
+
   }
 
 
+  /* =========================================================
+     사진 업로드
+  ========================================================= */
 
-  outPairName.textContent =
-
-    pairName.value ||
-
-    'Pair Name';
-
-
-
-  outDesc.textContent =
-
-    desc.value;
-
-}
-
-
-
-/* =========================================================
-   사진 업로드
-========================================================= */
-
-file.addEventListener(
-
-  'change',
-
-  event => {
-
-
-    const f =
-      event.target.files?.[0];
-
-
-    if(!f){
-
-      return;
-
-    }
-
-
-    if(
-      !f.type.startsWith(
-        'image/'
-      )
-    ){
-
-      alert(
-        '이미지 파일을 선택해 주세요.'
-      );
-
-      return;
-
-    }
-
-
-
-    const reader =
-      new FileReader();
-
-
-
-    reader.onload =
-
+  file.addEventListener(
+    'change',
     event => {
 
+      const f =
+        event.target.files?.[0];
 
-      state.src =
-        event.target.result;
+      if(!f){
+        return;
+      }
 
 
-      outImg.onload = () => {
+      if(!f.type.startsWith('image/')){
 
-        outImg.hidden =
-          false;
+        alert(
+          '이미지 파일을 선택해 주세요.'
+        );
+
+        return;
+
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+      event => {
+
+        state.src =
+          event.target.result;
+
+
+        /*
+          이미지가 로드된 뒤
+          미리보기 표시
+        */
+
+        outImg.onload = () => {
+
+          outImg.hidden = false;
+
+        };
+
+
+        outImg.src =
+          state.src;
 
       };
 
 
-      outImg.src =
-        state.src;
+      reader.readAsDataURL(f);
+
+    }
+  );
 
 
-    };
+  /* =========================================================
+     색상 선택
+  ========================================================= */
 
-
-
-    reader.readAsDataURL(
-      f
-    );
-
-
-  }
-
-);
-
-
-
-/* =========================================================
-   색상 선택
-========================================================= */
-
-document
-.querySelectorAll('.sw')
-.forEach(
-
-  button => {
-
+  document
+  .querySelectorAll('.sw')
+  .forEach(button => {
 
     button.addEventListener(
-
       'click',
-
       () => {
 
-
         state.color =
-
           button.dataset.c;
-
 
 
         document
         .querySelectorAll('.sw')
-        .forEach(
-
-          x =>
+        .forEach(x => {
 
           x.classList.remove(
             'active'
-          )
+          );
 
-        );
-
+        });
 
 
         button.classList.add(
@@ -1802,328 +1614,554 @@ document
         );
 
 
-
         updateTheme();
 
-
       }
-
     );
 
-
-  }
-
-);
+  });
 
 
+  /* =========================================================
+     텍스트 입력
+  ========================================================= */
 
-/* =========================================================
-   텍스트 입력
-========================================================= */
+  [
+    windowTitle,
+    pairName,
+    pairName2,
+    desc,
+    desc2,
+    note
 
-[
-  windowTitle,
-  pairName,
-  pairName2,
-  desc,
-  desc2,
-  note
-
-].forEach(
-
-  element => {
-
+  ].forEach(element => {
 
     element.addEventListener(
-
       'input',
-
       syncText
-
     );
 
+  });
+
+
+  /* =========================================================
+     이미지 로딩 대기
+  ========================================================= */
+
+  function waitForImage(img){
+
+    return new Promise(resolve => {
+
+      if(
+        img.complete &&
+        img.naturalWidth > 0
+      ){
+
+        resolve();
+
+        return;
+
+      }
+
+
+      img.onload =
+        () => resolve();
+
+
+      img.onerror =
+        () => resolve();
+
+    });
 
   }
 
-);
+
+  /* =========================================================
+     저장용 캡처
+
+     핵심:
+
+     1. 현재 미리보기의 실제 크기를 측정
+     2. 미리보기 DOM을 복제
+     3. 사진을 background-image로 변환
+     4. object-fit 문제 제거
+     5. 원본 미리보기와 동일한 크기로 캡처
+  ========================================================= */
+
+  async function capturePreview(){
+
+    await waitForImage(outImg);
 
 
+    /*
+      브라우저가 마지막 스타일을
+      적용할 때까지 기다림
+    */
 
-/* =========================================================
-   이미지 저장
+    await new Promise(resolve => {
 
-   미리보기 DOM 그대로 캡처
-========================================================= */
+      requestAnimationFrame(() => {
 
-save.addEventListener(
+        requestAnimationFrame(resolve);
 
-  'click',
+      });
 
-  async () => {
+    });
+
+
+    /*
+      현재 미리보기의 실제 크기
+    */
+
+    const rect =
+      mac.getBoundingClientRect();
+
+
+    const width =
+      Math.round(rect.width);
+
+
+    const height =
+      Math.round(rect.height);
+
+
+    /*
+      미리보기 전체를 복제
+
+      복제본은 화면 밖에서
+      캡처하기 때문에
+      원본 미리보기에는 영향 없음
+    */
+
+    const clone =
+      mac.cloneNode(true);
+
+
+    /*
+      캡처용 컨테이너
+    */
+
+    const wrapper =
+      document.createElement('div');
+
+
+    wrapper.style.position =
+      'fixed';
+
+    wrapper.style.left =
+      '-100000px';
+
+    wrapper.style.top =
+      '0';
+
+    wrapper.style.width =
+      width + 'px';
+
+    wrapper.style.height =
+      height + 'px';
+
+    wrapper.style.overflow =
+      'hidden';
+
+    wrapper.style.background =
+      getComputedStyle(mac)
+      .backgroundColor;
+
+
+    /*
+      복제본 크기 고정
+
+      모바일에서 캡처할 때
+      CSS 미디어쿼리가 바뀌는 것을 방지
+    */
+
+    clone.style.width =
+      width + 'px';
+
+    clone.style.height =
+      height + 'px';
+
+    clone.style.maxWidth =
+      'none';
+
+    clone.style.minWidth =
+      width + 'px';
+
+    clone.style.aspectRatio =
+      'auto';
+
+    clone.style.transform =
+      'none';
+
+
+    wrapper.appendChild(clone);
+
+    document.body.appendChild(wrapper);
+
+
+    /*
+      =====================================================
+      사진 처리
+
+      html2canvas에서 object-fit 때문에
+      가로로 늘어나는 문제를 방지하기 위해
+
+      실제 미리보기 사진의
+      현재 렌더링 상태를 그대로
+      background-image로 변환
+
+      background-size: cover
+      background-position: center
+
+      → 사진 비율 유지
+      → 원형 유지
+    =====================================================
+    */
+
+    const originalPhoto =
+      mac.querySelector('.photo');
+
+    const clonePhoto =
+      clone.querySelector('.photo');
+
+    const cloneImage =
+      clone.querySelector('#outImg');
 
 
     if(
-      !state.src
+      originalPhoto &&
+      clonePhoto &&
+      state.src
     ){
 
-      alert(
-        '먼저 사진을 선택해 주세요.'
-      );
-
-      return;
-
-    }
+      const originalStyle =
+        getComputedStyle(
+          originalPhoto
+        );
 
 
-
-    if(
-      typeof html2canvas ===
-      'undefined'
-    ){
-
-      alert(
-        '이미지 저장 기능을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.'
-      );
-
-      return;
-
-    }
-
-
-
-    save.disabled =
-      true;
-
-
-    save.textContent =
-      '이미지 생성 중...';
-
-
-
-    try{
+      const imageStyle =
+        getComputedStyle(
+          outImg
+        );
 
 
       /*
-        이미지가 완전히 로딩됐는지 확인
+        현재 사진 영역 크기
       */
+
+      const photoRect =
+        originalPhoto
+        .getBoundingClientRect();
+
+
+      /*
+        이미지가
+        원형 영역을 꽉 채우도록
+        background 방식으로 처리
+      */
+
+      clonePhoto.style.backgroundImage =
+        `url("${state.src}")`;
+
+
+      clonePhoto.style.backgroundSize =
+        'cover';
+
+
+      clonePhoto.style.backgroundPosition =
+        'center center';
+
+
+      clonePhoto.style.backgroundRepeat =
+        'no-repeat';
+
+
+      /*
+        기존 img는 숨김
+
+        이렇게 하면
+        html2canvas가 img의
+        object-fit을 처리하지 않음
+      */
+
+      cloneImage.style.display =
+        'none';
+
+
+      /*
+        원본 사진의
+        테두리와 그림자 유지
+      */
+
+      clonePhoto.style.borderRadius =
+        originalStyle.borderRadius;
+
+
+      clonePhoto.style.boxShadow =
+        originalStyle.boxShadow;
+
+
+      clonePhoto.style.backgroundColor =
+        originalStyle.backgroundColor;
+
+    }
+
+
+    /*
+      캡처용 복제본을
+      현재 미리보기와 동일하게
+      브라우저가 렌더링하도록 대기
+    */
+
+    await new Promise(resolve => {
+
+      requestAnimationFrame(() => {
+
+        requestAnimationFrame(resolve);
+
+      });
+
+    });
+
+
+    /*
+      =====================================================
+      html2canvas
+
+      clone 전체를 캡처
+
+      scale 3으로 고해상도 저장
+
+      실제 디자인 비율은
+      원본과 동일
+    =====================================================
+    */
+
+    const canvas =
+      await html2canvas(
+        clone,
+        {
+
+          /*
+            원본 미리보기와 동일한
+            비율로 확대
+          */
+
+          scale:3,
+
+          width:width,
+
+          height:height,
+
+          useCORS:true,
+
+          allowTaint:false,
+
+          backgroundColor:
+            getComputedStyle(
+              mac
+            ).backgroundColor,
+
+          imageTimeout:15000,
+
+          logging:false,
+
+          /*
+            CSS 픽셀 크기 유지
+          */
+
+          windowWidth:
+            document.documentElement
+            .clientWidth,
+
+          windowHeight:
+            document.documentElement
+            .clientHeight
+
+        }
+      );
+
+
+    /*
+      복제본 제거
+    */
+
+    wrapper.remove();
+
+
+    return canvas;
+
+  }
+
+
+  /* =========================================================
+     PNG 저장
+  ========================================================= */
+
+  save.addEventListener(
+    'click',
+    async () => {
+
+
+      if(!state.src){
+
+        alert(
+          '먼저 사진을 선택해 주세요.'
+        );
+
+        return;
+
+      }
+
 
       if(
-        !outImg.complete ||
-        outImg.naturalWidth === 0
+        typeof html2canvas ===
+        'undefined'
       ){
 
-        await new Promise(
-
-          resolve => {
-
-            outImg.onload =
-              resolve;
-
-          }
-
+        alert(
+          '이미지 저장 기능을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.'
         );
+
+        return;
 
       }
-
-
-
-      /*
-        브라우저 렌더링 대기
-      */
-
-      await new Promise(
-
-        resolve =>
-
-        requestAnimationFrame(
-
-          () =>
-
-          requestAnimationFrame(
-            resolve
-          )
-
-        )
-
-      );
-
-
-
-      /*
-        현재 미리보기
-        #mac 자체를 캡처
-
-        별도의 Canvas 레이아웃을
-        다시 그리지 않음.
-
-        따라서 미리보기와
-        저장 결과가 동일함.
-      */
-
-      const canvas =
-
-        await html2canvas(
-
-          mac,
-
-          {
-
-            scale:3,
-
-            useCORS:true,
-
-            allowTaint:false,
-
-            backgroundColor:
-              getComputedStyle(
-                mac
-              ).backgroundColor,
-
-            logging:false,
-
-            imageTimeout:15000
-
-          }
-
-        );
-
-
-
-      /*
-        PNG 생성
-      */
-
-      const blob =
-
-        await new Promise(
-
-          resolve =>
-
-          canvas.toBlob(
-
-            resolve,
-
-            'image/png',
-
-            1
-
-          )
-
-        );
-
-
-
-      if(!blob){
-
-        throw new Error(
-          'PNG 생성 실패'
-        );
-
-      }
-
-
-
-      /*
-        다운로드
-      */
-
-      const url =
-
-        URL.createObjectURL(
-          blob
-        );
-
-
-
-      const link =
-
-        document.createElement(
-          'a'
-        );
-
-
-
-      link.href =
-        url;
-
-
-
-      link.download =
-        'pair-archive.png';
-
-
-
-      document.body.appendChild(
-        link
-      );
-
-
-
-      link.click();
-
-
-
-      link.remove();
-
-
-
-      setTimeout(
-
-        () => {
-
-          URL.revokeObjectURL(
-            url
-          );
-
-        },
-
-        1500
-
-      );
-
-
-    }
-    catch(error){
-
-
-      console.error(
-        error
-      );
-
-
-      alert(
-        '이미지를 저장하는 중 문제가 발생했습니다.\n잠시 후 다시 시도해 주세요.'
-      );
-
-
-    }
-    finally{
 
 
       save.disabled =
-        false;
+        true;
 
 
       save.textContent =
-        '이미지로 저장';
+        '이미지 생성 중...';
 
+
+      try{
+
+
+        /*
+          현재 미리보기
+          그대로 캡처
+        */
+
+        const canvas =
+          await capturePreview();
+
+
+        /*
+          PNG 생성
+        */
+
+        const blob =
+          await new Promise(
+            resolve => {
+
+              canvas.toBlob(
+                resolve,
+                'image/png',
+                1
+              );
+
+            }
+          );
+
+
+        if(!blob){
+
+          throw new Error(
+            'PNG 생성 실패'
+          );
+
+        }
+
+
+        /*
+          다운로드
+        */
+
+        const url =
+          URL.createObjectURL(
+            blob
+          );
+
+
+        const link =
+          document.createElement(
+            'a'
+          );
+
+
+        link.href =
+          url;
+
+
+        link.download =
+          'pair-archive.png';
+
+
+        document.body.appendChild(
+          link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        setTimeout(
+          () => {
+
+            URL.revokeObjectURL(
+              url
+            );
+
+          },
+          1500
+        );
+
+
+      }
+      catch(error){
+
+
+        console.error(
+          'PNG 저장 오류:',
+          error
+        );
+
+
+        alert(
+          '이미지를 저장하는 중 문제가 발생했습니다.\n잠시 후 다시 시도해 주세요.'
+        );
+
+
+      }
+      finally{
+
+
+        save.disabled =
+          false;
+
+
+        save.textContent =
+          '이미지로 저장';
+
+      }
 
     }
+  );
 
 
-  }
+  /* =========================================================
+     초기 실행
+  ========================================================= */
 
-);
+  syncText();
 
-
-
-/* =========================================================
-   초기 실행
-========================================================= */
-
-syncText();
-
-updateTheme();
+  updateTheme();
 
 
 })();
