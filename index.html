@@ -2,11 +2,12 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <title>Pair Archive — 페어 카드 스튜디오</title>
 
 <style>
+
 :root{
   --accent:#f39ab5;
   --accent-soft:#fff0f5;
@@ -39,8 +40,7 @@ body{
 
 button,
 input,
-textarea,
-select{
+textarea{
   font:inherit;
 }
 
@@ -90,7 +90,7 @@ button{
 
 .editor,
 .preview{
-  background:rgba(255,253,251,.94);
+  background:rgba(255,253,251,.95);
   border:1px solid #f0dfe4;
   border-radius:24px;
   box-shadow:0 18px 45px rgba(157,83,105,.08);
@@ -162,10 +162,12 @@ textarea:focus{
 }
 
 textarea{
-  min-height:110px;
+  min-height:105px;
   resize:vertical;
   line-height:1.7;
 }
+
+/* 사진 업로드 */
 
 .upload{
   display:flex;
@@ -189,23 +191,39 @@ textarea{
   display:none;
 }
 
+
 /* 사진 조절 영역 */
 
 .crop{
   position:relative;
   width:100%;
-  height:220px;
-  margin-top:10px;
-  border-radius:14px;
+  aspect-ratio:1 / 1;
+  margin-top:14px;
+  border-radius:50%;
   overflow:hidden;
   background:#f8edf0;
   touch-action:none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.8),
+    0 12px 28px rgba(113,70,84,.12);
+}
+
+.crop::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.9);
+  pointer-events:none;
 }
 
 .crop img{
   position:absolute;
   left:50%;
   top:50%;
+  width:auto;
+  height:auto;
   max-width:none;
   transform-origin:center center;
   user-select:none;
@@ -225,16 +243,8 @@ textarea{
   color:#b29ba2;
   font-size:12px;
   text-align:center;
+  line-height:1.7;
   padding:30px;
-  pointer-events:none;
-}
-
-.frame{
-  position:absolute;
-  inset:18px;
-  border:1px solid rgba(255,255,255,.95);
-  box-shadow:0 0 0 999px rgba(90,50,65,.13);
-  border-radius:12px;
   pointer-events:none;
 }
 
@@ -243,7 +253,7 @@ textarea{
   justify-content:center;
   align-items:center;
   gap:8px;
-  margin-top:10px;
+  margin-top:12px;
 }
 
 .cropTools button{
@@ -267,6 +277,7 @@ textarea{
   text-align:center;
 }
 
+
 /* 컬러 */
 
 .palette{
@@ -288,6 +299,7 @@ textarea{
 .sw.active{
   box-shadow:0 0 0 2px #4e3a42;
 }
+
 
 /* 비율 */
 
@@ -314,7 +326,8 @@ textarea{
   font-weight:700;
 }
 
-/* 저장 버튼 */
+
+/* 저장 */
 
 .save{
   width:100%;
@@ -334,8 +347,9 @@ textarea{
 }
 
 .save:active{
-  transform:scale(.99);
+  transform:scale(.98);
 }
+
 
 /* 미리보기 */
 
@@ -373,10 +387,8 @@ textarea{
   overflow:hidden;
 }
 
-/*
-  미리보기 카드
-  실제 저장 캔버스와 동일한 논리 구조
-*/
+
+/* 맥북 카드 */
 
 .mac{
   width:min(820px,100%);
@@ -387,7 +399,6 @@ textarea{
   box-shadow:0 30px 65px rgba(104,61,76,.19);
   position:relative;
   flex:none;
-  container-type:inline-size;
 }
 
 .mac.ratio-square{
@@ -398,9 +409,10 @@ textarea{
   aspect-ratio:4 / 5;
 }
 
+
 .macbar{
   height:44px;
-  background:rgba(250,249,250,.94);
+  background:rgba(250,249,250,.96);
   border-bottom:1px solid #e7e4e5;
   display:flex;
   align-items:center;
@@ -445,80 +457,75 @@ textarea{
   white-space:nowrap;
 }
 
-/* 카드 내부 */
+
+/* 카드 */
 
 .card{
-  position:relative;
   width:100%;
   height:calc(100% - 44px);
-  overflow:hidden;
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
+  overflow:hidden;
 }
 
-/* 1:1 */
+
+/*
+  핵심:
+  사진을 카드 가로폭의 약 80%로 설정
+*/
 
 .ratio-square .card{
-  padding:5.5% 8%;
-  gap:4%;
+  padding:
+    6%
+    8%
+    5%;
 }
-
-.ratio-square .photo{
-  width:42%;
-  aspect-ratio:1 / 1;
-  flex:none;
-  border-radius:50%;
-}
-
-/* 4:5 */
 
 .ratio-portrait .card{
-  padding:5% 9%;
-  gap:4%;
+  padding:
+    5%
+    8%
+    4%;
 }
 
-.ratio-portrait .photo{
-  width:44%;
-  aspect-ratio:4 / 5;
-  flex:none;
-  border-radius:
-    50%
-    50%
-    18px
-    18px;
-}
 
-/* 사진 */
+/* 미리보기 사진 */
 
 .photo{
-  overflow:hidden;
-  background:#f7e9ee;
   position:relative;
-  box-shadow:0 14px 30px rgba(113,70,84,.14);
-  flex-shrink:0;
+  width:80%;
+  aspect-ratio:1 / 1;
+  flex:none;
+  overflow:hidden;
+  border-radius:50%;
+  background:#f7e9ee;
+  box-shadow:
+    0 16px 35px rgba(113,70,84,.16);
+  margin-bottom:5%;
 }
 
-.photo:after{
+.photo::after{
   content:"";
   position:absolute;
   inset:0;
-  border:1px solid rgba(255,255,255,.8);
-  border-radius:inherit;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.85);
   pointer-events:none;
 }
 
 .photo img{
   position:absolute;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  left:0;
-  top:0;
+  left:50%;
+  top:50%;
+  width:auto;
+  height:auto;
+  max-width:none;
   transform-origin:center center;
   will-change:transform;
 }
+
 
 /* 텍스트 */
 
@@ -537,7 +544,7 @@ textarea{
   letter-spacing:3px;
   color:var(--accent);
   font-weight:800;
-  margin-bottom:2.5%;
+  margin-bottom:2%;
   max-width:90%;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -547,17 +554,17 @@ textarea{
 .name{
   font-family:Georgia,"Times New Roman",serif;
   font-weight:500;
-  font-size:clamp(25px,5cqw,42px);
+  font-size:clamp(25px,5vw,42px);
   line-height:1.2;
   letter-spacing:-1px;
-  margin:0 0 2.5%;
+  margin:0 0 2%;
   max-width:100%;
   word-break:break-word;
 }
 
 .desc{
   width:100%;
-  font-size:clamp(10px,1.7cqw,14px);
+  font-size:clamp(10px,1.7vw,14px);
   line-height:1.8;
   color:#746a70;
   white-space:pre-line;
@@ -575,7 +582,7 @@ textarea{
 
 .note{
   width:100%;
-  font-size:clamp(9px,1.5cqw,12px);
+  font-size:clamp(9px,1.5vw,12px);
   line-height:1.8;
   color:#91868b;
   white-space:pre-line;
@@ -583,7 +590,8 @@ textarea{
   word-break:keep-all;
 }
 
-/* 작은 화면 */
+
+/* 반응형 */
 
 @media(max-width:950px){
 
@@ -597,10 +605,6 @@ textarea{
 
 }
 
-/*
-  모바일 세로 화면에서도
-  카드가 잘리지 않고 전체가 보이도록
-*/
 
 @media(max-width:600px){
 
@@ -626,7 +630,6 @@ textarea{
 
   .stage{
     padding:14px;
-    min-height:0;
   }
 
   .mac{
@@ -653,19 +656,8 @@ textarea{
     height:calc(100% - 36px);
   }
 
-  .ratio-square .card{
-    padding:6% 8%;
-  }
-
-  .ratio-portrait .card{
-    padding:5% 8%;
-  }
-
 }
 
-/*
-  모바일 가로 화면
-*/
 
 @media(
   max-width:900px
@@ -693,14 +685,6 @@ textarea{
     margin-top:5px;
   }
 
-  .layout{
-    grid-template-columns:1fr;
-  }
-
-  .preview{
-    width:100%;
-  }
-
   .stage{
     padding:14px;
     min-height:0;
@@ -714,18 +698,26 @@ textarea{
   }
 
 }
+
 </style>
 </head>
 
+
 <body>
+
 
 <div class="wrap">
 
+
 <header class="top">
 
-<div class="mark">♡</div>
+<div class="mark">
+♡
+</div>
 
-<h1>Pair Archive</h1>
+<h1>
+Pair Archive
+</h1>
 
 <p>
 두 사람의 이야기를 하나의 작은 창에 담아보세요.
@@ -737,14 +729,12 @@ textarea{
 <div class="layout">
 
 
-<!-- =========================
+<!-- ======================
      EDITOR
-========================= -->
+====================== -->
 
 <section class="editor">
 
-
-<!-- 페어 정보 -->
 
 <div class="block">
 
@@ -800,7 +790,6 @@ id="desc"
 </div>
 
 
-<!-- 사진 -->
 
 <div class="block">
 
@@ -823,7 +812,14 @@ accept="image/*"
 </label>
 
 
-<div class="crop">
+<!--
+  실제 결과물과 같은 원형 조절창
+-->
+
+<div
+id="crop"
+class="crop"
+>
 
 <img
 id="cropImg"
@@ -835,10 +831,9 @@ id="hint"
 class="hint"
 >
 사진을 선택한 뒤<br>
-드래그해서 위치를 조절해보세요
+원 안에서 드래그해서<br>
+위치를 조절해보세요
 </span>
-
-<span class="frame"></span>
 
 </div>
 
@@ -878,7 +873,6 @@ type="button"
 </div>
 
 
-<!-- 컬러 -->
 
 <div class="block">
 
@@ -927,7 +921,6 @@ type="button"
 </div>
 
 
-<!-- 이야기 -->
 
 <div class="block">
 
@@ -969,7 +962,6 @@ id="note"
 </div>
 
 
-<!-- 비율 -->
 
 <div class="block">
 
@@ -981,12 +973,14 @@ id="note"
 
 <div class="ratioGroup">
 
+
 <button
 class="ratioBtn"
 data-ratio="1:1"
 type="button"
 >
-1 : 1<br>
+1 : 1
+<br>
 <small>정사각형</small>
 </button>
 
@@ -996,16 +990,17 @@ class="ratioBtn active"
 data-ratio="4:5"
 type="button"
 >
-4 : 5<br>
+4 : 5
+<br>
 <small>인스타그램</small>
 </button>
 
-</div>
 
 </div>
 
+</div>
 
-<!-- 저장 -->
+
 
 <button
 id="save"
@@ -1019,9 +1014,10 @@ type="button"
 </section>
 
 
-<!-- =========================
+
+<!-- ======================
      PREVIEW
-========================= -->
+====================== -->
 
 <section class="preview">
 
@@ -1048,9 +1044,8 @@ class="mac ratio-portrait"
 >
 
 
-<!-- 맥북 상단 -->
-
 <div class="macbar">
+
 
 <div class="dots">
 
@@ -1070,17 +1065,18 @@ class="title"
 Pair Archive
 </span>
 
+
 </div>
 
 
-<!-- 카드 -->
 
 <div class="card">
 
 
-<!-- 사진 -->
-
-<div class="photo">
+<div
+id="photo"
+class="photo"
+>
 
 <img
 id="outImg"
@@ -1090,7 +1086,6 @@ hidden
 </div>
 
 
-<!-- 텍스트 -->
 
 <div class="content">
 
@@ -1150,38 +1145,57 @@ class="note"
 
 </div>
 
+
 </div>
+
 
 
 <script>
 
 (() => {
 
-const $ =
-id =>
-document.getElementById(id);
 
-
-/* 상태 */
+/* =========================
+   상태
+========================= */
 
 const state = {
 
-src:null,
+  src:null,
 
-scale:1,
+  /*
+    사진 이동값
 
-x:0,
+    사진 조절창의 중심을 기준으로
+    실제 이미지가 이동한 픽셀
+  */
 
-y:0,
+  x:0,
 
-color:'#f39ab5',
+  y:0,
 
-ratio:'4:5'
+  /*
+    사진 확대
+  */
+
+  scale:1,
+
+  color:'#f39ab5',
+
+  ratio:'4:5'
 
 };
 
 
-/* DOM */
+
+/* =========================
+   DOM
+========================= */
+
+const $ =
+id =>
+document.getElementById(id);
+
 
 const windowTitle =
 $('windowTitle');
@@ -1202,13 +1216,16 @@ const file =
 $('file');
 
 const crop =
-document.querySelector('.crop');
+$('crop');
 
 const cropImg =
 $('cropImg');
 
 const hint =
 $('hint');
+
+const photo =
+$('photo');
 
 const outImg =
 $('outImg');
@@ -1238,100 +1255,13 @@ const save =
 $('save');
 
 
-/*
-  사진 표시 크기 계산
 
-  편집창의 사진 위치와
-  미리보기 사진 위치를
-  같은 비율로 계산하기 위한 함수
-*/
+/* =========================
+   텍스트 동기화
+========================= */
 
-function getImageTransform(){
+function syncText(){
 
-  return {
-
-    x:
-      state.x,
-
-    y:
-      state.y,
-
-    scale:
-      state.scale
-
-  };
-
-}
-
-
-/* 편집창 사진 */
-
-function renderCrop(){
-
-  if(!state.src){
-    return;
-  }
-
-
-  cropImg.style.transform =
-    `translate(
-      calc(-50% + ${state.x}px),
-      calc(-50% + ${state.y}px)
-    )
-    scale(${state.scale})`;
-
-
-  zoom.textContent =
-    Math.round(
-      state.scale * 100
-    ) +
-    '%';
-
-}
-
-
-/*
-  미리보기 사진
-
-  편집창에서 이동한 거리와
-  확대 비율을 동일하게 적용
-*/
-
-function renderPreview(){
-
-  if(!state.src){
-    return;
-  }
-
-
-  const transform =
-    getImageTransform();
-
-
-  outImg.style.transform =
-    `translate(
-      ${transform.x * 0.55}px,
-      ${transform.y * 0.55}px
-    )
-    scale(${transform.scale})`;
-
-}
-
-
-/* 전체 렌더링 */
-
-function render(){
-
-  renderCrop();
-
-  renderPreview();
-
-}
-
-
-/* 텍스트 동기화 */
-
-function sync(){
 
   outTitle.textContent =
     windowTitle.value ||
@@ -1361,77 +1291,438 @@ function sync(){
     state.color
   );
 
+
+}
+
+
+
+/* =========================
+   사진 크기 계산
+
+   조절창과 미리보기 모두
+   같은 방식으로 이미지 크기를 계산
+========================= */
+
+function calculateImageSize(
+
+  containerWidth,
+
+  containerHeight,
+
+  imageWidth,
+
+  imageHeight,
+
+  scale
+
+){
+
+  /*
+    원형 프레임 안에서
+    이미지가 빈 공간 없이
+    꽉 차도록 계산
+  */
+
+  const baseScale =
+
+    Math.max(
+
+      containerWidth /
+      imageWidth,
+
+      containerHeight /
+      imageHeight
+
+    );
+
+
+  return {
+
+    width:
+      imageWidth *
+      baseScale *
+      scale,
+
+    height:
+      imageHeight *
+      baseScale *
+      scale
+
+  };
+
 }
 
 
-/* 텍스트 입력 */
 
-[
-  windowTitle,
-  name,
-  desc,
-  eyebrow,
-  note
+/* =========================
+   사진 렌더링
+========================= */
 
-].forEach(
+function renderPhoto(){
 
-input => {
 
-  input.addEventListener(
-    'input',
-    sync
-  );
+  if(!state.src){
+    return;
+  }
+
+
+  /*
+    조절창
+
+    CSS는 실제 이미지 크기를
+    JS로 직접 계산해서 적용
+  */
+
+  const cropWidth =
+    crop.clientWidth;
+
+
+  const cropHeight =
+    crop.clientHeight;
+
+
+  const cropSize =
+
+    Math.min(
+      cropWidth,
+      cropHeight
+    );
+
+
+  const cropScale =
+    calculateImageSize(
+
+      cropSize,
+
+      cropSize,
+
+      cropImg.naturalWidth,
+
+      cropImg.naturalHeight,
+
+      state.scale
+
+    );
+
+
+  cropImg.style.width =
+    cropScale.width +
+    'px';
+
+
+  cropImg.style.height =
+    cropScale.height +
+    'px';
+
+
+  cropImg.style.transform =
+
+    `translate(
+
+      calc(-50% + ${state.x}px),
+
+      calc(-50% + ${state.y}px)
+
+    )`;
+
+
+  /*
+    미리보기
+
+    조절창과 미리보기의
+    실제 프레임 크기 차이를
+    비율로 환산
+  */
+
+  const previewWidth =
+    photo.clientWidth;
+
+
+  const previewHeight =
+    photo.clientHeight;
+
+
+  const previewScale =
+    calculateImageSize(
+
+      previewWidth,
+
+      previewHeight,
+
+      cropImg.naturalWidth,
+
+      cropImg.naturalHeight,
+
+      state.scale
+
+    );
+
+
+  /*
+    이동량을
+    조절창 크기 → 미리보기 크기
+    비율로 변환
+
+    임의의 0.55 같은 값은 사용하지 않음
+  */
+
+  const ratioX =
+
+    previewWidth /
+    cropSize;
+
+
+  const ratioY =
+
+    previewHeight /
+    cropSize;
+
+
+  outImg.style.width =
+    previewScale.width +
+    'px';
+
+
+  outImg.style.height =
+    previewScale.height +
+    'px';
+
+
+  outImg.style.transform =
+
+    `translate(
+
+      calc(-50% + ${
+        state.x *
+        ratioX
+      }px),
+
+      calc(-50% + ${
+        state.y *
+        ratioY
+      }px)
+
+    )`;
+
+
+  zoom.textContent =
+
+    Math.round(
+      state.scale *
+      100
+    ) +
+
+    '%';
 
 }
+
+
+
+/* =========================
+   이미지 로드
+========================= */
+
+function handleImageLoad(){
+
+
+  cropImg.hidden =
+    false;
+
+
+  outImg.hidden =
+    false;
+
+
+  hint.hidden =
+    true;
+
+
+  renderPhoto();
+
+}
+
+
+
+/* =========================
+   파일 선택
+========================= */
+
+file.addEventListener(
+
+  'change',
+
+  event => {
+
+
+    const selected =
+      event.target.files?.[0];
+
+
+    if(!selected){
+      return;
+    }
+
+
+    if(
+      !selected.type.startsWith(
+        'image/'
+      )
+    ){
+
+      alert(
+        '이미지 파일을 선택해 주세요.'
+      );
+
+      return;
+
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+
+    event => {
+
+
+      state.src =
+        event.target.result;
+
+
+      state.x =
+        0;
+
+
+      state.y =
+        0;
+
+
+      state.scale =
+        1;
+
+
+      cropImg.onload =
+        handleImageLoad;
+
+
+      cropImg.src =
+        state.src;
+
+
+      outImg.src =
+        state.src;
+
+
+    };
+
+
+    reader.onerror =
+
+    () => {
+
+      alert(
+        '사진을 불러오지 못했습니다.'
+      );
+
+    };
+
+
+    reader.readAsDataURL(
+      selected
+    );
+
+
+  }
 
 );
 
 
-/* 사진 선택 */
 
-file.addEventListener(
+/* =========================
+   확대
+========================= */
 
-'change',
+$('plus').addEventListener(
 
-event => {
+  'click',
 
-  const selected =
-    event.target.files?.[0];
-
-
-  if(!selected){
-    return;
-  }
+  () => {
 
 
-  if(
-    !selected.type.startsWith(
-      'image/'
-    )
-  ){
-
-    alert(
-      '이미지 파일을 선택해 주세요.'
-    );
-
-    return;
-
-  }
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload =
-  event => {
-
-    state.src =
-      event.target.result;
+    if(!state.src){
+      return;
+    }
 
 
     state.scale =
-      1;
+
+      Math.min(
+
+        3,
+
+        state.scale +
+        0.1
+
+      );
+
+
+    renderPhoto();
+
+
+  }
+
+);
+
+
+
+/* =========================
+   축소
+========================= */
+
+$('minus').addEventListener(
+
+  'click',
+
+  () => {
+
+
+    if(!state.src){
+      return;
+    }
+
+
+    state.scale =
+
+      Math.max(
+
+        0.5,
+
+        state.scale -
+        0.1
+
+      );
+
+
+    renderPhoto();
+
+
+  }
+
+);
+
+
+
+/* =========================
+   초기화
+========================= */
+
+$('reset').addEventListener(
+
+  'click',
+
+  () => {
 
 
     state.x =
@@ -1442,565 +1733,805 @@ event => {
       0;
 
 
-    cropImg.src =
-      state.src;
+    state.scale =
+      1;
 
 
-    cropImg.hidden =
-      false;
+    renderPhoto();
 
 
-    hint.hidden =
-      true;
-
-
-    outImg.src =
-      state.src;
-
-
-    outImg.hidden =
-      false;
-
-
-    render();
-
-  };
-
-
-  reader.onerror =
-  () => {
-
-    alert(
-      '사진을 불러오지 못했습니다.'
-    );
-
-  };
-
-
-  reader.readAsDataURL(
-    selected
-  );
-
-}
+  }
 
 );
 
 
-/* 확대 */
 
-$('plus').addEventListener(
-
-'click',
-
-() => {
-
-  state.scale =
-    Math.min(
-      3,
-      state.scale +
-      0.1
-    );
-
-
-  render();
-
-}
-
-);
-
-
-/* 축소 */
-
-$('minus').addEventListener(
-
-'click',
-
-() => {
-
-  state.scale =
-    Math.max(
-      0.5,
-      state.scale -
-      0.1
-    );
-
-
-  render();
-
-}
-
-);
-
-
-/* 초기화 */
-
-$('reset').addEventListener(
-
-'click',
-
-() => {
-
-  state.scale =
-    1;
-
-
-  state.x =
-    0;
-
-
-  state.y =
-    0;
-
-
-  render();
-
-}
-
-);
-
-
-/* 마우스 휠 */
+/* =========================
+   휠 확대
+========================= */
 
 crop.addEventListener(
 
-'wheel',
+  'wheel',
 
-event => {
-
-  if(!state.src){
-    return;
-  }
+  event => {
 
 
-  event.preventDefault();
+    if(!state.src){
+      return;
+    }
 
 
-  state.scale =
-    Math.max(
+    event.preventDefault();
 
-      0.5,
 
-      Math.min(
+    state.scale =
 
-        3,
+      Math.max(
 
-        state.scale +
+        0.5,
 
-        (
-          event.deltaY < 0
-          ? 0.08
-          : -0.08
+        Math.min(
+
+          3,
+
+          state.scale +
+
+          (
+            event.deltaY < 0
+
+            ? 0.08
+
+            : -0.08
+
+          )
+
         )
 
-      )
-
-    );
+      );
 
 
-  render();
+    renderPhoto();
 
-},
 
-{
-  passive:false
-}
+  },
+
+  {
+    passive:false
+  }
 
 );
 
 
-/* 드래그 */
+
+/* =========================
+   드래그
+========================= */
 
 let dragging =
 false;
 
+
 let lastX =
 0;
+
 
 let lastY =
 0;
 
 
+
 cropImg.addEventListener(
 
-'pointerdown',
+  'pointerdown',
 
-event => {
+  event => {
 
-  if(!state.src){
-    return;
+
+    if(!state.src){
+      return;
+    }
+
+
+    dragging =
+      true;
+
+
+    lastX =
+      event.clientX;
+
+
+    lastY =
+      event.clientY;
+
+
+    cropImg.setPointerCapture(
+
+      event.pointerId
+
+    );
+
+
   }
-
-
-  dragging =
-    true;
-
-
-  lastX =
-    event.clientX;
-
-
-  lastY =
-    event.clientY;
-
-
-  cropImg.setPointerCapture(
-    event.pointerId
-  );
-
-}
 
 );
 
 
+
 cropImg.addEventListener(
 
-'pointermove',
+  'pointermove',
 
-event => {
+  event => {
 
-  if(!dragging){
-    return;
+
+    if(!dragging){
+      return;
+    }
+
+
+    state.x +=
+
+      event.clientX -
+      lastX;
+
+
+    state.y +=
+
+      event.clientY -
+      lastY;
+
+
+    lastX =
+      event.clientX;
+
+
+    lastY =
+      event.clientY;
+
+
+    renderPhoto();
+
+
   }
 
-
-  state.x +=
-    event.clientX -
-    lastX;
-
-
-  state.y +=
-    event.clientY -
-    lastY;
-
-
-  lastX =
-    event.clientX;
-
-
-  lastY =
-    event.clientY;
-
-
-  render();
-
-}
-
 );
+
 
 
 function stopDragging(){
 
+
   dragging =
     false;
+
 
 }
 
 
+
 cropImg.addEventListener(
+
   'pointerup',
+
   stopDragging
+
 );
+
 
 cropImg.addEventListener(
+
   'pointercancel',
+
   stopDragging
+
 );
 
 
-/* 색상 */
+
+/* =========================
+   컬러
+========================= */
 
 document
 .querySelectorAll('.sw')
 .forEach(
 
-button => {
-
-  button.addEventListener(
-
-    'click',
-
-    () => {
-
-      state.color =
-        button.dataset.c;
+  button => {
 
 
-      document
-      .querySelectorAll('.sw')
-      .forEach(
+    button.addEventListener(
 
-        item => {
+      'click',
 
-          item.classList.remove(
-            'active'
-          );
-
-        }
-
-      );
+      () => {
 
 
-      button.classList.add(
-        'active'
-      );
+        state.color =
+          button.dataset.c;
 
 
-      sync();
+        document
+        .querySelectorAll('.sw')
+        .forEach(
 
-    }
+          item => {
 
-  );
+            item.classList.remove(
+              'active'
+            );
 
-}
+          }
+
+        );
+
+
+        button.classList.add(
+          'active'
+        );
+
+
+        syncText();
+
+
+      }
+
+    );
+
+
+  }
 
 );
 
 
-/* 비율 */
+
+/* =========================
+   비율
+========================= */
 
 document
 .querySelectorAll('.ratioBtn')
 .forEach(
 
-button => {
-
-  button.addEventListener(
-
-    'click',
-
-    () => {
-
-      state.ratio =
-        button.dataset.ratio;
+  button => {
 
 
-      document
-      .querySelectorAll('.ratioBtn')
-      .forEach(
+    button.addEventListener(
 
-        item => {
+      'click',
 
-          item.classList.remove(
-            'active'
+      () => {
+
+
+        state.ratio =
+          button.dataset.ratio;
+
+
+        document
+        .querySelectorAll('.ratioBtn')
+        .forEach(
+
+          item => {
+
+            item.classList.remove(
+              'active'
+            );
+
+          }
+
+        );
+
+
+        button.classList.add(
+          'active'
+        );
+
+
+        card.classList.remove(
+
+          'ratio-square',
+
+          'ratio-portrait'
+
+        );
+
+
+        if(
+          state.ratio ===
+          '1:1'
+        ){
+
+          card.classList.add(
+            'ratio-square'
+          );
+
+        }else{
+
+          card.classList.add(
+            'ratio-portrait'
           );
 
         }
 
-      );
 
+        requestAnimationFrame(
 
-      button.classList.add(
-        'active'
-      );
+          renderPhoto
 
-
-      card.classList.remove(
-        'ratio-square',
-        'ratio-portrait'
-      );
-
-
-      if(
-        state.ratio ===
-        '1:1'
-      ){
-
-        card.classList.add(
-          'ratio-square'
         );
 
-      }else{
-
-        card.classList.add(
-          'ratio-portrait'
-        );
 
       }
 
-    }
+    );
 
-  );
 
-}
+  }
 
 );
 
 
-/*
-  저장용 캔버스
 
-  미리보기와 같은 구조로
-  사진과 텍스트를 그린다.
-*/
+/* =========================
+   텍스트 이벤트
+========================= */
 
-save.addEventListener(
+[
+  windowTitle,
+  name,
+  desc,
+  eyebrow,
+  note
 
-'click',
+].forEach(
 
-() => {
+  input => {
 
-  if(!state.src){
 
-    alert(
-      '먼저 사진을 선택해 주세요.'
+    input.addEventListener(
+
+      'input',
+
+      syncText
+
     );
 
-    return;
 
   }
 
-
-  const canvas =
-    document.createElement(
-      'canvas'
-    );
+);
 
 
-  const ctx =
-    canvas.getContext(
-      '2d'
-    );
+
+/* =========================
+   창 크기 변경
+========================= */
+
+window.addEventListener(
+
+  'resize',
+
+  () => {
 
 
-  if(!ctx){
+    if(state.src){
 
-    alert(
-      '이미지를 저장할 수 없습니다.'
-    );
+      requestAnimationFrame(
 
-    return;
+        renderPhoto
 
-  }
-
-
-  const W =
-    1800;
-
-
-  const H =
-    state.ratio ===
-    '1:1'
-    ? 1800
-    : 2250;
-
-
-  canvas.width =
-    W;
-
-
-  canvas.height =
-    H;
-
-
-  /* 배경 */
-
-  ctx.fillStyle =
-    '#ffffff';
-
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-
-  /* 맥북 상단바 */
-
-  const barHeight =
-    92;
-
-
-  ctx.fillStyle =
-    '#faf9fa';
-
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    barHeight
-  );
-
-
-  /* 버튼 */
-
-  [
-    '#ff625a',
-    '#ffc04b',
-    '#31c85a'
-
-  ].forEach(
-
-    (color,index) => {
-
-      ctx.fillStyle =
-        color;
-
-
-      ctx.beginPath();
-
-
-      ctx.arc(
-        38 +
-        index *
-        42,
-        46,
-        13,
-        0,
-        Math.PI *
-        2
       );
-
-
-      ctx.fill();
 
     }
 
+
+  }
+
+);
+
+
+
+/* =========================
+   Canvas 둥근 사각형
+========================= */
+
+function roundedRect(
+
+  ctx,
+
+  x,
+
+  y,
+
+  width,
+
+  height,
+
+  radius
+
+){
+
+
+  ctx.beginPath();
+
+
+  ctx.moveTo(
+
+    x + radius,
+
+    y
+
   );
 
 
-  /* 창 제목 */
+  ctx.arcTo(
 
-  ctx.fillStyle =
-    '#999094';
+    x + width,
+
+    y,
+
+    x + width,
+
+    y + height,
+
+    radius
+
+  );
+
+
+  ctx.arcTo(
+
+    x + width,
+
+    y + height,
+
+    x,
+
+    y + height,
+
+    radius
+
+  );
+
+
+  ctx.arcTo(
+
+    x,
+
+    y + height,
+
+    x,
+
+    y,
+
+    radius
+
+  );
+
+
+  ctx.arcTo(
+
+    x,
+
+    y,
+
+    x + width,
+
+    y,
+
+    radius
+
+  );
+
+
+  ctx.closePath();
+
+}
+
+
+
+/* =========================
+   Canvas 텍스트 줄바꿈
+========================= */
+
+function drawCenteredLines(
+
+  ctx,
+
+  text,
+
+  x,
+
+  y,
+
+  lineHeight,
+
+  font,
+
+  color
+
+){
 
 
   ctx.font =
-    '17px sans-serif';
+    font;
+
+
+  ctx.fillStyle =
+    color;
 
 
   ctx.textAlign =
     'center';
 
 
-  ctx.fillText(
+  const lines =
 
-    windowTitle.value ||
-    'Pair Archive',
+    String(
+      text || ''
+    )
+    .split('\n');
 
-    W / 2,
 
-    53
+  lines.forEach(
+
+    (line,index) => {
+
+
+      ctx.fillText(
+
+        line,
+
+        x,
+
+        y +
+        index *
+        lineHeight
+
+      );
+
+
+    }
 
   );
 
 
-  const image =
-    new Image();
+  return (
+
+    y +
+
+    lines.length *
+    lineHeight
+
+  );
+
+}
 
 
-  image.onload = () => {
+
+/* =========================
+   이미지 저장
+========================= */
+
+save.addEventListener(
+
+  'click',
+
+  async () => {
+
+
+    if(!state.src){
+
+      alert(
+        '먼저 사진을 선택해 주세요.'
+      );
+
+      return;
+
+    }
+
 
     /*
-      저장 이미지의 사진 영역
-      미리보기와 동일한 비율
+      저장 캔버스
+
+      1:1 = 1800 x 1800
+
+      4:5 = 1800 x 2250
     */
 
-    let photoW;
-    let photoH;
-    let photoX;
+    const W =
+      1800;
+
+
+    const H =
+
+      state.ratio ===
+      '1:1'
+
+      ? 1800
+
+      : 2250;
+
+
+    const canvas =
+      document.createElement(
+        'canvas'
+      );
+
+
+    canvas.width =
+      W;
+
+
+    canvas.height =
+      H;
+
+
+    const ctx =
+      canvas.getContext(
+        '2d'
+      );
+
+
+    if(!ctx){
+
+      alert(
+        '이미지를 저장할 수 없습니다.'
+      );
+
+      return;
+
+    }
+
+
+    /*
+      배경
+    */
+
+    ctx.fillStyle =
+      '#ffffff';
+
+
+    ctx.fillRect(
+
+      0,
+
+      0,
+
+      W,
+
+      H
+
+    );
+
+
+    /*
+      맥북 상단바
+    */
+
+    const barHeight =
+      92;
+
+
+    ctx.fillStyle =
+      '#faf9fa';
+
+
+    ctx.fillRect(
+
+      0,
+
+      0,
+
+      W,
+
+      barHeight
+
+    );
+
+
+    /*
+      맥북 버튼
+    */
+
+    [
+
+      '#ff625a',
+
+      '#ffc04b',
+
+      '#31c85a'
+
+    ].forEach(
+
+      (color,index) => {
+
+
+        ctx.fillStyle =
+          color;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+          38 +
+          index *
+          42,
+
+          46,
+
+          13,
+
+          0,
+
+          Math.PI *
+          2
+
+        );
+
+
+        ctx.fill();
+
+
+      }
+
+    );
+
+
+    /*
+      창 이름
+    */
+
+    ctx.fillStyle =
+      '#999094';
+
+
+    ctx.font =
+      '17px sans-serif';
+
+
+    ctx.textAlign =
+      'center';
+
+
+    ctx.fillText(
+
+      windowTitle.value ||
+      'Pair Archive',
+
+      W / 2,
+
+      53
+
+    );
+
+
+    /*
+      사진 크기
+
+      결과물 가로 폭의 80%
+    */
+
+    const photoSize =
+      W *
+      0.80;
+
+
+    const photoX =
+      (
+        W -
+        photoSize
+      ) /
+      2;
+
+
+    /*
+      1:1과 4:5 모두
+      원형 사진
+    */
+
     let photoY;
 
 
@@ -2009,52 +2540,99 @@ save.addEventListener(
       '1:1'
     ){
 
-      photoW =
-        700;
-
-      photoH =
-        700;
-
-      photoX =
-        (
-          W -
-          photoW
-        ) /
-        2;
-
       photoY =
         180;
 
     }else{
 
-      photoW =
-        700;
-
-      photoH =
-        875;
-
-      photoX =
-        (
-          W -
-          photoW
-        ) /
-        2;
-
       photoY =
-        150;
+        160;
 
     }
 
 
-    /* 사진 */
+    /*
+      원본 이미지 로드
+    */
 
-    ctx.save();
+    const image =
+      new Image();
 
 
-    if(
-      state.ratio ===
-      '1:1'
-    ){
+    image.onload = () => {
+
+
+      /*
+        조절창과 동일한
+        contain/cover 계산
+      */
+
+      const baseScale =
+
+        Math.max(
+
+          photoSize /
+          image.naturalWidth,
+
+          photoSize /
+          image.naturalHeight
+
+        );
+
+
+      const drawWidth =
+
+        image.naturalWidth *
+        baseScale *
+        state.scale;
+
+
+      const drawHeight =
+
+        image.naturalHeight *
+        baseScale *
+        state.scale;
+
+
+      /*
+        조절창 기준 이동값을
+        저장 이미지 기준으로 환산
+
+        조절창 크기 : 약 300px
+
+        저장 이미지 : 1440px
+
+        따라서 비율 계산
+      */
+
+      const cropSize =
+        crop.clientWidth;
+
+
+      const outputRatio =
+
+        photoSize /
+        cropSize;
+
+
+      const outputX =
+
+        state.x *
+        outputRatio;
+
+
+      const outputY =
+
+        state.y *
+        outputRatio;
+
+
+      /*
+        원형 마스크
+      */
+
+      ctx.save();
+
 
       ctx.beginPath();
 
@@ -2064,9 +2642,9 @@ save.addEventListener(
         W / 2,
 
         photoY +
-        photoH / 2,
+        photoSize / 2,
 
-        photoW / 2,
+        photoSize / 2,
 
         0,
 
@@ -2078,347 +2656,303 @@ save.addEventListener(
 
       ctx.clip();
 
-    }else{
 
-      roundedRect(
+      /*
+        사진 그리기
+      */
 
-        ctx,
+      ctx.drawImage(
 
-        photoX,
+        image,
 
-        photoY,
+        photoX +
+        (
+          photoSize -
+          drawWidth
+        ) /
+        2 +
+        outputX,
 
-        photoW,
+        photoY +
+        (
+          photoSize -
+          drawHeight
+        ) /
+        2 +
+        outputY,
 
-        photoH,
+        drawWidth,
 
-        300
-
-      );
-
-
-      ctx.clip();
-
-    }
-
-
-    const fit =
-      Math.max(
-
-        photoW /
-        image.width,
-
-        photoH /
-        image.height
+        drawHeight
 
       );
 
 
-    const iw =
-      image.width *
-      fit *
-      state.scale;
+      ctx.restore();
 
 
-    const ih =
-      image.height *
-      fit *
-      state.scale;
+      /*
+        텍스트 시작 위치
+      */
+
+      let y =
+
+        state.ratio ===
+        '1:1'
+
+        ? 1060
+
+        : 1300;
 
 
-    /*
-      저장 이미지와 미리보기의
-      위치 이동 비율을 동일하게 적용
-    */
+      /*
+        섹션 제목
+      */
 
-    const savedX =
-      state.x *
-      2;
+      ctx.fillStyle =
+        state.color;
 
 
-    const savedY =
-      state.y *
-      2;
+      ctx.font =
+        'bold 22px sans-serif';
 
 
-    ctx.drawImage(
-
-      image,
-
-      photoX +
-      (
-        photoW -
-        iw
-      ) /
-      2 +
-      savedX,
-
-      photoY +
-      (
-        photoH -
-        ih
-      ) /
-      2 +
-      savedY,
-
-      iw,
-
-      ih
-
-    );
+      ctx.textAlign =
+        'center';
 
 
-    ctx.restore();
+      ctx.fillText(
 
-
-    /*
-      텍스트
-    */
-
-    let textY;
-
-
-    if(
-      state.ratio ===
-      '1:1'
-    ){
-
-      textY =
-        1030;
-
-    }else{
-
-      textY =
-        1180;
-
-    }
-
-
-    /* 섹션 제목 */
-
-    ctx.fillStyle =
-      state.color;
-
-
-    ctx.font =
-      'bold 22px sans-serif';
-
-
-    ctx.textAlign =
-      'center';
-
-
-    ctx.fillText(
-
-      (
-        eyebrow.value ||
-        'OUR STORY'
-      ).toUpperCase(),
-
-      W / 2,
-
-      textY
-
-    );
-
-
-    textY +=
-      80;
-
-
-    /* 페어 이름 */
-
-    ctx.fillStyle =
-      '#302a2d';
-
-
-    ctx.font =
-      '500 62px Georgia, serif';
-
-
-    ctx.fillText(
-
-      name.value ||
-      'Pair Name',
-
-      W / 2,
-
-      textY
-
-    );
-
-
-    textY +=
-      75;
-
-
-    /* 소개 */
-
-    textY =
-      drawLines(
-
-        ctx,
-
-        desc.value,
+        (
+          eyebrow.value ||
+          'OUR STORY'
+        ).toUpperCase(),
 
         W / 2,
 
-        textY,
-
-        38,
-
-        '23px sans-serif',
-
-        '#746a70',
-
-        'center'
+        y
 
       );
 
 
-    /* 라인 */
-
-    ctx.fillStyle =
-      state.color;
+      y +=
+        80;
 
 
-    ctx.fillRect(
+      /*
+        페어 이름
+      */
 
-      W / 2 -
-      27,
-
-      textY +
-      28,
-
-      54,
-
-      2
-
-    );
+      ctx.fillStyle =
+        '#302a2d';
 
 
-    /* 이야기 */
-
-    drawLines(
-
-      ctx,
-
-      note.value,
-
-      W / 2,
-
-      textY +
-      90,
-
-      34,
-
-      '20px sans-serif',
-
-      '#91868b',
-
-      'center'
-
-    );
+      ctx.font =
+        '500 62px Georgia, serif';
 
 
-    /*
-      PNG 생성
-    */
+      ctx.fillText(
 
-    canvas.toBlob(
+        name.value ||
+        'Pair Name',
 
-      blob => {
+        W / 2,
 
-        if(!blob){
+        y
 
-          alert(
-            '이미지를 만드는 데 실패했습니다. 다시 시도해 주세요.'
-          );
-
-          return;
-
-        }
+      );
 
 
-        const url =
-          URL.createObjectURL(
-            blob
-          );
+      y +=
+        80;
 
 
-        const link =
-          document.createElement(
-            'a'
-          );
+      /*
+        소개
+      */
 
+      y =
 
-        link.href =
-          url;
+        drawCenteredLines(
 
+          ctx,
 
-        link.download =
+          desc.value,
 
-          state.ratio ===
-          '1:1'
+          W / 2,
 
-          ? 'pair-archive-1x1.png'
+          y,
 
-          : 'pair-archive-4x5.png';
+          38,
 
+          '23px sans-serif',
 
-        document.body.appendChild(
-          link
+          '#746a70'
+
         );
 
 
-        link.click();
+      /*
+        포인트 라인
+      */
+
+      ctx.fillStyle =
+        state.color;
 
 
-        link.remove();
+      ctx.fillRect(
+
+        W / 2 -
+        27,
+
+        y +
+        24,
+
+        54,
+
+        2
+
+      );
 
 
-        setTimeout(
+      /*
+        이야기
+      */
 
-          () => {
+      drawCenteredLines(
 
-            URL.revokeObjectURL(
-              url
+        ctx,
+
+        note.value,
+
+        W / 2,
+
+        y +
+        85,
+
+        34,
+
+        '20px sans-serif',
+
+        '#91868b'
+
+      );
+
+
+      /*
+        PNG Blob 생성
+      */
+
+      canvas.toBlob(
+
+        blob => {
+
+
+          if(!blob){
+
+            alert(
+              '이미지를 저장하지 못했습니다. 다시 시도해 주세요.'
             );
 
-          },
+            return;
 
-          1000
-
-        );
-
-      },
-
-      'image/png'
-
-    );
-
-  };
+          }
 
 
-  image.onerror =
-  () => {
+          const url =
 
-    alert(
-      '사진을 불러오지 못했습니다. 다시 사진을 선택해 주세요.'
-    );
-
-  };
+            URL.createObjectURL(
+              blob
+            );
 
 
-  image.src =
-    state.src;
+          const link =
 
-});
+            document.createElement(
+              'a'
+            );
 
 
-/* 초기화 */
+          link.href =
+            url;
 
-sync();
+
+          link.download =
+
+            state.ratio ===
+            '1:1'
+
+            ? 'pair-archive-1x1.png'
+
+            : 'pair-archive-4x5.png';
+
+
+          link.style.display =
+            'none';
+
+
+          document.body.appendChild(
+            link
+          );
+
+
+          link.click();
+
+
+          setTimeout(
+
+            () => {
+
+              link.remove();
+
+              URL.revokeObjectURL(
+                url
+              );
+
+            },
+
+            1000
+
+          );
+
+
+        },
+
+        'image/png'
+
+      );
+
+
+    };
+
+
+    image.onerror =
+
+    () => {
+
+      alert(
+        '사진을 불러오지 못했습니다. 다시 시도해 주세요.'
+      );
+
+    };
+
+
+    image.src =
+      state.src;
+
+
+  }
+
+);
+
+
+
+/* =========================
+   초기 실행
+========================= */
+
+syncText();
+
 
 })();
 
