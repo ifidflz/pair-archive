@@ -514,17 +514,19 @@ imgTest.src = URL.createObjectURL(f);
     cropImg.hidden=false;
     hint.hidden=true;
     outImg.src=s.src;
-    outImg.onload = () => {
-  alert(
-    "outImg 크기: " +
-    outImg.naturalWidth +
-    " × " +
-    outImg.naturalHeight
-  );
+   
 };
-    outImg.hidden=false;
-    [plus,minus,reset].forEach(b=>b.disabled=false);
-    render();
+  outImg.hidden=false;
+
+outImg.onload = () => {
+  alert("render 전: " + outImg.naturalWidth + " × " + outImg.naturalHeight);
+
+  render();
+
+  setTimeout(() => {
+    alert("render 후: " + outImg.naturalWidth + " × " + outImg.naturalHeight);
+  }, 100);
+};
   };
   r.readAsDataURL(f);
 };
