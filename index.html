@@ -744,6 +744,16 @@ const fallbackBg = '#ffffff';
       windowWidth: document.documentElement.scrollWidth,
       windowHeight: document.documentElement.scrollHeight
     });
+    alert(
+  "stage 실제크기: " +
+  stageEl.offsetWidth +
+  " × " +
+  stageEl.offsetHeight +
+  "\n저장캔버스: " +
+  canvas.width +
+  " × " +
+  canvas.height
+);
   }finally{
     macEl.classList.remove('exporting','hide-fall');
     outImg.style.display = prevDisplay;
