@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Love Window — 러브 윈도우</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--accent:#f39ab5;--accent-soft:#fff0f5;--ink:#302a2d;--muted:#8f8187;--paper:#fffdfb;--line:#eee2e6;--name-color:#5c3b46;--dot1:#d8d4d5;--dot2:#bcb8ba;--dot3:var(--accent);}
+*{box-sizing:border-box}body{margin:0;background:#fff7f8;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Apple SD Gothic Neo",sans-serif}
+button,input,textarea{font:inherit}.wrap{max-width:1320px;margin:auto;padding:38px 24px 70px}
+.top{text-align:center;margin-bottom:30px}.top .mark{font-family:"Cormorant Garamond",serif;font-size:25px;color:#f39ab5;margin-bottom:6px}.top h1{font-family:"Cormorant Garamond", serif;font-weight:500;font-size:34px;letter-spacing:-.5px;margin:0;color:#4f464a;}.top p{color:#9c8e94;margin:6px 0 0;font-size:11px}
+  .top-text{
+  color:#f39ab5;
+  margin:6px 0 0;
+  font-size:18px;
+}
+.layout{display:grid;grid-template-columns:370px minmax(0,1fr);gap:22px;align-items:start}
+.editor,.preview{background:rgba(255,253,251,.92);border:1px solid #f0dfe4;border-radius:24px;box-shadow:0 18px 45px rgba(157,83,105,.08)}
+.editor{padding:24px}.preview{padding:24px;min-width:0}
+.block{padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line)}.block:last-of-type{border-bottom:0;margin-bottom:0}
+.block h3{font-family: "Noto Sans KR", sans-serif;font-size:14px;margin:0 0 16px;letter-spacing:.2px;color:#6d6468;}.block h3 span{color:#f39ab5;font-family:"Cormorant Garamond", serif; font-weight: 700;sans-serif;font-size:22px;margin-right:5px}
+.field{margin-bottom:13px}.field:last-child{margin-bottom:0}label{display:block;font-size:11px;color:#8f8187;margin-bottom:6px}
+input[type=text],textarea{width:100%;border:1px solid #eadde1;background:#fff;border-radius:12px;padding:11px 12px;color:var(--ink);outline:none}input[type=text]:focus,textarea:focus{border-color:#ef9eb7;box-shadow:0 0 0 4px #fdebf1}textarea{min-height:76px;resize:vertical;line-height:1.6}
+.upload{display:flex;align-items:center;justify-content:center;min-height:45px;border:1px dashed #e5b7c5;background:#fff8fa;border-radius:12px;color:#9a6576;cursor:pointer;font-size:13px}.upload:hover{background:#fff1f5}.upload input{display:none}
+.crop{position:relative;height:220px;margin-top:10px;border-radius:14px;overflow:hidden;background:#f8edf0}.crop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%}.hint{position:absolute;inset:0;display:grid;place-items:center;color:#b29ba2;font-size:12px;text-align:center;padding:30px;pointer-events:none}.frame{position:absolute;inset:18px;border:1px solid rgba(255,255,255,.95);box-shadow:0 0 0 999px rgba(90,50,65,.13);border-radius:12px;pointer-events:none}
+.cropTools{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:10px}.cropTools button{width:36px;height:32px;border:1px solid #eadde1;background:white;border-radius:9px;cursor:pointer;color:#735966}.cropTools button:disabled{opacity:.4;cursor:not-allowed}.zoom{font-size:11px;color:#8f8187;min-width:48px;text-align:center}
+.palette{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}.sw{width:28px;height:28px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 1px #eadde1;cursor:pointer;padding:0}.sw.active{box-shadow:0 0 0 2px #4e3a42}
+.save{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:#d4a4b3;color:white;font-weight:700;cursor:pointer;transition:all 0.2s}.save:hover{background:#c792a3}.save:disabled{opacity:.6;cursor:wait}
+.previewHead{display:flex;align-items:end;justify-content:space-between;margin:0 2px 14px; color:#6d6468;}.previewHead h3{font-size:14px;margin:0}.previewHead small{color:#ae9ca3;font-size:10px}
+.stage{max-width:480px;margin:0 auto;border-radius:18px;background:radial-gradient(circle at 50% 20%,var(--stage-c1,#fffdfd) 0,var(--stage-c2,#f9eef2) 58%,var(--stage-c3,#f5e6eb) 100%);padding:34px 20px;min-height:0;display:grid;place-items:center;overflow:visible}
+.mac{container-type:inline-size;width:100%;max-width:420px;aspect-ratio:1.5;background:#fff;border:1px solid #e3dfe1;border-radius:20px;overflow:hidden;box-shadow:0 30px 65px rgba(104,61,76,.19);flex:none;position:relative}
+.mac:after{content:"";position:absolute;inset:5.4cqw 0 0;background:linear-gradient(120deg,transparent 45%,rgba(255,255,255,.7) 50%,transparent 55%);opacity:.4;pointer-events:none}
+.mac.exporting:after{content:none}
+.macbar{height:5.4cqw;min-height:32px;background:var(--macbar-bg,rgba(250,249,250,.94));border-bottom:1px solid #e7e4e5;display:grid;grid-template-columns:8cqw 1fr 8cqw;align-items:center;padding:0 2.4cqw;position:relative;z-index:2}
+.dots{grid-column:1;display:flex;gap:.85cqw;margin-left:1.2cqw;}.dot{width:1.05cqw;height:1.05cqw;min-width:6px;min-height:6px;border-radius:50%}.dot.r{background:var(--dot1)}.dot.y{background:var(--dot2)}.dot.g{background:var(--dot3)}
+.addr{grid-column:2;justify-self:center;display:flex;align-items:center;gap:.6cqw;background:#eceaeb;border-radius:1.4cqw;padding:.6cqw 1.6cqw;color:#968f92;max-width:100%;overflow:hidden}
+.addr svg{width:1.5cqw;height:1.5cqw;min-width:11px;min-height:11px;flex:none}
+.addr span{font-size:clamp(9px,1.3cqw,13px);line-height:1.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 사진 크기 및 배치 수정 */
+.card{height:calc(100% - 5.4cqw - 1px);position:relative;display:grid;grid-template-columns:29cqw minmax(0,1fr);gap:7.5cqw;align-items:center;padding:clamp(16px, 3.4cqw, 34px) clamp(14.4px, 6.57cqw, 81px) clamp(40px, 8.5cqw, 85px) clamp(21.6px, 8.1cqw, 95.4px)}
+.photo{width:29cqw;aspect-ratio:260/330;border-radius:8cqw;overflow:hidden;background:var(--photo-bg,#f7e9ee);position:relative;box-shadow:0 1.7cqw 3.6cqw rgba(113,70,84,.14)}.photo:after{content:"";position:absolute;inset:0;border:1px solid rgba(255,255,255,.8);border-radius:inherit;pointer-events:none}.photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transform-origin:50% 50%}
+.content{ width:100%;min-width:0}.eyebrow{width:100%;font-size:clamp(8px,1.2cqw,11px);letter-spacing:.37cqw;color:var(--accent);font-weight:800;text-transform:uppercase;margin-bottom:1.6cqw}.name{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(13px,2.4cqw,24px);line-height:1.22;letter-spacing:-.3px;margin:0 0 1.4cqw;word-break:break-word;color:var(--name-color)}
+.desc{
+  width:100%;
+  font-size:clamp(9px,1.5cqw,14px);
+  line-height:1.3;
+  color:#746a70;
+  white-space:pre-line;
+  margin:0;
+  max-width:410px;
+}
+  .rule{
+ width:86px;
+    max-width:230px;
+  height:0.3px;
+  background:var(--accent);
+  margin:3.3cqw 0 0.8cqw;
+}
+
+.note{
+  font-family:"Cormorant Garamond", "Nanum Myeongjo",serif;
+ // font-style:italic;
+  font-weight:500;
+  font-size:clamp(8.25px,1.5cqw,14.5px);
+  line-height:1.8;
+  color:var(--note-color,#91868b);
+  white-space:pre-line;
+  margin:0;
+  max-width:420px;
+  letter-spacing:.03em;
+}
+/* 모바일 배치 수정 (사진 왼쪽 배치 유지) */
+@container (max-width:480px){.card{grid-template-columns:32cqw minmax(0,1fr);justify-items:start;text-align:left;gap:6cqw;padding:clamp(10px, 3cqw, 20px) 6.3cqw clamp(27px, 7.56cqw, 54px) 9cqw}.photo{width:32cqw;border-radius:6cqw}.content{max-width:100%}.desc,.note{max-width:100%}.rule{margin:3.3cqw 0 0.8cqw}}
+
+@media(max-width:950px){.layout{grid-template-columns:1fr}}
+@media(max-width:560px){.wrap{padding:22px 12px 50px}.editor,.preview{padding:16px}.palette{grid-template-columns:repeat(8,1fr);gap:7px}.sw{width:25px;height:25px}.stage{padding:16px 8px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="mark">♥</div><h1>Love Window <span class="top-text">for Phone</span></h1><p>Capturing our story in a little window !</p><p>*태블릿, pc사용시 비율이 깨지므로 휴대폰 이용을 권장드립니다.</p></header>
+<div class="layout">
+<section class="editor">
+<div class="block"><h3><span>01</span> URL Bar</h3>
+<div class="field"><label>주소창에 표시할 텍스트</label><input id="winTitle" type="text" value="pairarchive.love"></div>
+</div>
+<div class="block"><h3><span>02</span> Info</h3>
+<div class="field"><label>페어명</label><input id="eyebrow" type="text" value="LOVE X WINDOW"></div>
+<div class="field"><label>소개</label><textarea id="desc">We'll stay forever this way
+You are safe in my heart</textarea></div>
+<div class="field"><label>아이디 등</label><textarea id="note">@moartstud1o</textarea></div></div>
+<div class="block"><h3><span>03</span> Add Photo</h3>
+<label class="upload">＋ 사진 선택<input id="file" type="file" accept="image/*"></label>
+<div class="crop" id="crop"><img id="cropImg" hidden><span class="hint" id="hint">사진을 선택하면<br>여기에서 확대 정도를 조절할 수 있어요</span><span class="frame"></span></div>
+<div class="cropTools">
+    <button id="minus">−</button>
+    <button id="plus">＋</button>
+    <button id="reset">↺</button>
+</div></div>
+  <div class="block">
+  <h3><span>04</span> Display Settings</h3>
+
+  <div class="field">
+    <label>
+      <input type="checkbox" id="showRule" checked>
+      구분선 표시(Divider)
+    </label>
+  </div>
+
+  <div class="field">
+    <label>
+      <input type="checkbox" id="showNote" checked>
+      아이디 표시(Additional Info)
+    </label>
+  </div>
+
+  <div class="field">
+    <label>정렬</label>
+    <select id="descAlign">
+      <option value="left">왼쪽 정렬(left)</option>
+      <option value="center">가운데 정렬(center)</option>
+      <option value="right">오른쪽 정렬(right)</option>
+    </select>
+  </div>
+
+</div>
+<div class="block"><h3><span>05</span> Theme Color</h3><div class="palette">
+<button class="sw active" data-c="#f39ab5" style="background:#f39ab5"></button><button class="sw" data-c="#f6b7a9" style="background:#f6b7a9"></button><button class="sw" data-c="#f0c26e" style="background:#f0c26e"></button><button class="sw" data-c="#b9d99f" style="background:#b9d99f"></button><button class="sw" data-c="#7fc9be" style="background:#7fc9be"></button><button class="sw" data-c="#9fc8ee" style="background:#9fc8ee"></button><button class="sw" data-c="#c5b2e8" style="background:#c5b2e8"></button><button class="sw" data-c="#e8a9d4" style="background:#e8a9d4"></button><button class="sw" data-c="#f2a8a8" style="background:#f2a8a8"></button><button class="sw" data-c="#d98ea0" style="background:#d98ea0"></button><button class="sw" data-c="#c9a97e" style="background:#c9a97e"></button><button class="sw" data-c="#7fa8c9" style="background:#7fa8c9"></button><button class="sw" data-c="#a888c4" style="background:#a888c4"></button><button class="sw" data-c="#8fb8a8" style="background:#8fb8a8"></button><button class="sw" data-c="#6b6266" style="background:#6b6266"></button><button class="sw" data-c="#cfc9cb" style="background:#cfc9cb"></button>
+</div></div>
+<button class="save" id="save" type="button">SAVE</button>
+</section>
+<section class="preview"><div class="previewHead"><h3>Preview</h3><small>Love · Window Edition</small></div>
+<div class="stage"><div class="mac" id="card"><div class="macbar"><div class="dots"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i></div>
+<div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span id="outTitle">pairarchive.love</span></div>
+<span></span>
+</div>
+<div class="card"><div class="photo"><img id="outImg" hidden></div><div class="content"><div class="eyebrow" id="outEye">LOVE X WINDOW</div>
+  <div class="desc" id="outDesc">...</div>
+<div class="rule"></div>
+<p class="note" id="outNote">@moartstud1o</p>
+</div></div></div></div></section>
+</div></div>
+<script>
+(()=>{const $=id=>document.getElementById(id);const s={src:null,scale:1,color:'#f39ab5'};
+
+// ---- color helpers ----
+function hexToRgb(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const n=parseInt(hex,16);return [n>>16&255,n>>8&255,n&255];}
+function rgbToHex(r,g,b){return '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');}
+function rgbToHsl(r,g,b){r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b);let h,sat,l=(max+min)/2;if(max===min){h=sat=0}else{const d=max-min;sat=l>0.5?d/(2-max-min):d/(max+min);switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;default:h=(r-g)/d+4;}h/=6}return [h*360,sat*100,l*100];}
+function hslToRgb(h,sat,l){h/=360;sat/=100;l/=100;let r,g,b;if(sat===0){r=g=b=l}else{const hue2rgb=(p,q,t)=>{if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p};const q=l<0.5?l*(1+sat):l+sat-l*sat;const p=2*l-q;r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3)}return [r*255,g*255,b*255];}
+function shade(hex,{ds=0,dl=0}={}){const [r,g,b]=hexToRgb(hex);let [h,sat,l]=rgbToHsl(r,g,b);sat=Math.max(0,Math.min(100,sat+ds));l=Math.max(6,Math.min(96,l+dl));const [nr,ng,nb]=hslToRgb(h,sat,l);return rgbToHex(nr,ng,nb);}
+function nameColor(hex){return shade(hex,{ds:-38,dl:-30});}
+function dotColors(hex){return ['#d8d4d5','#bcb8ba',shade(hex,{dl:10,ds:-8})];}
+function hueSatOf(hex){const [r,g,b]=hexToRgb(hex);const [h,sat]=rgbToHsl(r,g,b);return [h,sat];}
+function hueOf(hex){return hueSatOf(hex)[0];}
+function pastel(h,sat,l){const [r,g,b]=hslToRgb(h,sat,l);return rgbToHex(r,g,b);}
+function stageColors(hex){
+  const [h,origSat]=hueSatOf(hex);
+  if(origSat<8) return [pastel(h,0,99),pastel(h,0,94),pastel(h,0,90)]; // 모노톤 색상은 무채색 배경으로
+  return [pastel(h,45,99),pastel(h,42,94),pastel(h,38,90)];
+}
+function macbarColor(hex){
+  const [h,origSat]=hueSatOf(hex);
+  if(origSat<8) return pastel(h,0,96); // 모노톤 색상은 무채색 창 배경으로
+  return pastel(h,22,96);
+}
+
+function sync(){
+
+  const content = document.querySelector('.content');
+  const rule = document.querySelector('.rule');
+
+  // 글자 정렬
+  content.style.textAlign = descAlign.value;
+
+  // 구분선 정렬
+  if(descAlign.value === 'center'){
+    rule.style.marginLeft='auto';
+    rule.style.marginRight='auto';
+  }
+  else if(descAlign.value === 'right'){
+    rule.style.marginLeft='auto';
+    rule.style.marginRight='0';
+  }
+  else{
+    rule.style.marginLeft='0';
+    rule.style.marginRight='auto';
+  }
+
+
+  outNote.style.display = showNote.checked ? 'block' : 'none';
+  outEye.style.textAlign = descAlign.value;
+document.querySelector('.content').style.textAlign = descAlign.value;
+  document.querySelector('.rule').style.display =
+  showRule.checked ? 'block' : 'none';
+  outTitle.textContent=(winTitle.value||'pairarchive.love').trim();
+ outDesc.textContent = desc.value.trim();
+
+let lastLineWidth = 20; // 기본값 (텍스트 없을 때)
+
+try {
+  const textNode = outDesc.firstChild;
+
+  if (textNode && textNode.nodeType === Node.TEXT_NODE && textNode.textContent.length) {
+    const range = document.createRange();
+    range.selectNodeContents(textNode);
+
+    const rects = range.getClientRects();
+
+    if (rects.length) {
+      // 실제 화면에 렌더링된 마지막 줄의 너비
+      lastLineWidth = rects[rects.length - 1].width;
+    }
+  }
+} catch (e) {
+  console.error('구분선 너비 측정 오류:', e);
+}
+
+document.querySelector('.rule').style.width =
+  Math.max(lastLineWidth, 20) + 'px';
+  outEye.textContent=(eyebrow.value||'OUR STORY').trim();
+  outNote.textContent=note.value.trim();
+  const [d1,d2,d3]=dotColors(s.color);
+  const [g1,g2,g3]=stageColors(s.color);
+  const root=document.documentElement.style;
+  root.setProperty('--accent',s.color);
+  root.setProperty('--name-color',nameColor(s.color));
+  root.setProperty('--dot1',d1);
+  root.setProperty('--dot2',d2);
+  root.setProperty('--dot3',d3);
+  root.setProperty('--stage-c1',g1);
+  root.setProperty('--stage-c2',g2);
+  root.setProperty('--stage-c3',g3);
+  root.setProperty(
+    '--photo-bg',
+    shade(s.color,{dl:40,ds:-20})
+);
+  root.setProperty(
+    '--note-color',
+    shade(s.color,{dl:-5,ds:-15})
+);root.setProperty('--macbar-bg',macbarColor(s.color));
+}
+['winTitle','desc','eyebrow','note'].forEach(id=>$(id).addEventListener('input',sync));
+
+$('showRule').addEventListener('change',sync);
+$('showNote').addEventListener('change',sync);
+$('descAlign').addEventListener('change',sync);
+function render(){
+  if(!s.src)return;
+  const t=`scale(${s.scale})`;
+  cropImg.style.transform=t;
+  outImg.style.transform=t;
+  
+}
+
+file.onchange=e=>{
+  const f=e.target.files?.[0];
+  if(!f)return;
+  if(!f.type.startsWith('image/'))return alert('이미지 파일을 선택해 주세요.');
+  const r=new FileReader();
+  r.onload=ev=>{
+    s.src=ev.target.result;
+    s.scale=1;
+    cropImg.src=s.src;
+    cropImg.hidden=false;
+    hint.hidden=true;
+    outImg.src=s.src;
+    outImg.hidden=false;
+    [plus,minus,reset].forEach(b=>b.disabled=false);
+    render();
+  };
+  r.readAsDataURL(f);
+};
+
+plus.onclick=()=>{s.scale=Math.min(3,+(s.scale+.1).toFixed(2));render()};
+minus.onclick=()=>{s.scale=Math.max(1,+(s.scale-.1).toFixed(2));render()};
+reset.onclick=()=>{s.scale=1;render()};
+
+document.querySelectorAll('.sw').forEach(b=>b.onclick=()=>{
+  s.color=b.dataset.c;
+  document.querySelectorAll('.sw').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  sync();
+});
+
+crop.onwheel=e=>{
+  if(!s.src)return;
+  e.preventDefault();
+  s.scale=Math.max(1,Math.min(3,+(s.scale+(e.deltaY<0?.08:-.08)).toFixed(2)));
+  render();
+},{passive:false};
+
+function isIOS(){
+  return /iP(hone|od|ad)/.test(navigator.userAgent) ||
+         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+      function isAndroid(){
+  return /Android/i.test(navigator.userAgent);
+}
+      
+async function exportCanvas(canvas, filename){
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1));
+
+  if(!blob){
+    alert('이미지를 만드는 중 문제가 발생했습니다.\n잠시 후 다시 시도해 주세요.');
+    return;
+  }
+
+  const file = new File([blob], filename, {type:'image/png'});
+
+  if(!isAndroid() && navigator.canShare && navigator.canShare({files:[file]})){
+    try{
+      await navigator.share({files:[file]});
+      return;
+    }catch(err){
+      if(err && err.name === 'AbortError'){
+        // 사용자가 공유 시트를 취소함 - 에러 아님
+        return;
+      }
+      // 공유가 실패하면 아래 대체 방법으로 계속 진행
+    }
+  }
+
+  const url = URL.createObjectURL(blob);
+
+  if(isIOS()){
+    window.open(url, '_blank');
+    setTimeout(() => {
+      alert('새 탭에 열린 이미지를 길게 눌러 "사진에 저장"을 선택해 주세요.');
+    }, 350);
+  }else{
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    if(isAndroid()){
+    setTimeout(() => {
+      alert('다운로드 폴더에 저장됐어요.\n갤러리에 바로 안 보이면 "파일" 앱 → 다운로드에서 확인해 주세요.');
+    }, 350);
+  }
+  }
+
+  setTimeout(() => URL.revokeObjectURL(url), 15000);
+}
+
+/* =========================================================
+   실제 화면에 렌더링된 미리보기를 html2canvas로 "있는 그대로"
+   캡처합니다 (배경까지 포함하도록 .stage 전체를 캡처).
+
+   단, 사진(<img>)만은 html2canvas가 아니라 직접 원본 이미지를
+   불러와서 그립니다. html2canvas는 object-fit:cover를 완벽히
+   재현하지 못해 사진이 눌려 보이고, 화면에 표시된 크기로 다시
+   그리기 때문에 화질도 떨어집니다. 그래서:
+   1) 사진만 잠시 숨긴 채로 html2canvas가 프레임/그림자/글자를
+      캡처하고,
+   2) 그 위에 업로드된 원본 고해상도 이미지를 CSS와 동일한
+      cover 계산으로 직접 그려 넣습니다.
+   위치·크기는 실제 DOM에서 그대로 읽어오므로 미리보기와
+   달라지지 않으면서, 화질은 오히려 원본 그대로라 더 선명합니다.
+========================================================= */
+
+function roundedRectPath(c,x,y,w,h,r){
+  c.beginPath();
+  c.moveTo(x+r,y);
+  c.arcTo(x+w,y,x+w,y+h,r);
+  c.arcTo(x+w,y+h,x,y+h,r);
+  c.arcTo(x,y+h,x,y,r);
+  c.arcTo(x,y,x+w,y,r);
+  c.closePath();
+}
+function parsePx(v){const n=parseFloat(v);return isNaN(n)?0:n;}
+function parseBoxShadow(str){
+  if(!str || str==='none') return null;
+  const colorMatch = str.match(/rgba?\([^)]+\)|#[0-9a-fA-F]{3,8}/);
+  const color = colorMatch ? colorMatch[0] : 'rgba(0,0,0,.2)';
+  const nums = str.replace(color,'').trim().split(/\s+/).filter(Boolean).map(parseFloat);
+  const [ox=0, oy=0, blur=0] = nums;
+  return {color, ox, oy, blur};
+}
+
+function compositePhoto(canvas, rootEl){
+  const hasPhoto = !!(s.src && outImg.complete && outImg.naturalWidth>0);
+  if(!hasPhoto) return;
+
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(1,0,0,1,0,0); // html2canvas가 남긴 변환 상태를 초기화 (안 하면 좌표가 겹배율로 밀려 사진이 캔버스 밖으로 그려짐)
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+
+  const rootRect = rootEl.getBoundingClientRect();
+  const QM = canvas.width / rootRect.width; // html2canvas가 실제로 사용한 배율을 역산
+
+  const photoEl = document.querySelector('.photo');
+  const pr = photoEl.getBoundingClientRect();
+  const rect = {
+    left:(pr.left-rootRect.left)*QM,
+    top:(pr.top-rootRect.top)*QM,
+    width: pr.width*QM,
+    height: pr.height*QM
+  };
+  const radius = parsePx(getComputedStyle(photoEl).borderRadius)*QM;
+
+  // html2canvas가 overflow:hidden + border-radius 조합에서 box-shadow를 놓치는 경우가 있어 직접 그려줌
+  const shadow = parseBoxShadow(getComputedStyle(photoEl).boxShadow);
+  if(shadow){
+    ctx.save();
+    ctx.shadowColor = shadow.color;
+    ctx.shadowOffsetX = shadow.ox*QM;
+    ctx.shadowOffsetY = shadow.oy*QM;
+    ctx.shadowBlur = shadow.blur*QM;
+    ctx.fillStyle = getComputedStyle(photoEl).backgroundColor || '#f7e9ee';
+    roundedRectPath(ctx, rect.left, rect.top, rect.width, rect.height, radius);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  ctx.save();
+  roundedRectPath(ctx, rect.left, rect.top, rect.width, rect.height, radius);
+  ctx.clip();
+
+  const im = outImg;
+  const boxW = rect.width, boxH = rect.height;
+  const coverScale = Math.max(boxW/im.naturalWidth, boxH/im.naturalHeight) * s.scale;
+  const iw = im.naturalWidth*coverScale, ih = im.naturalHeight*coverScale;
+  const dx = rect.left + (boxW-iw)/2;
+  const dy = rect.top + (boxH-ih)/2;
+  ctx.drawImage(im, dx, dy, iw, ih);
+  ctx.restore();
+
+  // html2canvas가 놓치는 경우가 있는 사진 테두리(.photo:after)도 직접 그려줌
+  const afterStyle = getComputedStyle(photoEl, '::after');
+  const borderW = parsePx(afterStyle.borderTopWidth)*QM;
+  if(borderW>0){
+    ctx.save();
+    roundedRectPath(ctx, rect.left+borderW/2, rect.top+borderW/2, rect.width-borderW, rect.height-borderW, Math.max(0,radius-borderW/2));
+    ctx.lineWidth = borderW;
+    ctx.strokeStyle = afterStyle.borderTopColor;
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+async function drawCanvasSave(){
+
+  if(typeof html2canvas === 'undefined'){
+    alert('저장 기능을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 새로고침해 주세요.');
+    return;
+  }
+
+  const macEl = document.getElementById('card');
+  const stageEl = document.querySelector('.stage');
+  const hasPhoto = !!(s.src && outImg.complete && outImg.naturalWidth>0);
+
+  await new Promise(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  });
+
+  macEl.classList.add('exporting'); // 대각선 반짝임 효과 숨김 (html2canvas 렌더링 아티팩트 방지)
+  const prevDisplay = outImg.style.display;
+  if(hasPhoto) outImg.style.display = 'none'; // 사진 자리는 프레임/그림자만 남기고 비워둠 (완전히 렌더링에서 제외)
+const fallbackBg = '#ffffff';
+  let canvas;
+  try{
+    canvas = await html2canvas(stageEl, {
+      scale: 3,              // 고정 고해상도 배율 (기기 화면 크기와 무관하게 항상 선명함)
+      backgroundColor: fallbackBg,
+      useCORS: true,
+      logging: false,
+      scrollX: -window.scrollX, // 페이지가 스크롤된 상태에서 캡처해도 좌표가 어긋나지 않도록 보정
+      scrollY: -window.scrollY, // (보정이 없으면 사진 합성 위치 계산이 틀어져 사진이 안 보이게 됨)
+      windowWidth: document.documentElement.scrollWidth,
+      windowHeight: document.documentElement.scrollHeight
+    });
+  }finally{
+    macEl.classList.remove('exporting');
+    outImg.style.display = prevDisplay;
+  }
+
+  try{
+    compositePhoto(canvas, stageEl);
+  }catch(err){
+    console.error('사진 합성 오류:', err);
+  }
+
+  await exportCanvas(canvas, (winTitle.value || 'pair-archive') + '.png');
+}
+
+
+save.onclick=async()=>{
+  save.disabled=true;
+  const original=save.textContent;
+  save.textContent='이미지 생성 중...';
+  try{
+    await drawCanvasSave();
+  }catch(err){
+    console.error('저장 오류:',err);
+    alert('이미지를 저장하는 중 문제가 발생했습니다.\n잠시 후 다시 시도해 주세요.');
+  }finally{
+    save.disabled=false;
+    save.textContent=original;
+  }
+};
+
+sync();
+})();
+</script>
+</body>
+</html>
