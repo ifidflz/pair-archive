@@ -198,7 +198,7 @@ You are safe in my heart</textarea></div>
 </section>
 </div></div>
 <script>
-(()=>{const $=id=>document.getElementById(id);const s={src:null,scale:1,color:'#f39ab5',photoSize:29,shape:'current',photoX:0,photoY:0,contentX:0,contentY:0};
+(()=>{const $=id=>document.getElementById(id);const s={src:null,scale:1,color:'#f39ab5',photoSize:29,sizeTouched:false,shape:'current',photoX:0,photoY:0,contentX:0,contentY:0};
 
 // ---- color helpers ----
 function hexToRgb(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');const n=parseInt(hex,16);return [n>>16&255,n>>8&255,n&255];}
@@ -298,7 +298,13 @@ document.querySelector('.rule').style.width =
 );root.setProperty('--macbar-bg',macbarColor(s.color));
 
   // 06. 사이즈 & 위치
-  root.setProperty('--photo-col', s.photoSize+'cqw');
+  // 사용자가 크기 슬라이더를 직접 조작하기 전에는 --photo-col을 지정하지 않아,
+  // PC(29cqw)·모바일(32cqw) 각각의 원래 기본 사진 크기가 그대로 유지되게 함
+  if(s.sizeTouched){
+    root.setProperty('--photo-col', s.photoSize+'cqw');
+  }else{
+    root.removeProperty('--photo-col');
+  }
   root.setProperty('--photo-x', s.photoX+'cqw');
   root.setProperty('--photo-y', s.photoY+'cqw');
   root.setProperty('--content-x', s.contentX+'cqw');
@@ -315,7 +321,7 @@ $('showNote').addEventListener('change',sync);
 $('descAlign').addEventListener('change',sync);
 
 // 06. 사이즈 & 위치 컨트롤 바인딩
-$('photoSize').addEventListener('input',e=>{s.photoSize=+e.target.value;sync();});
+$('photoSize').addEventListener('input',e=>{s.photoSize=+e.target.value;s.sizeTouched=true;sync();});
 $('photoX').addEventListener('input',e=>{s.photoX=+e.target.value;sync();});
 $('photoY').addEventListener('input',e=>{s.photoY=+e.target.value;sync();});
 $('contentX').addEventListener('input',e=>{s.contentX=+e.target.value;sync();});
