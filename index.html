@@ -712,18 +712,63 @@ function compositePhoto(canvas, rootEl){
   ctx.clip();
 
   const im = outImg;
-  const boxW = rect.width, boxH = rect.height;
-  const coverScale = Math.max(boxW/im.naturalWidth, boxH/im.naturalHeight) * s.scale;
-  const iw = im.naturalWidth*coverScale, ih = im.naturalHeight*coverScale;
-  const dx = rect.left + (boxW-iw)/2;
-  const dy = rect.top + (boxH-ih)/2;
-  alert("여기까지 도착");
-  alert(
-`원본: ${im.naturalWidth} × ${im.naturalHeight}
-그리는 크기: ${Math.round(iw)} × ${Math.round(ih)}
-캔버스: ${canvas.width} × ${canvas.height}`
+
+const boxW = rect.width;
+const boxH = rect.height;
+
+// 사진 영역보다 2배 크게 렌더링
+const renderScale = 2;
+
+const targetW = boxW * renderScale;
+const targetH = boxH * renderScale;
+
+const coverScale = Math.max(
+  targetW / im.naturalWidth,
+  targetH / im.naturalHeight
+) * s.scale;
+
+const iw = im.naturalWidth * coverScale;
+const ih = im.naturalHeight * coverScale;
+
+const dx = rect.left + (boxW - iw / renderScale) / 2;
+const dy = rect.top + (boxH - ih / renderScale) / 2;
+
+ctx.save();
+
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = "high";
+
+// 고해상도 임시 캔버스
+const temp = document.createElement("canvas");
+temp.width = targetW;
+temp.height = targetH;
+
+const tctx = temp.getContext("2d");
+tctx.imageSmoothingEnabled = true;
+tctx.imageSmoothingQuality = "high";
+
+tctx.drawImage(
+  im,
+  (targetW - iw) / 2,
+  (targetH - ih) / 2,
+  iw,
+  ih
 );
-  drawImageSmoothScaled(ctx, im, dx, dy, iw, ih);
+
+// 최종 캔버스에 축소
+ctx.drawImage(
+  temp,
+  0,
+  0,
+  targetW,
+  targetH,
+  rect.left,
+  rect.top,
+  boxW,
+  boxH
+);
+
+ctx.restore();
   ctx.restore();
 
   // html2canvas가 놓치는 경우가 있는 사진 테두리(.photo:after)도 직접 그려줌
@@ -761,7 +806,7 @@ const fallbackBg = '#ffffff';
   let canvas;
   try{
     canvas = await html2canvas(stageEl, {
-      scale: 3,              // 고정 고해상도 배율 (기기 화면 크기와 무관하게 항상 선명함)
+      scale: 4,              // 고정 고해상도 배율 (기기 화면 크기와 무관하게 항상 선명함)
       backgroundColor: fallbackBg,
       useCORS: true,
       logging: false,
