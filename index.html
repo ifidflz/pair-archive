@@ -697,6 +697,11 @@ function compositePhoto(canvas, rootEl){
   const iw = im.naturalWidth*coverScale, ih = im.naturalHeight*coverScale;
   const dx = rect.left + (boxW-iw)/2;
   const dy = rect.top + (boxH-ih)/2;
+  alert(
+`원본: ${im.naturalWidth} × ${im.naturalHeight}
+그리는 크기: ${Math.round(iw)} × ${Math.round(ih)}
+캔버스: ${canvas.width} × ${canvas.height}`
+);
   drawImageSmoothScaled(ctx, im, dx, dy, iw, ih);
   ctx.restore();
 
