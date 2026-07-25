@@ -497,6 +497,16 @@ file.onchange=e=>{
   if(!f)return;
   if(!f.type.startsWith('image/'))return alert('이미지 파일을 선택해 주세요.');
   const r=new FileReader();
+  const imgTest = new Image();
+imgTest.onload = () => {
+  alert(
+    "파일 원본 크기: " +
+    imgTest.naturalWidth +
+    " × " +
+    imgTest.naturalHeight
+  );
+};
+imgTest.src = URL.createObjectURL(f);
   r.onload=ev=>{
     s.src=ev.target.result;
     s.scale=1;
