@@ -376,6 +376,27 @@ function roundedRectPath(c,x,y,w,h,r){
   c.closePath();
 }
 function parsePx(v){const n=parseFloat(v);return isNaN(n)?0:n;}
+function drawImageSmoothScaled(destCtx, img, dx, dy, dw, dh){
+  let src = img;
+  let srcW = img.naturalWidth || img.width;
+  let srcH = img.naturalHeight || img.height;
+
+  while(srcW > dw*2 && srcH > dh*2){
+    const stepW = Math.max(1, Math.floor(srcW/2));
+    const stepH = Math.max(1, Math.floor(srcH/2));
+    const stepCanvas = document.createElement('canvas');
+    stepCanvas.width = stepW;
+    stepCanvas.height = stepH;
+    const stepCtx = stepCanvas.getContext('2d');
+    stepCtx.imageSmoothingEnabled = true;
+    stepCtx.imageSmoothingQuality = 'high';
+    stepCtx.drawImage(src, 0, 0, stepW, stepH);
+    src = stepCanvas;
+    srcW = stepW;
+    srcH = stepH;
+  }
+  destCtx.drawImage(src, dx, dy, dw, dh);
+}
 function parseBoxShadow(str){
   if(!str || str==='none') return null;
   const colorMatch = str.match(/rgba?\([^)]+\)|#[0-9a-fA-F]{3,8}/);
@@ -431,7 +452,7 @@ function compositePhoto(canvas, rootEl){
   const iw = im.naturalWidth*coverScale, ih = im.naturalHeight*coverScale;
   const dx = rect.left + (boxW-iw)/2;
   const dy = rect.top + (boxH-ih)/2;
-  ctx.drawImage(im, dx, dy, iw, ih);
+  drawImageSmoothScaled(ctx, im, dx, dy, iw, ih);
   ctx.restore();
 
   // html2canvas가 놓치는 경우가 있는 사진 테두리(.photo:after)도 직접 그려줌
