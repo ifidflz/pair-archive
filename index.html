@@ -504,6 +504,14 @@ file.onchange=e=>{
     cropImg.hidden=false;
     hint.hidden=true;
     outImg.src=s.src;
+    outImg.onload = () => {
+  alert(
+    "outImg 크기: " +
+    outImg.naturalWidth +
+    " × " +
+    outImg.naturalHeight
+  );
+};
     outImg.hidden=false;
     [plus,minus,reset].forEach(b=>b.disabled=false);
     render();
