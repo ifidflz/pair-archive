@@ -497,16 +497,6 @@ file.onchange=e=>{
   if(!f)return;
   if(!f.type.startsWith('image/'))return alert('이미지 파일을 선택해 주세요.');
   const r=new FileReader();
-  const imgTest = new Image();
-imgTest.onload = () => {
-  alert(
-    "파일 원본 크기: " +
-    imgTest.naturalWidth +
-    " × " +
-    imgTest.naturalHeight
-  );
-};
-imgTest.src = URL.createObjectURL(f);
   r.onload=ev=>{
     s.src=ev.target.result;
     s.scale=1;
@@ -514,19 +504,9 @@ imgTest.src = URL.createObjectURL(f);
     cropImg.hidden=false;
     hint.hidden=true;
     outImg.src=s.src;
-   
-};
-  outImg.hidden=false;
-
-outImg.onload = () => {
-  alert("render 전: " + outImg.naturalWidth + " × " + outImg.naturalHeight);
-
-  render();
-
-  setTimeout(() => {
-    alert("render 후: " + outImg.naturalWidth + " × " + outImg.naturalHeight);
-  }, 100);
-};
+    outImg.hidden=false;
+    [plus,minus,reset].forEach(b=>b.disabled=false);
+    render();
   };
   r.readAsDataURL(f);
 };
@@ -711,7 +691,13 @@ function compositePhoto(canvas, rootEl){
   roundedRectPath(ctx, rect.left, rect.top, rect.width, rect.height, radius);
   ctx.clip();
 
-  ctx.drawImage(im, dx, dy, iw, ih);
+  const im = outImg;
+  const boxW = rect.width, boxH = rect.height;
+  const coverScale = Math.max(boxW/im.naturalWidth, boxH/im.naturalHeight) * s.scale;
+  const iw = im.naturalWidth*coverScale, ih = im.naturalHeight*coverScale;
+  const dx = rect.left + (boxW-iw)/2;
+  const dy = rect.top + (boxH-ih)/2;
+  drawImageSmoothScaled(ctx, im, dx, dy, iw, ih);
   ctx.restore();
 
   // html2canvas가 놓치는 경우가 있는 사진 테두리(.photo:after)도 직접 그려줌
@@ -749,7 +735,7 @@ const fallbackBg = '#ffffff';
   let canvas;
   try{
     canvas = await html2canvas(stageEl, {
-      scale: 4,              // 고정 고해상도 배율 (기기 화면 크기와 무관하게 항상 선명함)
+      scale: 3,              // 고정 고해상도 배율 (기기 화면 크기와 무관하게 항상 선명함)
       backgroundColor: fallbackBg,
       useCORS: true,
       logging: false,
