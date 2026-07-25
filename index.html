@@ -29,7 +29,7 @@ input[type=text],textarea{width:100%;border:1px solid #eadde1;background:#fff;bo
 .crop{position:relative;height:220px;margin-top:10px;border-radius:14px;overflow:hidden;background:#f8edf0}.crop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%}.hint{position:absolute;inset:0;display:grid;place-items:center;color:#b29ba2;font-size:12px;text-align:center;padding:30px;pointer-events:none}.frame{position:absolute;inset:18px;border:1px solid rgba(255,255,255,.95);box-shadow:0 0 0 999px rgba(90,50,65,.13);border-radius:12px;pointer-events:none}
 .cropTools{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:10px}.cropTools button{width:36px;height:32px;border:1px solid #eadde1;background:white;border-radius:9px;cursor:pointer;color:#735966}.cropTools button:disabled{opacity:.4;cursor:not-allowed}.zoom{font-size:11px;color:#8f8187;min-width:48px;text-align:center}
 .palette{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}.sw{width:28px;height:28px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 1px #eadde1;cursor:pointer;padding:0}.sw.active{box-shadow:0 0 0 2px #4e3a42}
-.save{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:#EBB2C2;color:white;font-weight:700;cursor:pointer;transition:all 0.2s}.save:hover{background:#EBC3CE}.save:disabled{opacity:.6;cursor:wait}
+.save{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:#d4a4b3;color:white;font-weight:700;cursor:pointer;transition:all 0.2s}.save:hover{background:#c792a3}.save:disabled{opacity:.6;cursor:wait}
 .previewHead{display:flex;align-items:end;justify-content:space-between;margin:0 2px 14px; color:#6d6468;}.previewHead h3{font-size:14px;margin:0}.previewHead small{color:#ae9ca3;font-size:10px}
 .stage{max-width:480px;margin:0 auto;border-radius:18px;background:radial-gradient(circle at 50% 20%,var(--stage-c1,#fffdfd) 0,var(--stage-c2,#f9eef2) 58%,var(--stage-c3,#f5e6eb) 100%);padding:34px 20px;min-height:0;display:grid;place-items:center;overflow:visible}
 .mac{container-type:inline-size;width:100%;max-width:420px;aspect-ratio:1.5;background:#fff;border:1px solid #e3dfe1;border-radius:20px;overflow:hidden;box-shadow:0 30px 65px rgba(104,61,76,.19);flex:none;position:relative}
@@ -41,9 +41,9 @@ input[type=text],textarea{width:100%;border:1px solid #eadde1;background:#fff;bo
 .addr svg{width:1.5cqw;height:1.5cqw;min-width:11px;min-height:11px;flex:none}
 .addr span{font-size:clamp(9px,1.3cqw,13px);line-height:1.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* 사진 크기 및 배치 수정 */
-.card{height:calc(100% - 5.4cqw - 1px);position:relative;display:grid;grid-template-columns:29cqw minmax(0,1fr);gap:7.5cqw;align-items:center;padding:clamp(16px, 3.4cqw, 34px) clamp(14.4px, 6.57cqw, 81px) clamp(40px, 8.5cqw, 85px) clamp(21.6px, 8.1cqw, 95.4px)}
-.photo{width:29cqw;aspect-ratio:260/330;border-radius:8cqw;overflow:hidden;background:var(--photo-bg,#f7e9ee);position:relative;box-shadow:0 1.7cqw 3.6cqw rgba(113,70,84,.14)}.photo:after{content:"";position:absolute;inset:0;border:1px solid rgba(255,255,255,.8);border-radius:inherit;pointer-events:none}.photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transform-origin:50% 50%}
-.content{ width:100%;min-width:0}.eyebrow{width:100%;font-size:clamp(8px,1.2cqw,11px);letter-spacing:.37cqw;color:var(--accent);font-weight:800;text-transform:uppercase;margin-bottom:1.6cqw}.name{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(13px,2.4cqw,24px);line-height:1.22;letter-spacing:-.3px;margin:0 0 1.4cqw;word-break:break-word;color:var(--name-color)}
+.card{height:calc(100% - 5.4cqw - 1px);position:relative;display:grid;grid-template-columns:var(--photo-size,29cqw) minmax(0,1fr);gap:7.5cqw;align-items:center;padding:clamp(16px, 3.4cqw, 34px) clamp(14.4px, 6.57cqw, 81px) clamp(40px, 8.5cqw, 85px) clamp(21.6px, 8.1cqw, 95.4px)}
+.photo{width:var(--photo-size,29cqw);aspect-ratio:260/330;border-radius:8cqw;overflow:hidden;background:var(--photo-bg,#f7e9ee);position:relative;box-shadow:0 1.7cqw 3.6cqw rgba(113,70,84,.14);transform:translate(var(--photo-x,0px),var(--photo-y,0px))}.photo.circle{aspect-ratio:1/1;border-radius:999px}.photo:after{content:"";position:absolute;inset:0;border:1px solid rgba(255,255,255,.8);border-radius:inherit;pointer-events:none}.photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transform-origin:50% 50%}
+.content{ width:100%;min-width:0;transform:translate(var(--content-x,0px),var(--content-y,0px))}.eyebrow{width:100%;font-size:clamp(8px,1.2cqw,11px);letter-spacing:.37cqw;color:var(--accent);font-weight:800;text-transform:uppercase;margin-bottom:1.6cqw}.name{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(13px,2.4cqw,24px);line-height:1.22;letter-spacing:-.3px;margin:0 0 1.4cqw;word-break:break-word;color:var(--name-color)}
 .desc{
   width:100%;
   font-size:clamp(9px,1.5cqw,14px);
@@ -74,7 +74,7 @@ input[type=text],textarea{width:100%;border:1px solid #eadde1;background:#fff;bo
   letter-spacing:.03em;
 }
 /* 모바일 배치 수정 (사진 왼쪽 배치 유지) */
-@container (max-width:480px){.card{grid-template-columns:32cqw minmax(0,1fr);justify-items:start;text-align:left;gap:6cqw;padding:clamp(10px, 3cqw, 20px) 6.3cqw clamp(27px, 7.56cqw, 54px) 9cqw}.photo{width:32cqw;border-radius:6cqw}.content{max-width:100%}.desc,.note{max-width:100%}.rule{margin:3.3cqw 0 0.8cqw}}
+@container (max-width:480px){.card{grid-template-columns:var(--photo-size,32cqw) minmax(0,1fr);justify-items:start;text-align:left;gap:6cqw;padding:clamp(10px, 3cqw, 20px) 6.3cqw clamp(27px, 7.56cqw, 54px) 9cqw}.photo{width:var(--photo-size,32cqw);border-radius:6cqw}.photo.circle{border-radius:999px}.content{max-width:100%}.desc,.note{max-width:100%}.rule{margin:3.3cqw 0 0.8cqw}}
 
 @media(max-width:950px){.layout{grid-template-columns:1fr}}
 @media(max-width:560px){.wrap{padding:22px 12px 50px}.editor,.preview{padding:16px}.palette{grid-template-columns:repeat(8,1fr);gap:7px}.sw{width:25px;height:25px}.stage{padding:16px 8px}}
@@ -82,7 +82,7 @@ input[type=text],textarea{width:100%;border:1px solid #eadde1;background:#fff;bo
 </head>
 <body>
 <div class="wrap">
-<header class="top"><div class="mark">♥</div><h1>Love Window</h1><p>Capturing our story in a little window !</p><p>*태블릿, pc사용도 가능합니다.</p></header>
+<header class="top"><div class="mark">♥</div><h1>Love Window <span class="top-text">for Phone</span></h1><p>Capturing our story in a little window !</p><p>*태블릿, pc사용시 비율이 깨지므로 휴대폰 이용을 권장드립니다.</p></header>
 <div class="layout">
 <section class="editor">
 <div class="block"><h3><span>01</span> URL Bar</h3>
@@ -92,7 +92,9 @@ input[type=text],textarea{width:100%;border:1px solid #eadde1;background:#fff;bo
 <div class="field"><label>페어명</label><input id="eyebrow" type="text" value="LOVE X WINDOW"></div>
 <div class="field"><label>소개</label><textarea id="desc">We'll stay forever this way
 You are safe in my heart</textarea></div>
-<div class="field"><label>아이디 등</label><textarea id="note">@moartstud1o</textarea></div></div>
+<div class="field"><label>아이디 등</label><textarea id="note">@moartstud1o</textarea></div>
+<button id="clearAll" type="button" style="width:100%;margin-top:6px;padding:9px;border:1px solid #eadde1;background:#fff;border-radius:10px;color:#a9646f;font-size:12px;cursor:pointer">✕ 작성한 내용 전체 지우기</button>
+</div>
 <div class="block"><h3><span>03</span> Add Photo</h3>
 <label class="upload">＋ 사진 선택<input id="file" type="file" accept="image/*"></label>
 <div class="crop" id="crop"><img id="cropImg" hidden><span class="hint" id="hint">사진을 선택하면<br>여기에서 확대 정도를 조절할 수 있어요</span><span class="frame"></span></div>
@@ -101,8 +103,31 @@ You are safe in my heart</textarea></div>
     <button id="plus">＋</button>
     <button id="reset">↺</button>
 </div></div>
+<div class="block"><h3><span>04</span> Photo Size &amp; Shape</h3>
+<div class="field"><label>사진 크기</label><input id="photoSize" type="range" min="18" max="40" step="0.5" value="29" style="width:100%"></div>
+<div class="field"><label>사진 모양</label>
+  <select id="photoShape">
+    <option value="square">사각형(둥근 모서리)</option>
+    <option value="circle">원형</option>
+  </select>
+</div>
+</div>
+<div class="block"><h3><span>05</span> Position</h3>
+<div class="field"><label>사진 위치 (좌우 / 상하)</label>
+  <div style="display:flex;gap:8px">
+    <input id="photoX" type="range" min="-40" max="40" step="1" value="0" style="width:100%">
+    <input id="photoY" type="range" min="-40" max="40" step="1" value="0" style="width:100%">
+  </div>
+</div>
+<div class="field"><label>내용 위치 (좌우 / 상하)</label>
+  <div style="display:flex;gap:8px">
+    <input id="contentX" type="range" min="-40" max="40" step="1" value="0" style="width:100%">
+    <input id="contentY" type="range" min="-40" max="40" step="1" value="0" style="width:100%">
+  </div>
+</div>
+</div>
   <div class="block">
-  <h3><span>04</span> Display Settings</h3>
+  <h3><span>06</span> Display Settings</h3>
 
   <div class="field">
     <label>
@@ -128,7 +153,7 @@ You are safe in my heart</textarea></div>
   </div>
 
 </div>
-<div class="block"><h3><span>05</span> Theme Color</h3><div class="palette">
+<div class="block"><h3><span>07</span> Theme Color</h3><div class="palette">
 <button class="sw active" data-c="#f39ab5" style="background:#f39ab5"></button><button class="sw" data-c="#f6b7a9" style="background:#f6b7a9"></button><button class="sw" data-c="#f0c26e" style="background:#f0c26e"></button><button class="sw" data-c="#b9d99f" style="background:#b9d99f"></button><button class="sw" data-c="#7fc9be" style="background:#7fc9be"></button><button class="sw" data-c="#9fc8ee" style="background:#9fc8ee"></button><button class="sw" data-c="#c5b2e8" style="background:#c5b2e8"></button><button class="sw" data-c="#e8a9d4" style="background:#e8a9d4"></button><button class="sw" data-c="#f2a8a8" style="background:#f2a8a8"></button><button class="sw" data-c="#d98ea0" style="background:#d98ea0"></button><button class="sw" data-c="#c9a97e" style="background:#c9a97e"></button><button class="sw" data-c="#7fa8c9" style="background:#7fa8c9"></button><button class="sw" data-c="#a888c4" style="background:#a888c4"></button><button class="sw" data-c="#8fb8a8" style="background:#8fb8a8"></button><button class="sw" data-c="#6b6266" style="background:#6b6266"></button><button class="sw" data-c="#cfc9cb" style="background:#cfc9cb"></button>
 </div></div>
 <button class="save" id="save" type="button">SAVE</button>
@@ -243,12 +268,35 @@ document.querySelector('.rule').style.width =
     '--note-color',
     shade(s.color,{dl:-5,ds:-15})
 );root.setProperty('--macbar-bg',macbarColor(s.color));
+
+  // 사진 크기
+  root.setProperty('--photo-size', photoSize.value + 'cqw');
+
+  // 사진 모양(원형/사각형)
+  document.querySelector('.photo').classList.toggle('circle', photoShape.value === 'circle');
+
+  // 사진 / 내용 위치 이동
+  root.setProperty('--photo-x', photoX.value + 'px');
+  root.setProperty('--photo-y', photoY.value + 'px');
+  root.setProperty('--content-x', contentX.value + 'px');
+  root.setProperty('--content-y', contentY.value + 'px');
 }
 ['winTitle','desc','eyebrow','note'].forEach(id=>$(id).addEventListener('input',sync));
 
 $('showRule').addEventListener('change',sync);
 $('showNote').addEventListener('change',sync);
 $('descAlign').addEventListener('change',sync);
+
+['photoSize','photoX','photoY','contentX','contentY'].forEach(id=>$(id).addEventListener('input',sync));
+$('photoShape').addEventListener('change',sync);
+
+$('clearAll').addEventListener('click',()=>{
+  if(!confirm('작성한 내용을 전부 지울까요? (사진·색상은 유지됩니다)')) return;
+  eyebrow.value='';
+  desc.value='';
+  note.value='';
+  sync();
+});
 function render(){
   if(!s.src)return;
   const t=`scale(${s.scale})`;
@@ -376,6 +424,9 @@ function roundedRectPath(c,x,y,w,h,r){
   c.closePath();
 }
 function parsePx(v){const n=parseFloat(v);return isNaN(n)?0:n;}
+
+// 원본 이미지를 목표 크기로 한 번에 왕창 축소하면 일부 브라우저(특히 일부 안드로이드 웹뷰)에서
+// 픽셀이 깨져 보이는 문제가 있어, 절반씩 여러 단계로 나눠서 부드럽게 축소함
 function drawImageSmoothScaled(destCtx, img, dx, dy, dw, dh){
   let src = img;
   let srcW = img.naturalWidth || img.width;
@@ -426,7 +477,11 @@ function compositePhoto(canvas, rootEl){
     width: pr.width*QM,
     height: pr.height*QM
   };
-  const radius = parsePx(getComputedStyle(photoEl).borderRadius)*QM;
+  const radius = Math.min(
+    parsePx(getComputedStyle(photoEl).borderRadius)*QM,
+    rect.width/2,
+    rect.height/2
+  );
 
   // html2canvas가 overflow:hidden + border-radius 조합에서 box-shadow를 놓치는 경우가 있어 직접 그려줌
   const shadow = parseBoxShadow(getComputedStyle(photoEl).boxShadow);
