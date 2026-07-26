@@ -554,6 +554,36 @@ function compositePhoto(canvas, rootEl){
   }
 }
 
+function compositeCursor(canvas, rootEl, cssRect, colorHex){
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(1,0,0,1,0,0);
+  const rootRect = rootEl.getBoundingClientRect();
+  const QM = canvas.width / rootRect.width;
+  const rect = {
+    left:(cssRect.left-rootRect.left)*QM,
+    top:(cssRect.top-rootRect.top)*QM,
+    width: cssRect.width*QM,
+    height: cssRect.height*QM
+  };
+  const scale = rect.width/24; // svg viewBox 기준(0 0 24 24)
+  const pts=[[4,3],[4,18.3],[8,15],[10.6,21],[13.7,19.6],[11,13.6],[17,13.6]];
+  const d = pts.map((p,i)=>(i===0?'M':'L')+(p[0]*scale)+' '+(p[1]*scale)).join(' ')+' Z';
+  const path = new Path2D(d);
+  ctx.save();
+  ctx.translate(rect.left, rect.top);
+  ctx.shadowColor = 'rgba(60,30,40,.4)';
+  ctx.shadowBlur = 1.5*QM;
+  ctx.shadowOffsetY = 1*QM;
+  ctx.fillStyle = colorHex;
+  ctx.fill(path);
+  ctx.shadowColor = 'transparent';
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = scale;
+  ctx.strokeStyle = '#ffffff';
+  ctx.stroke(path);
+  ctx.restore();
+}
+
 async function drawCanvasSave(){
 
   if(typeof html2canvas === 'undefined'){
@@ -564,6 +594,8 @@ async function drawCanvasSave(){
   const macEl = document.getElementById('card');
   const stageEl = document.querySelector('.stage');
   const hasPhoto = !!(s.src && outImg.complete && outImg.naturalWidth>0);
+  const hasCursor = showCursor.checked;
+  let cursorRectPre = null;
 
   await new Promise(resolve => {
     requestAnimationFrame(() => requestAnimationFrame(resolve));
@@ -572,6 +604,11 @@ async function drawCanvasSave(){
   macEl.classList.add('exporting'); // 대각선 반짝임 효과 숨김 (html2canvas 렌더링 아티팩트 방지)
   const prevDisplay = outImg.style.display;
   if(hasPhoto) outImg.style.display = 'none'; // 사진 자리는 프레임/그림자만 남기고 비워둠 (완전히 렌더링에서 제외)
+  const cursorPrevDisplay = outCursor.style.display;
+  if(hasCursor){
+    cursorRectPre = outCursor.getBoundingClientRect(); // 숨기기 전 위치를 미리 측정
+    outCursor.style.display = 'none'; // html2canvas는 인라인 SVG의 CSS 변수 색상을 제대로 못 그리는 경우가 있어, 캡처에서는 빼고 직접 그림
+  }
 const fallbackBg = '#ffffff';
   let canvas;
   try{
@@ -588,12 +625,21 @@ const fallbackBg = '#ffffff';
   }finally{
     macEl.classList.remove('exporting');
     outImg.style.display = prevDisplay;
+    outCursor.style.display = cursorPrevDisplay;
   }
 
   try{
     compositePhoto(canvas, stageEl);
   }catch(err){
     console.error('사진 합성 오류:', err);
+  }
+
+  if(hasCursor && cursorRectPre){
+    try{
+      compositeCursor(canvas, stageEl, cursorRectPre, s.color);
+    }catch(err){
+      console.error('커서 아이콘 합성 오류:', err);
+    }
   }
 
   await exportCanvas(canvas, (winTitle.value || 'pair-archive') + '.png');
