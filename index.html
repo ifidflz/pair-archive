@@ -349,7 +349,6 @@ document.querySelectorAll('.shapeBtn').forEach(btn=>btn.addEventListener('click'
 function render(){
   if(!s.src)return;
   const t=`scale(${s.scale})`;
-  cropImg.style.transform=t;
   outImg.style.transform=t;
   
 }
@@ -362,8 +361,6 @@ file.onchange=e=>{
   r.onload=ev=>{
     s.src=ev.target.result;
     s.scale=1;
-    cropImg.src=s.src;
-    cropImg.hidden=false;
     hint.hidden=true;
     outImg.src=s.src;
     outImg.hidden=false;
