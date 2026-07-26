@@ -98,7 +98,8 @@ input[type=range],input[type=checkbox]{accent-color:#f4b8ce}
 .shapeBtn.active{border-color:#ef9eb7;background:#fdebf1;color:#a2586c;font-weight:700}
 
 /* 우측 하단 테마컬러 마우스 커서 아이콘 */
-.cursorIcon{position:absolute;right:3.2cqw;bottom:3.2cqw;width:4.2cqw;height:4.2cqw;min-width:9px;min-height:9px;max-width:17px;max-height:17px;z-index:5;pointer-events:none;filter:drop-shadow(0 1px 1.5px rgba(60,30,40,.35))}
+.cursorIcon{position:absolute;right:6.5cqw;bottom:6.5cqw;width:4.2cqw;height:4.2cqw;min-width:9px;min-height:9px;max-width:17px;max-height:17px;z-index:5;pointer-events:none;filter:drop-shadow(0 1px 1.5px rgba(60,30,40,.35))}
+.cursorIcon[hidden]{display:none!important}
 .cursorIcon path{fill:var(--accent);stroke:#fff;stroke-width:1;stroke-linejoin:round}
 </style>
 </head>
@@ -259,7 +260,7 @@ function sync(){
 
 
   outNote.style.display = showNote.checked ? 'block' : 'none';
-  if(showCursor.checked){ outCursor.removeAttribute('hidden'); } else { outCursor.setAttribute('hidden',''); }
+  if(showCursor.checked){ outCursor.removeAttribute('hidden'); outCursor.style.display=''; } else { outCursor.setAttribute('hidden',''); outCursor.style.display='none'; }
   outEye.style.textAlign = descAlign.value;
 document.querySelector('.content').style.textAlign = descAlign.value;
   document.querySelector('.rule').style.display =
