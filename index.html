@@ -96,6 +96,10 @@ input[type=range],input[type=checkbox]{accent-color:#f4b8ce}
 .shapeBtn{flex:1;padding:9px 6px;border:1px solid #eadde1;background:#fff;border-radius:10px;color:#8f8187;font-size:12px;cursor:pointer;transition:all .15s}
 .shapeBtn:hover{background:#fff8fa}
 .shapeBtn.active{border-color:#ef9eb7;background:#fdebf1;color:#a2586c;font-weight:700}
+
+/* 우측 하단 테마컬러 마우스 커서 아이콘 */
+.cursorIcon{position:absolute;right:3.2cqw;bottom:3.2cqw;width:4.2cqw;height:4.2cqw;min-width:9px;min-height:9px;max-width:17px;max-height:17px;z-index:5;pointer-events:none;filter:drop-shadow(0 1px 1.5px rgba(60,30,40,.35))}
+.cursorIcon path{fill:var(--accent);stroke:#fff;stroke-width:1;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -145,6 +149,13 @@ You are safe in my heart</textarea></div>
     </select>
   </div>
 
+  <div class="field">
+    <label>
+      <input type="checkbox" id="showCursor">
+      마우스 커서 아이콘 표시(우측 하단, 테마컬러 적용)
+    </label>
+  </div>
+
 </div>
 <div class="block"><h3><span>05</span> Theme Color</h3><div class="palette">
 <button class="sw active" data-c="#f39ab5" style="background:#f39ab5"></button><button class="sw" data-c="#f6b7a9" style="background:#f6b7a9"></button><button class="sw" data-c="#f0c26e" style="background:#f0c26e"></button><button class="sw" data-c="#b9d99f" style="background:#b9d99f"></button><button class="sw" data-c="#7fc9be" style="background:#7fc9be"></button><button class="sw" data-c="#9fc8ee" style="background:#9fc8ee"></button><button class="sw" data-c="#c5b2e8" style="background:#c5b2e8"></button><button class="sw" data-c="#e8a9d4" style="background:#e8a9d4"></button><button class="sw" data-c="#f2a8a8" style="background:#f2a8a8"></button><button class="sw" data-c="#d98ea0" style="background:#d98ea0"></button><button class="sw" data-c="#c9a97e" style="background:#c9a97e"></button><button class="sw" data-c="#7fa8c9" style="background:#7fa8c9"></button><button class="sw" data-c="#a888c4" style="background:#a888c4"></button><button class="sw" data-c="#8fb8a8" style="background:#8fb8a8"></button><button class="sw" data-c="#6b6266" style="background:#6b6266"></button><button class="sw" data-c="#cfc9cb" style="background:#cfc9cb"></button>
@@ -160,7 +171,9 @@ You are safe in my heart</textarea></div>
   <div class="desc" id="outDesc">...</div>
 <div class="rule"></div>
 <p class="note" id="outNote">@moartstud1o</p>
-</div></div></div></div>
+</div></div>
+<svg id="outCursor" class="cursorIcon" viewBox="0 0 24 24" hidden><path d="M4 3 L4 18.3 L8 15 L10.6 21 L13.7 19.6 L11 13.6 L17 13.6 Z"/></svg>
+</div></div>
 
 <div class="posBlock">
   <h3><span>06</span> Size &amp; Position</h3>
@@ -179,7 +192,7 @@ You are safe in my heart</textarea></div>
     </div>
     <div class="field">
       <label><span>사진 좌우 위치</span></label>
-      <input type="range" id="photoX" min="-20" max="20" step="0.5" value="0">
+      <input type="range" id="photoX" min="-20" max="62" step="0.5" value="0">
     </div>
     <div class="field">
       <label><span>사진 상하 위치</span></label>
@@ -187,7 +200,7 @@ You are safe in my heart</textarea></div>
     </div>
     <div class="field">
       <label><span>내용 좌우 위치</span></label>
-      <input type="range" id="contentX" min="-15" max="15" step="0.5" value="0">
+      <input type="range" id="contentX" min="-46" max="30" step="0.5" value="0">
     </div>
     <div class="field">
       <label><span>내용 상하 위치</span></label>
@@ -246,6 +259,7 @@ function sync(){
 
 
   outNote.style.display = showNote.checked ? 'block' : 'none';
+  if(showCursor.checked){ outCursor.removeAttribute('hidden'); } else { outCursor.setAttribute('hidden',''); }
   outEye.style.textAlign = descAlign.value;
 document.querySelector('.content').style.textAlign = descAlign.value;
   document.querySelector('.rule').style.display =
@@ -318,6 +332,7 @@ document.querySelector('.rule').style.width =
 
 $('showRule').addEventListener('change',sync);
 $('showNote').addEventListener('change',sync);
+$('showCursor').addEventListener('change',sync);
 $('descAlign').addEventListener('change',sync);
 
 // 06. 사이즈 & 위치 컨트롤 바인딩
